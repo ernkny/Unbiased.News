@@ -1,0 +1,6 @@
+@Unbiased.News.Api_HostAddress = http://localhost:5143
+
+GET {{Unbiased.News.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
