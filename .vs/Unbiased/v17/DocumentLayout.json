@@ -1,69 +1,69 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\",
+  "WorkspaceRootPath": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|solutionrelative:unbiased.news.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|solutionrelative:unbiased.news.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.application\\iapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.application\\iapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|solutionrelative:unbiased.news.application\\iapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.infrastructure\\iinfrastructure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.infrastructure\\iinfrastructure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|solutionrelative:unbiased.news.infrastructure\\iinfrastructure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.infrastructure\\unbiased.news.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.infrastructure\\unbiased.news.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|solutionrelative:unbiased.news.infrastructure\\unbiased.news.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E64B3F6E-2931-4C66-900E-6488252FCD56}|Unbiased.News.Domain\\Unbiased.News.Domain.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.domain\\unbiased.news.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "AbsoluteMoniker": "D:0:0:{E64B3F6E-2931-4C66-900E-6488252FCD56}|Unbiased.News.Domain\\Unbiased.News.Domain.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.domain\\unbiased.news.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{E64B3F6E-2931-4C66-900E-6488252FCD56}|Unbiased.News.Domain\\Unbiased.News.Domain.csproj|solutionrelative:unbiased.news.domain\\unbiased.news.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.application\\services\\categoriesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.application\\services\\categoriesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|solutionrelative:unbiased.news.application\\services\\categoriesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.application\\interfaces\\icategoriesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.application\\interfaces\\icategoriesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|solutionrelative:unbiased.news.application\\interfaces\\icategoriesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.api\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.api\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C9B732A3-489F-4179-8C1F-7095AC2CD216}|Unbiased.News.Api\\Unbiased.News.Api.csproj|solutionrelative:unbiased.news.api\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.application\\cqrs\\handlers\\categories\\getcategoriesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.application\\cqrs\\handlers\\categories\\getcategoriesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|solutionrelative:unbiased.news.application\\cqrs\\handlers\\categories\\getcategoriesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.infrastructure\\dataaccess\\repositories\\concrete\\categoriesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.infrastructure\\dataaccess\\repositories\\concrete\\categoriesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|solutionrelative:unbiased.news.infrastructure\\dataaccess\\repositories\\concrete\\categoriesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.infrastructure\\dataaccess\\repositories\\abstract\\icategoriesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.infrastructure\\dataaccess\\repositories\\abstract\\icategoriesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|solutionrelative:unbiased.news.infrastructure\\dataaccess\\repositories\\abstract\\icategoriesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.application\\cqrs\\queries\\categories\\getcategoriesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.application\\cqrs\\queries\\categories\\getcategoriesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC94B169-F3B1-413E-965C-5C8EFAEBDB33}|Unbiased.News.Application\\Unbiased.News.Application.csproj|solutionrelative:unbiased.news.application\\cqrs\\queries\\categories\\getcategoriesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.infrastructure\\dataaccess\\connections\\unbiasedsqlconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.infrastructure\\dataaccess\\connections\\unbiasedsqlconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8374EAD4-6BE5-41E4-9441-5BC8A0A14F31}|Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj|solutionrelative:unbiased.news.infrastructure\\dataaccess\\connections\\unbiasedsqlconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E64B3F6E-2931-4C66-900E-6488252FCD56}|Unbiased.News.Domain\\Unbiased.News.Domain.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.domain\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E64B3F6E-2931-4C66-900E-6488252FCD56}|Unbiased.News.Domain\\Unbiased.News.Domain.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.domain\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E64B3F6E-2931-4C66-900E-6488252FCD56}|Unbiased.News.Domain\\Unbiased.News.Domain.csproj|solutionrelative:unbiased.news.domain\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{29C38317-DF9D-481F-8D1D-DF2AEA508EAE}|Unbiased.News.Common\\Unbiased.News.Common.csproj|c:\\users\\erenk\\source\\repos\\unbiased\\unbiased.news.common\\unbiased.news.common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "AbsoluteMoniker": "D:0:0:{29C38317-DF9D-481F-8D1D-DF2AEA508EAE}|Unbiased.News.Common\\Unbiased.News.Common.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.news.common\\unbiased.news.common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{29C38317-DF9D-481F-8D1D-DF2AEA508EAE}|Unbiased.News.Common\\Unbiased.News.Common.csproj|solutionrelative:unbiased.news.common\\unbiased.news.common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
@@ -74,121 +74,149 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 17,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:14:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{65ddf8c3-8f89-4077-a6c6-dbb8853aab13}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "IInfrastructure.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\IInfrastructure.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Infrastructure\\IInfrastructure.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Infrastructure\\IInfrastructure.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\IInfrastructure.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Infrastructure\\IInfrastructure.cs",
               "RelativeToolTip": "Unbiased.News.Infrastructure\\IInfrastructure.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T13:01:44.602Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T13:01:44.602Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "CategoryController.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\Controllers\\CategoryController.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Api\\Controllers\\CategoryController.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Api\\Controllers\\CategoryController.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\Controllers\\CategoryController.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Api\\Controllers\\CategoryController.cs",
               "RelativeToolTip": "Unbiased.News.Api\\Controllers\\CategoryController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T12:56:53.6Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T12:56:53.6Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "CategoriesService.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Services\\CategoriesService.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Services\\CategoriesService.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Application\\Services\\CategoriesService.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Services\\CategoriesService.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Services\\CategoriesService.cs",
               "RelativeToolTip": "Unbiased.News.Application\\Services\\CategoriesService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T12:53:29.099Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T12:53:29.099Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "ICategoriesService.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Interfaces\\ICategoriesService.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Interfaces\\ICategoriesService.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Application\\Interfaces\\ICategoriesService.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Interfaces\\ICategoriesService.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Interfaces\\ICategoriesService.cs",
               "RelativeToolTip": "Unbiased.News.Application\\Interfaces\\ICategoriesService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T12:50:53.555Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T12:50:53.555Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
               "Title": "CategoriesRepository.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Concrete\\CategoriesRepository.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Concrete\\CategoriesRepository.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Concrete\\CategoriesRepository.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Concrete\\CategoriesRepository.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Concrete\\CategoriesRepository.cs",
               "RelativeToolTip": "Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Concrete\\CategoriesRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwB8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T12:38:10.448Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T12:38:10.448Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
               "Title": "GetCategoriesQueryHandler.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
               "RelativeToolTip": "Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T12:35:52.313Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T12:35:52.313Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Api\\Program.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Api\\Program.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\Program.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Api\\Program.cs",
               "RelativeToolTip": "Unbiased.News.Api\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T11:40:21.624Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T11:40:21.624Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "Unbiased.News.Domain.csproj",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
+              "DocumentMoniker": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
               "RelativeDocumentMoniker": "Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
+              "ToolTip": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
               "RelativeToolTip": "Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-10-25T22:19:05.67Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-25T22:19:05.67Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Api\\appsettings.json",
               "RelativeDocumentMoniker": "Unbiased.News.Api\\appsettings.json",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\appsettings.json",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Api\\appsettings.json",
               "RelativeToolTip": "Unbiased.News.Api\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAACLAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-10-26T10:44:19.326Z",
               "EditorCaption": ""
@@ -197,92 +225,85 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "IApplication.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\IApplication.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\IApplication.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Application\\IApplication.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\IApplication.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\IApplication.cs",
               "RelativeToolTip": "Unbiased.News.Application\\IApplication.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T13:03:33.354Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T13:03:33.354Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Unbiased.News.Infrastructure",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
+              "Title": "Unbiased.News.Infrastructure.csproj",
+              "DocumentMoniker": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
               "RelativeDocumentMoniker": "Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
+              "ToolTip": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
               "RelativeToolTip": "Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-10-26T09:37:29.587Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T09:37:29.587Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
               "Title": "ICategoriesRepository.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Abstract\\ICategoriesRepository.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Abstract\\ICategoriesRepository.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Abstract\\ICategoriesRepository.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Abstract\\ICategoriesRepository.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Abstract\\ICategoriesRepository.cs",
               "RelativeToolTip": "Unbiased.News.Infrastructure\\DataAccess\\Repositories\\Abstract\\ICategoriesRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T12:37:45.287Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T12:37:45.287Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 12,
               "Title": "GetCategoriesQuery.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
               "RelativeToolTip": "Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T12:29:16.285Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T12:29:16.285Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 14,
               "Title": "Category.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Entities\\Category.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Domain\\Entities\\Category.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Domain\\Entities\\Category.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Entities\\Category.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Domain\\Entities\\Category.cs",
               "RelativeToolTip": "Unbiased.News.Domain\\Entities\\Category.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T12:30:20.425Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T12:30:20.425Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
               "Title": "UnbiasedSqlConnection.cs",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\DataAccess\\Connections\\UnbiasedSqlConnection.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Infrastructure\\DataAccess\\Connections\\UnbiasedSqlConnection.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Infrastructure\\DataAccess\\Connections\\UnbiasedSqlConnection.cs",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\DataAccess\\Connections\\UnbiasedSqlConnection.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Infrastructure\\DataAccess\\Connections\\UnbiasedSqlConnection.cs",
               "RelativeToolTip": "Unbiased.News.Infrastructure\\DataAccess\\Connections\\UnbiasedSqlConnection.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T11:14:28.005Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-26T11:14:28.005Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 15,
               "Title": "Unbiased.News.Common.csproj",
-              "DocumentMoniker": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
+              "DocumentMoniker": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
               "RelativeDocumentMoniker": "Unbiased.News.Common\\Unbiased.News.Common.csproj",
-              "ToolTip": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
+              "ToolTip": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
               "RelativeToolTip": "Unbiased.News.Common\\Unbiased.News.Common.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-10-25T22:19:03.206Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-25T22:19:03.206Z"
             }
           ]
         }

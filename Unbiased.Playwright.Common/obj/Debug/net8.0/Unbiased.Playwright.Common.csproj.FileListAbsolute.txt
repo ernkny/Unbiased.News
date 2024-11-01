@@ -10,3 +10,15 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\refint\Unbiased.Playwright.Common.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\ref\Unbiased.Playwright.Common.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\bin\Debug\net8.0\Unbiased.Playwright.Common.deps.json
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\bin\Debug\net8.0\Unbiased.Playwright.Common.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\bin\Debug\net8.0\Unbiased.Playwright.Common.pdb
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.AssemblyInfoInputs.cache
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.AssemblyInfo.cs
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.csproj.CoreCompileInputs.cache
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.sourcelink.json
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\refint\Unbiased.Playwright.Common.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.pdb
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Common\obj\Debug\net8.0\ref\Unbiased.Playwright.Common.dll

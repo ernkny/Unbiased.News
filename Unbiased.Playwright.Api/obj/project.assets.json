@@ -1132,24 +1132,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\erenk\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\pc\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj",
+      "projectUniqueName": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj",
       "projectName": "Unbiased.Playwright.Api",
-      "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj",
-      "packagesPath": "C:\\Users\\erenk\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Api\\obj\\",
+      "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj",
+      "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Api\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\erenk\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
