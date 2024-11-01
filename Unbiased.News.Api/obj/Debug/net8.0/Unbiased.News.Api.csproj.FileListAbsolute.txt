@@ -77,3 +77,4 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\obj\Debug\net8.0\refint\U
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\obj\Debug\net8.0\Unbiased.News.Api.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\obj\Debug\net8.0\Unbiased.News.Api.genruntimeconfig.cache
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\obj\Debug\net8.0\ref\Unbiased.News.Api.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\obj\Debug\net8.0\Unbiased.News.Api.sourcelink.json

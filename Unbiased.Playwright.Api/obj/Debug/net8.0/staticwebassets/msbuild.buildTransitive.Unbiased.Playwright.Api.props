@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\Unbiased.Playwright.Api.props" />
+</Project>

@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "L50GaO/gIic=",
+  "dgSpecHash": "WSi95lV0sGE=",
   "success": true,
   "projectFilePath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\erenk\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
+    "C:\\Users\\erenk\\.nuget\\packages\\microsoft.playwright\\1.48.0\\microsoft.playwright.1.48.0.nupkg.sha512",
+    "C:\\Users\\erenk\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
+    "C:\\Users\\erenk\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\erenk\\.nuget\\packages\\system.text.encodings.web\\6.0.0\\system.text.encodings.web.6.0.0.nupkg.sha512",
+    "C:\\Users\\erenk\\.nuget\\packages\\system.text.json\\6.0.10\\system.text.json.6.0.10.nupkg.sha512"
+  ],
   "logs": []
 }

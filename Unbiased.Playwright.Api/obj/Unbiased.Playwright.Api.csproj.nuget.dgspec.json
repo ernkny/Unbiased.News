@@ -50,6 +50,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.Playwright": {
+              "target": "Package",
+              "version": "[1.48.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"

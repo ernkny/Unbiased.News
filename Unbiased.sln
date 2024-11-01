@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unbiased.Playwright.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unbiased.Playwright.Api", "Unbiased.Playwright.Api\Unbiased.Playwright.Api.csproj", "{EA29E8B6-1732-42F3-B335-4D124914719C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unbiased.Shared.Dtos", "Unbiased.Shared.Dtos\Unbiased.Shared.Dtos.csproj", "{FBF00E32-77A8-45F3-8441-63D925FB5FB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{EA29E8B6-1732-42F3-B335-4D124914719C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA29E8B6-1732-42F3-B335-4D124914719C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA29E8B6-1732-42F3-B335-4D124914719C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBF00E32-77A8-45F3-8441-63D925FB5FB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBF00E32-77A8-45F3-8441-63D925FB5FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBF00E32-77A8-45F3-8441-63D925FB5FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBF00E32-77A8-45F3-8441-63D925FB5FB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{010022F4-BC20-4669-8C79-4418478EFA20} = {9C9913CA-5DDC-4ECA-9CF4-8748E092D87D}
 		{E1077CCD-44A2-4752-916A-0A537939F5DF} = {9C9913CA-5DDC-4ECA-9CF4-8748E092D87D}
 		{EA29E8B6-1732-42F3-B335-4D124914719C} = {9C9913CA-5DDC-4ECA-9CF4-8748E092D87D}
+		{FBF00E32-77A8-45F3-8441-63D925FB5FB1} = {A3E92A30-6E2F-4A9B-865B-1C380D3BE085}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B972362-6F8D-4D4B-A1E2-9DE3578189BF}

@@ -15,3 +15,4 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Infrastructure\obj\Debug\net8
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Infrastructure\obj\Debug\net8.0\refint\Unbiased.News.Infrastructure.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Infrastructure\obj\Debug\net8.0\Unbiased.News.Infrastructure.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Infrastructure\obj\Debug\net8.0\ref\Unbiased.News.Infrastructure.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Infrastructure\obj\Debug\net8.0\Unbiased.News.Infrastructure.sourcelink.json

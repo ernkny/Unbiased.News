@@ -1,0 +1,6 @@
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.Playwright.Application.csproj.AssemblyReference.cache
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.Playwright.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.Playwright.Application.AssemblyInfoInputs.cache
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.Playwright.Application.AssemblyInfo.cs
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.Playwright.Application.csproj.CoreCompileInputs.cache
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.Playwright.Application.sourcelink.json

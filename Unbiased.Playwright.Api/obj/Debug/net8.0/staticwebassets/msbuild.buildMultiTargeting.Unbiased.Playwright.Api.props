@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Unbiased.Playwright.Api.props" />
+</Project>

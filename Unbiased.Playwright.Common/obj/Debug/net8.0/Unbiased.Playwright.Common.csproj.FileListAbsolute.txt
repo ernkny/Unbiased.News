@@ -1,0 +1,12 @@
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\bin\Debug\net8.0\Unbiased.Playwright.Common.deps.json
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\bin\Debug\net8.0\Unbiased.Playwright.Common.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\bin\Debug\net8.0\Unbiased.Playwright.Common.pdb
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.AssemblyInfoInputs.cache
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.AssemblyInfo.cs
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.csproj.CoreCompileInputs.cache
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.sourcelink.json
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\refint\Unbiased.Playwright.Common.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\Unbiased.Playwright.Common.pdb
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Common\obj\Debug\net8.0\ref\Unbiased.Playwright.Common.dll

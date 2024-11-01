@@ -13,3 +13,4 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Domain\obj\Debug\net8.0\Unbia
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Domain\obj\Debug\net8.0\refint\Unbiased.News.Domain.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Domain\obj\Debug\net8.0\Unbiased.News.Domain.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Domain\obj\Debug\net8.0\ref\Unbiased.News.Domain.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Domain\obj\Debug\net8.0\Unbiased.News.Domain.sourcelink.json

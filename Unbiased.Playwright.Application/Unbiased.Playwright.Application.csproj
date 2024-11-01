@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Abstract\" />
-    <Folder Include="Concrete\" />
+    <Folder Include="Cqrs\" />
+    <Folder Include="Dto\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Playwright" Version="1.48.0" />
   </ItemGroup>
 
 </Project>

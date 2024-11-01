@@ -9,3 +9,4 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Common\obj\Debug\net8.0\Unbia
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Common\obj\Debug\net8.0\refint\Unbiased.News.Common.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Common\obj\Debug\net8.0\Unbiased.News.Common.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Common\obj\Debug\net8.0\ref\Unbiased.News.Common.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Common\obj\Debug\net8.0\Unbiased.News.Common.sourcelink.json
