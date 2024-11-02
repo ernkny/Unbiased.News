@@ -11,4 +11,13 @@
     <Folder Include="Concrete\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Unbiased.Playwright.Domain\Unbiased.Playwright.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

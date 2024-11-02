@@ -7,14 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Cqrs\" />
     <Folder Include="Dto\" />
     <Folder Include="Mappings\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.Playwright" Version="1.48.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Unbiased.Playwright.Domain\Unbiased.Playwright.Domain.csproj" />
+    <ProjectReference Include="..\Unbiased.Playwright.Infrastructure\Unbiased.Playwright.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

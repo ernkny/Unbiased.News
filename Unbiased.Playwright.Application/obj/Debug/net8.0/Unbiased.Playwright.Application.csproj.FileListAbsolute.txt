@@ -355,3 +355,8 @@ C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\obj\Debug
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\obj\Debug\net8.0\refint\Unbiased.Playwright.Application.dll
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.Playwright.Application.pdb
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\obj\Debug\net8.0\ref\Unbiased.Playwright.Application.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Domain.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Infrastructure.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Domain.pdb
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Infrastructure.pdb
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.AC728EB8.Up2Date

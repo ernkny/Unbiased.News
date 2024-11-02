@@ -1,0 +1,18 @@
+[
+  {
+    "ContainingType": "Unbiased.Playwright.Api.Controllers.NewsController",
+    "Method": "InsertNews",
+    "RelativePath": "api/News",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "insertNewsDto",
+        "Type": "Unbiased.Playwright.Domain.DTOs.InsertNewsDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

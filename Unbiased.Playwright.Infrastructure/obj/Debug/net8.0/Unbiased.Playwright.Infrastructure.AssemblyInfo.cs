@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Unbiased.Playwright.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+388054bb1f113449a4c1c903d1f6bcba62f3cba7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7edd50c03123cb782e1f142c8c33d629a508e8bd")]
 [assembly: System.Reflection.AssemblyProductAttribute("Unbiased.Playwright.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Unbiased.Playwright.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

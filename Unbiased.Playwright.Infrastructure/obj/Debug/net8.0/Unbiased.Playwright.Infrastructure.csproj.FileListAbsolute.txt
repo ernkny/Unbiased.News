@@ -22,3 +22,7 @@ C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Infrastructure\obj\De
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Infrastructure\obj\Debug\net8.0\refint\Unbiased.Playwright.Infrastructure.dll
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Infrastructure\obj\Debug\net8.0\Unbiased.Playwright.Infrastructure.pdb
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Infrastructure\obj\Debug\net8.0\ref\Unbiased.Playwright.Infrastructure.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Infrastructure\bin\Debug\net8.0\Unbiased.Playwright.Domain.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Infrastructure\bin\Debug\net8.0\Unbiased.Playwright.Domain.pdb
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Infrastructure\obj\Debug\net8.0\Unbiased.Playwright.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Infrastructure\obj\Debug\net8.0\Unbiased.B0078D52.Up2Date
