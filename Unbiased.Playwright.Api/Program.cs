@@ -1,5 +1,6 @@
 using Unbiased.Playwright.Application;
 using Unbiased.Playwright.Application.Interfaces;
+using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Application.Services;
 using Unbiased.Playwright.Infrastructure;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
@@ -21,7 +22,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAppl
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
 
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
-builder.Services.AddScoped<IInsertNewsService, InsertNewsService>();
+builder.Services.AddScoped<INewsService, NewsService>();
+builder.Services.AddScoped<IPlaywrightScrappingService, PlaywrightScrappingService>();
 
 var app = builder.Build();
 

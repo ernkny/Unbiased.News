@@ -8,7 +8,7 @@ namespace Unbiased.News.Domain.Entities
 {
     public class Category
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string CategoryName { get; set; }
         public int OrderLevel { get; set; }
     }

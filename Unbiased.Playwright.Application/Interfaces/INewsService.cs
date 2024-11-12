@@ -7,8 +7,8 @@ using Unbiased.Playwright.Domain.DTOs;
 
 namespace Unbiased.Playwright.Application.Interfaces
 {
-    public interface IInsertNewsService
+    public interface INewsService
     {
-        Task<Guid> InsertNewsAsync(InsertNewsDto addNewsDto);
+        Task<Guid> AddNewsAsync(InsertNewsDto addNewsDto);
     }
 }

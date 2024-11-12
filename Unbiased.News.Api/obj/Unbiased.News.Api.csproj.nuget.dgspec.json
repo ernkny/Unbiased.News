@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Api\\Unbiased.News.Api.csproj": {}
+    "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\Unbiased.News.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Api\\Unbiased.News.Api.csproj": {
+    "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\Unbiased.News.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Api\\Unbiased.News.Api.csproj",
+        "projectUniqueName": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\Unbiased.News.Api.csproj",
         "projectName": "Unbiased.News.Api",
-        "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Api\\Unbiased.News.Api.csproj",
-        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Api\\obj\\",
+        "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\Unbiased.News.Api.csproj",
+        "packagesPath": "C:\\Users\\erenk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Api\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\erenk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -29,8 +33,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Application\\Unbiased.News.Application.csproj": {
-                "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Application\\Unbiased.News.Application.csproj"
+              "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Unbiased.News.Application.csproj": {
+                "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Unbiased.News.Application.csproj"
               }
             }
           }
@@ -82,17 +86,21 @@
         }
       }
     },
-    "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Application\\Unbiased.News.Application.csproj": {
+    "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Unbiased.News.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Application\\Unbiased.News.Application.csproj",
+        "projectUniqueName": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Unbiased.News.Application.csproj",
         "projectName": "Unbiased.News.Application",
-        "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Application\\Unbiased.News.Application.csproj",
-        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Application\\obj\\",
+        "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\Unbiased.News.Application.csproj",
+        "packagesPath": "C:\\Users\\erenk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Application\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\erenk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -107,11 +115,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj": {
-                "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj"
+              "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj": {
+                "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj"
               },
-              "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj"
+              "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj"
               }
             }
           }
@@ -156,17 +164,21 @@
         }
       }
     },
-    "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj": {
+    "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
+        "projectUniqueName": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
         "projectName": "Unbiased.News.Common",
-        "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
-        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\obj\\",
+        "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
+        "packagesPath": "C:\\Users\\erenk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\erenk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -217,17 +229,21 @@
         }
       }
     },
-    "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj": {
+    "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
         "projectName": "Unbiased.News.Domain",
-        "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
-        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\obj\\",
+        "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj",
+        "packagesPath": "C:\\Users\\erenk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\erenk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -242,8 +258,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj": {
-                "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj"
+              "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj": {
+                "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj"
               }
             }
           }
@@ -282,17 +298,21 @@
         }
       }
     },
-    "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj": {
+    "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
         "projectName": "Unbiased.News.Infrastructure",
-        "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Infrastructure\\obj\\",
+        "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\Unbiased.News.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\erenk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\erenk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -307,11 +327,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj": {
-                "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Common\\Unbiased.News.Common.csproj"
+              "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj": {
+                "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj"
               },
-              "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj": {
-                "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj"
+              "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj": {
+                "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Domain\\Unbiased.News.Domain.csproj"
               }
             }
           }

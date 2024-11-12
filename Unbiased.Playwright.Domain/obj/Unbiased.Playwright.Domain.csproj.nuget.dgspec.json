@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj": {}
+    "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj": {
+    "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj",
         "projectName": "Unbiased.Playwright.Domain",
-        "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj",
-        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Domain\\obj\\",
+        "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj",
+        "packagesPath": "C:\\Users\\erenk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\erenk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

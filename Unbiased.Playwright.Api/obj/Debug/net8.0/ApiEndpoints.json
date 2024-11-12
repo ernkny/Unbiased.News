@@ -1,8 +1,18 @@
 [
   {
     "ContainingType": "Unbiased.Playwright.Api.Controllers.NewsController",
+    "Method": "GetNewsWithPlaywright",
+    "RelativePath": "api/News/GetNewsWithPlaywright",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Unbiased.Playwright.Api.Controllers.NewsController",
     "Method": "InsertNews",
-    "RelativePath": "api/News",
+    "RelativePath": "api/News/InsertNews",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
