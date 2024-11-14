@@ -1,6 +1,16 @@
 [
   {
     "ContainingType": "Unbiased.Playwright.Api.Controllers.NewsController",
+    "Method": "GetImagesForCollectedNews",
+    "RelativePath": "api/News/GetImagesForCollectedNews",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Unbiased.Playwright.Api.Controllers.NewsController",
     "Method": "GetNewsWithPlaywright",
     "RelativePath": "api/News/GetNewsWithPlaywright",
     "HttpMethod": "GET",

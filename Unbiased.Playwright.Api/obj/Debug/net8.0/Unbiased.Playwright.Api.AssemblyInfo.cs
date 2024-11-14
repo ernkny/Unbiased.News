@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Unbiased.Playwright.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+19610e66e463e52c17f591fd91248ba1cd78bc0c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b44487154a02fff369ce2a2c6fc628bfdcec37d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Unbiased.Playwright.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Unbiased.Playwright.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

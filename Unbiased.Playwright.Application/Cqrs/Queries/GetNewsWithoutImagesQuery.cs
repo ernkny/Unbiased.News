@@ -1,0 +1,6 @@
+﻿using MediatR;
+
+namespace Unbiased.Playwright.Application.Cqrs.Queries
+{
+    public record GetNewsWithoutImagesQuery(DateTime startDate): IRequest<IEnumerable<string>>;
+}

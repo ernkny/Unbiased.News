@@ -27,10 +27,15 @@ namespace Unbiased.Playwright.Api.Controllers
         [HttpGet("GetNewsWithPlaywright")]
         public async Task<IActionResult> GetNewsWithPlaywright()
         {
-            var result = await _playwrightScrapping.PlaywrightScrappingNewsAndAddRangeNews(); 
+            var result = await _playwrightScrapping.PlaywrightScrappingNewsAndAddRangeNews();
             return Ok(result);
         }
 
-
+        [HttpGet("GetImagesForCollectedNews")]
+        public async Task<IActionResult> GetImagesForCollectedNews()
+        {
+            var result = await _playwrightScrapping.GetImagesForCollectedNews();
+            return Ok(result);
+        }
     }
 }

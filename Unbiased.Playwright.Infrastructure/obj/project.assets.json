@@ -1738,24 +1738,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\erenk\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\pc\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj",
       "projectName": "Unbiased.Playwright.Infrastructure",
-      "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\erenk\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Infrastructure\\obj\\",
+      "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\erenk\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1770,8 +1765,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj": {
-              "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj"
+            "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj": {
+              "projectPath": "C:\\Users\\pc\\Source\\Repos\\Unbiased.News\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj"
             }
           }
         }

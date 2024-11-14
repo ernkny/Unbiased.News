@@ -12,5 +12,6 @@ namespace Unbiased.Playwright.Application.Interfaces.Playwright
         Task<List<News>> PlaywrightScrappingNews();
         Task<bool> SaveAllNewsWithRange(List<News> listOfNews);
         Task<bool> PlaywrightScrappingNewsAndAddRangeNews();
+        Task<bool> GetImagesForCollectedNews();
     }
 }
