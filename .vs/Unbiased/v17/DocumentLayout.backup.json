@@ -3,28 +3,60 @@
   "WorkspaceRootPath": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|solutionrelative:unbiased.playwright.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.infrastructure\\dataaccess\\repositories\\concrete\\newsimagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|solutionrelative:unbiased.playwright.infrastructure\\dataaccess\\repositories\\concrete\\newsimagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\playwright\\concrete\\getimageprocess.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\playwright\\concrete\\getimageprocess.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\services\\playwrightscrappingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\services\\playwrightscrappingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.api\\controllers\\newscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|solutionrelative:unbiased.playwright.api\\controllers\\newscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\playwright\\concrete\\playwright\\newsscrapping\\searchwithkeywordsmethod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\playwright\\concrete\\playwright\\newsscrapping\\searchwithkeywordsmethod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\interfaces\\playwright\\iplaywrightscrappingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\interfaces\\playwright\\iplaywrightscrappingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\playwright\\concrete\\playwright\\newsscrapping\\searchwithtitlesmethod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\playwright\\concrete\\playwright\\newsscrapping\\searchwithtitlesmethod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E72459AE-8ED0-4206-ADBD-98B89C967185}|Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.domain\\dtos\\getnewswithoutimagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E72459AE-8ED0-4206-ADBD-98B89C967185}|Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj|solutionrelative:unbiased.playwright.domain\\dtos\\getnewswithoutimagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\playwright\\concrete\\playwright\\newsscrappingprocess\\getnewswithguidcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\playwright\\concrete\\playwright\\newsscrappingprocess\\getnewswithguidcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\cqrs\\handlers\\getnewswithoutimagesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\cqrs\\handlers\\getnewswithoutimagesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.infrastructure\\dataaccess\\repositories\\abstract\\inewsimagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|solutionrelative:unbiased.playwright.infrastructure\\dataaccess\\repositories\\abstract\\inewsimagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.infrastructure\\dataaccess\\repositories\\concrete\\newsimagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|solutionrelative:unbiased.playwright.infrastructure\\dataaccess\\repositories\\concrete\\newsimagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.infrastructure\\dataaccess\\repositories\\concrete\\newsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|solutionrelative:unbiased.playwright.infrastructure\\dataaccess\\repositories\\concrete\\newsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\cqrs\\queries\\getnewswithoutimagesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\cqrs\\queries\\getnewswithoutimagesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.api\\controllers\\newscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|solutionrelative:unbiased.playwright.api\\controllers\\newscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|solutionrelative:unbiased.playwright.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\cqrs\\handlers\\addnewsqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -39,24 +71,8 @@
       "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\cqrs\\commands\\addnewsimagecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.infrastructure\\dataaccess\\repositories\\abstract\\inewsimagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|solutionrelative:unbiased.playwright.infrastructure\\dataaccess\\repositories\\abstract\\inewsimagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.infrastructure\\dataaccess\\repositories\\concrete\\newsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{899FA18C-68F4-491A-8FF3-82FD9F4135FF}|Unbiased.Playwright.Infrastructure\\Unbiased.Playwright.Infrastructure.csproj|solutionrelative:unbiased.playwright.infrastructure\\dataaccess\\repositories\\concrete\\newsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E72459AE-8ED0-4206-ADBD-98B89C967185}|Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.domain\\entities\\news.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E72459AE-8ED0-4206-ADBD-98B89C967185}|Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj|solutionrelative:unbiased.playwright.domain\\entities\\news.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\interfaces\\playwright\\iplaywrightscrappingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\interfaces\\playwright\\iplaywrightscrappingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.application\\playwright\\concrete\\playwright\\newsscrappingprocess\\getnewswithguidcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E1077CCD-44A2-4752-916A-0A537939F5DF}|Unbiased.Playwright.Application\\Unbiased.Playwright.Application.csproj|solutionrelative:unbiased.playwright.application\\playwright\\concrete\\playwright\\newsscrappingprocess\\getnewswithguidcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EA29E8B6-1732-42F3-B335-4D124914719C}|Unbiased.Playwright.Api\\Unbiased.Playwright.Api.csproj|c:\\users\\pc\\source\\repos\\unbiased.news\\unbiased.playwright.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -85,18 +101,18 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 249,
-          "SelectedChildIndex": 0,
+          "DockedWidth": 321,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 13,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Api\\Program.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Api\\Program.cs",
               "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Api\\Program.cs",
               "RelativeToolTip": "Unbiased.Playwright.Api\\Program.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABoAAABWAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAABRwBoAAABWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-02T20:09:07.569Z",
               "IsPinned": true,
@@ -104,13 +120,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 17,
               "Title": "News.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Domain\\Entities\\News.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Domain\\Entities\\News.cs",
               "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Domain\\Entities\\News.cs",
               "RelativeToolTip": "Unbiased.Playwright.Domain\\Entities\\News.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAgwA0AAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAA1wA0AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-02T19:23:31.331Z",
               "IsPinned": true,
@@ -118,7 +134,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 12,
               "Title": "NewsController.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Api\\Controllers\\NewsController.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Api\\Controllers\\NewsController.cs",
@@ -132,15 +148,29 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "PlaywrightScrappingService.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Services\\PlaywrightScrappingService.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Services\\PlaywrightScrappingService.cs",
               "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Services\\PlaywrightScrappingService.cs",
               "RelativeToolTip": "Unbiased.Playwright.Application\\Services\\PlaywrightScrappingService.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAwwD0AAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAADUAAAAAAAAAAAAIwEEAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-14T17:58:09.328Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GetImageProcess.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Playwright\\Concrete\\GetImageProcess.cs",
+              "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Playwright\\Concrete\\GetImageProcess.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Playwright\\Concrete\\GetImageProcess.cs",
+              "RelativeToolTip": "Unbiased.Playwright.Application\\Playwright\\Concrete\\GetImageProcess.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAqwBkAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T18:27:26.302Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
@@ -186,7 +216,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
+              "Title": "SearchWithKeywordsMethod.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrapping\\SearchWithKeywordsMethod.cs",
+              "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrapping\\SearchWithKeywordsMethod.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrapping\\SearchWithKeywordsMethod.cs",
+              "RelativeToolTip": "Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrapping\\SearchWithKeywordsMethod.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAgwBsAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T14:41:33.46Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SearchWithTitlesMethod.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrapping\\SearchWithTitlesMethod.cs",
+              "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrapping\\SearchWithTitlesMethod.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrapping\\SearchWithTitlesMethod.cs",
+              "RelativeToolTip": "Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrapping\\SearchWithTitlesMethod.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwBQAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T18:31:56.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GetNewsWithoutImageDto.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Domain\\DTOs\\GetNewsWithoutImageDto.cs",
+              "RelativeDocumentMoniker": "Unbiased.Playwright.Domain\\DTOs\\GetNewsWithoutImageDto.cs",
+              "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Domain\\DTOs\\GetNewsWithoutImageDto.cs",
+              "RelativeToolTip": "Unbiased.Playwright.Domain\\DTOs\\GetNewsWithoutImageDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T18:14:21.752Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "AddNewsQueryHandler.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Cqrs\\Handlers\\AddNewsQueryHandler.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Cqrs\\Handlers\\AddNewsQueryHandler.cs",
@@ -199,20 +268,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "GetNewsWithoutImagesQueryHandler.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Cqrs\\Handlers\\GetNewsWithoutImagesQueryHandler.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Cqrs\\Handlers\\GetNewsWithoutImagesQueryHandler.cs",
               "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Cqrs\\Handlers\\GetNewsWithoutImagesQueryHandler.cs",
               "RelativeToolTip": "Unbiased.Playwright.Application\\Cqrs\\Handlers\\GetNewsWithoutImagesQueryHandler.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwBIAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-14T18:53:16.75Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 15,
               "Title": "AddNewsImageQueryHandler.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Cqrs\\Handlers\\AddNewsImageQueryHandler.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Cqrs\\Handlers\\AddNewsImageQueryHandler.cs",
@@ -225,20 +294,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 11,
               "Title": "GetNewsWithoutImagesQuery.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Cqrs\\Queries\\GetNewsWithoutImagesQuery.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Cqrs\\Queries\\GetNewsWithoutImagesQuery.cs",
               "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Cqrs\\Queries\\GetNewsWithoutImagesQuery.cs",
               "RelativeToolTip": "Unbiased.Playwright.Application\\Cqrs\\Queries\\GetNewsWithoutImagesQuery.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAABsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-14T18:50:43.608Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 16,
               "Title": "AddNewsImageCommand.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Cqrs\\Commands\\AddNewsImageCommand.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Cqrs\\Commands\\AddNewsImageCommand.cs",
@@ -251,20 +320,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 9,
               "Title": "NewsImageRepository.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Infrastructure\\DataAccess\\Repositories\\Concrete\\NewsImageRepository.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Infrastructure\\DataAccess\\Repositories\\Concrete\\NewsImageRepository.cs",
               "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Infrastructure\\DataAccess\\Repositories\\Concrete\\NewsImageRepository.cs",
               "RelativeToolTip": "Unbiased.Playwright.Infrastructure\\DataAccess\\Repositories\\Concrete\\NewsImageRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAoAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-14T18:29:05.885Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 8,
               "Title": "INewsImageRepository.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Infrastructure\\DataAccess\\Repositories\\Abstract\\INewsImageRepository.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Infrastructure\\DataAccess\\Repositories\\Abstract\\INewsImageRepository.cs",
@@ -277,20 +346,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 3,
               "Title": "IPlaywrightScrappingService.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Interfaces\\Playwright\\IPlaywrightScrappingService.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Interfaces\\Playwright\\IPlaywrightScrappingService.cs",
               "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Interfaces\\Playwright\\IPlaywrightScrappingService.cs",
               "RelativeToolTip": "Unbiased.Playwright.Application\\Interfaces\\Playwright\\IPlaywrightScrappingService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-14T18:02:33.25Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 6,
               "Title": "GetNewsWithGuidControl.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrappingProcess\\GetNewsWithGuidControl.cs",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Application\\Playwright\\Concrete\\Playwright\\NewsScrappingProcess\\GetNewsWithGuidControl.cs",
@@ -303,7 +372,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 18,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.Playwright.Api\\appsettings.json",
               "RelativeDocumentMoniker": "Unbiased.Playwright.Api\\appsettings.json",
@@ -311,7 +380,8 @@
               "RelativeToolTip": "Unbiased.Playwright.Api\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAACIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-11-12T20:10:09.438Z"
+              "WhenOpened": "2024-11-12T20:10:09.438Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -328,7 +398,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 20,
               "Title": "GetCategoriesQuery.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
@@ -336,11 +406,12 @@
               "RelativeToolTip": "Unbiased.News.Application\\Cqrs\\Queries\\Categories\\GetCategoriesQuery.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-02T20:20:48.337Z"
+              "WhenOpened": "2024-11-02T20:20:48.337Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 22,
               "Title": "CategoryController.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Api\\Controllers\\CategoryController.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Api\\Controllers\\CategoryController.cs",
@@ -348,23 +419,25 @@
               "RelativeToolTip": "Unbiased.News.Api\\Controllers\\CategoryController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-02T20:04:18.146Z"
+              "WhenOpened": "2024-11-02T20:04:18.146Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 19,
               "Title": "GetCategoriesQueryHandler.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
               "ToolTip": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
               "RelativeToolTip": "Unbiased.News.Application\\Cqrs\\Handlers\\Categories\\GetCategoriesQueryHandler.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwAwAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-02T19:57:10.828Z"
+              "WhenOpened": "2024-11-02T19:57:10.828Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 21,
               "Title": "CategoriesService.cs",
               "DocumentMoniker": "C:\\Users\\pc\\source\\repos\\Unbiased.News\\Unbiased.News.Application\\Services\\CategoriesService.cs",
               "RelativeDocumentMoniker": "Unbiased.News.Application\\Services\\CategoriesService.cs",
@@ -372,7 +445,8 @@
               "RelativeToolTip": "Unbiased.News.Application\\Services\\CategoriesService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-02T19:50:22.456Z"
+              "WhenOpened": "2024-11-02T19:50:22.456Z",
+              "EditorCaption": ""
             }
           ]
         }

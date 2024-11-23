@@ -138,6 +138,14 @@
             "Microsoft.Playwright": {
               "target": "Package",
               "version": "[1.48.0, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "SixLabors.ImageSharp.Drawing": {
+              "target": "Package",
+              "version": "[2.1.4, )"
             }
           },
           "imports": [

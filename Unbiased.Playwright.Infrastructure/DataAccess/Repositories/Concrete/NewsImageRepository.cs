@@ -33,14 +33,14 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<IEnumerable<string>> GetNewsWithoutImages(DateTime startDate)
+        public async Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImages(DateTime startDate)
         {
             using (var connection = _connection.CreateConnection())
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("startDate", startDate, DbType.DateTime);
 
-                return await connection.QueryAsync<string>("UB_sp_GetNewsWithoutImages", parameters, commandType: CommandType.StoredProcedure);
+                return await connection.QueryAsync<GetNewsWithoutImageDto>("UB_sp_GetNewsWithoutImages", parameters, commandType: CommandType.StoredProcedure);
             }
         }
     }

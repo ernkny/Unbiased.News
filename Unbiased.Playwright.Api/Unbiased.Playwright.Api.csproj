@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Unbiased.Playwright.Application\Unbiased.Playwright.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Watermark\watermark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

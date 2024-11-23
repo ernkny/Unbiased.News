@@ -11,6 +11,6 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
     public interface INewsImageRepository
     {
         Task<Guid> AddNewsImageAsync(InsertNewsImageDto addNewsImageDto);
-        Task<IEnumerable<string>> GetNewsWithoutImages(DateTime startDate);
+        Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImages(DateTime startDate);
     }
 }

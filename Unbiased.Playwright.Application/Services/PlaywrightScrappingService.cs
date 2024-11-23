@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Unbiased.Playwright.Application.Cqrs.Commands;
 using Unbiased.Playwright.Application.Cqrs.Queries;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
+using Unbiased.Playwright.Application.Playwright.Concrete;
 using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrappingProcess;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
@@ -55,16 +56,18 @@ namespace Unbiased.Playwright.Application.Services
         public async Task<bool> GetImagesForCollectedNews()
         {
             // Get matchId's without images from the database
-            var matchIds = await _mediator.Send(new GetNewsWithoutImagesQuery(DateTime.Now.AddDays(-100)));
-            // TODO: Get the image from google images
-            // TODO: Watermark the image
-            // Save to database
-            foreach (var matchId in matchIds)
+            var newsWithoutImages = (await _mediator.Send(new GetNewsWithoutImagesQuery(DateTime.Now.AddDays(-100)))).ToList();
+
+            var titles = newsWithoutImages.Select(x => x.Title).ToList();
+
+            var imagesForTitles = await GetImageProcess.GetNewsImageForTitle(titles);
+
+            for ( var i = 0; i < imagesForTitles.Count; i++)
             {
                 await _mediator.Send(new AddNewsImageCommand(new InsertNewsImageDto
                 {
-                    MatchId = matchId,
-                    ImageBase64 = "test"
+                    MatchId = newsWithoutImages[i].MatchId,
+                    ImageBase64 = imagesForTitles[i]
                 }));
             }
 

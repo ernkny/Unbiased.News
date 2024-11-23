@@ -832,3 +832,7 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\obj\Debug\net8.0\re
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\obj\Debug\net8.0\Unbiased.Playwright.Api.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\obj\Debug\net8.0\Unbiased.Playwright.Api.genruntimeconfig.cache
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\obj\Debug\net8.0\ref\Unbiased.Playwright.Api.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\Watermark\watermark.png
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.Fonts.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.ImageSharp.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.ImageSharp.Drawing.dll
