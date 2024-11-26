@@ -10,5 +10,6 @@ namespace Unbiased.Playwright.Application.Interfaces
     public interface INewsService
     {
         Task<Guid> AddNewsAsync(InsertNewsDto addNewsDto);
+        Task<bool> SendNewsToApiForGenerateAsync();
     }
 }

@@ -13,7 +13,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                 var chromium = playwright.Chromium;
                 var browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
                 {
-                    Headless = false,
+                    Headless = true,
                 });
 
                 var page = await browser.NewPageAsync();
@@ -46,7 +46,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                         }
                     }
                 }
-                page.CloseAsync();
+                await page.CloseAsync();
                 return model;
             }
             catch (Exception exception)

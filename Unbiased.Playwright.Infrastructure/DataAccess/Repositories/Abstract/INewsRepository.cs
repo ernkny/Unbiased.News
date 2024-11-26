@@ -8,7 +8,10 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         Task<Guid> AddNewsAsync(InsertNewsDto addNewsDto);
         Task<IEnumerable<News>> GetAllNewsByNotIncludedProcessAsync();
         Task<IEnumerable<string>> GetAllActiveKeywordsForSearchAsync();
-
-        Task<bool> AddRangeAllNews(IEnumerable<News> news);
+        Task<bool> AddRangeAllNewsAsync(IEnumerable<News> news);
+        Task<bool> ValidateUrlForSearchWithTitleAsync(string title);
+        Task<IEnumerable<GeneratedNewsDto>> GetAllCombinedDetailsAsync();
+        Task<bool> AddOpenAiResponseAsync(string responseBody);
+        Task<bool> AddGeneratedNews(News generatedNews);
     }
 }

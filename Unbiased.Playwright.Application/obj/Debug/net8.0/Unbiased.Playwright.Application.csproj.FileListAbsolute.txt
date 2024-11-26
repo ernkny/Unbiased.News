@@ -695,8 +695,10 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\n
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Application.deps.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Application.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Application.pdb
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Common.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Domain.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Infrastructure.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Common.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Domain.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\bin\Debug\net8.0\Unbiased.Playwright.Infrastructure.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Application\obj\Debug\net8.0\Unbiased.Playwright.Application.csproj.AssemblyReference.cache

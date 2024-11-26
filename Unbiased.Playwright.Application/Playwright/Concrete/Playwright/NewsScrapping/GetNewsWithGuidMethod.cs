@@ -1,66 +1,55 @@
 ﻿using Microsoft.Playwright;
-using System;
+using System.Collections.Concurrent;
 using System.Text;
 using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 using Unbiased.Playwright.Domain.Entities;
 
-namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrapping
+public class GetNewsWithGuidMethod
 {
-    public class GetNewsWithGuidMethod
+    private IPlaywright _playwright;
+
+    public async Task<List<News>> GetNewsWithGuid(List<SaveSearchUrlAndGuidDto> urlAndGuidPairs)
     {
-        public async Task<List<News>> GetNewsWithGuid(List<SaveSearchUrlAndGuidDto> saveSearchUrlAndGuidDtos)
+        var newsArticles = new ConcurrentBag<News>();
+        if (_playwright == null)
         {
-            //todo for object reference error 
+            _playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+        }
+        var browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+        await Parallel.ForEachAsync(urlAndGuidPairs, async (urlPair, cancellationToken) =>
+        {
             try
             {
-                var listOfNews = Enumerable.Empty<News>().ToList();
-                using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-                var chromium = playwright.Chromium;
-                var browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
-                {
-                    Headless = false,
-                });
-
                 var page = await browser.NewPageAsync();
-                foreach (var news in saveSearchUrlAndGuidDtos.GroupBy(x => x.MatchId).ToList())
+                var contentBuilder = new StringBuilder();
+                await page.GotoAsync(urlPair.Url, new PageGotoOptions { Timeout = 60000, WaitUntil = WaitUntilState.DOMContentLoaded });
+                var paragraphs = await page.QuerySelectorAllAsync("p:not([class])");
+                foreach (var paragraph in paragraphs)
                 {
-                   
-                    foreach (var url in news.ToList())
-                    {
-                        var stringBuilder = new StringBuilder();
-                        await page.GotoAsync(url.Url, new PageGotoOptions
-                        {
-                            Timeout = 60000,
-                            WaitUntil = WaitUntilState.DOMContentLoaded
-                        });
-                        var getAllNewContent = await page.QuerySelectorAllAsync("p");
-                        foreach (var content in getAllNewContent)
-                        {
-                            stringBuilder.AppendLine(await content.InnerTextAsync());
-                        }
-                        listOfNews.Add(new News()
-                        {
-                            CreatedTime = DateTime.Now,
-                            CreatedUser = "system",
-                            Detail = stringBuilder.ToString(),
-                            IsActive = true,
-                            IsProcessed = false,
-                            MatchId = url.MatchId,
-                            IsDeleted = false,
-                            Title = url.Title,
-                            Url = url.Url,
-                        });
-                    }
+                    contentBuilder.AppendLine(await paragraph.InnerTextAsync());
                 }
+                newsArticles.Add(new News
+                {
+                    CreatedTime = DateTime.Now,
+                    CreatedUser = "system",
+                    Detail = contentBuilder.ToString(),
+                    IsActive = true,
+                    IsProcessed = false,
+                    MatchId = urlPair.MatchId,
+                    IsDeleted = false,
+                    Title = urlPair.Title,
+                    Url = urlPair.Url,
+                });
                 await page.CloseAsync();
-                return listOfNews;
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-
-                throw exception.InnerException;
+                Console.WriteLine($"URL işlenirken bir hata oluştu: {urlPair.Url} - {ex.Message}");
             }
+        });
 
-        }
+        await browser.CloseAsync();
+
+        return newsArticles.ToList();
     }
 }

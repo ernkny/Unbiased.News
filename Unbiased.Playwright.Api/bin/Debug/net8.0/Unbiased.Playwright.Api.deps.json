@@ -10,7 +10,8 @@
         "dependencies": {
           "Microsoft.Playwright": "1.48.0",
           "Swashbuckle.AspNetCore": "6.6.2",
-          "Unbiased.Playwright.Application": "1.0.0"
+          "Unbiased.Playwright.Application": "1.0.0",
+          "Unbiased.Shared.Dtos": "1.0.0"
         },
         "runtime": {
           "Unbiased.Playwright.Api.dll": {}
@@ -177,7 +178,26 @@
         }
       },
       "Microsoft.Extensions.ApiDescription.Server/6.0.5": {},
+      "Microsoft.Extensions.Configuration.Abstractions/9.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
       "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {},
+      "Microsoft.Extensions.Primitives/9.0.0": {
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
       "Microsoft.Identity.Client/4.61.3": {
         "dependencies": {
           "Microsoft.IdentityModel.Abstractions": "6.35.0",
@@ -456,11 +476,20 @@
         "dependencies": {
           "MediatR": "12.4.1",
           "Microsoft.Playwright": "1.48.0",
+          "Unbiased.Playwright.Common": "1.0.0",
           "Unbiased.Playwright.Domain": "1.0.0",
           "Unbiased.Playwright.Infrastructure": "1.0.0"
         },
         "runtime": {
           "Unbiased.Playwright.Application.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Unbiased.Playwright.Common/1.0.0": {
+        "runtime": {
+          "Unbiased.Playwright.Common.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -477,11 +506,21 @@
       "Unbiased.Playwright.Infrastructure/1.0.0": {
         "dependencies": {
           "Dapper": "2.1.35",
+          "MediatR": "12.4.1",
           "Microsoft.Data.SqlClient": "5.2.2",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0",
           "Unbiased.Playwright.Domain": "1.0.0"
         },
         "runtime": {
           "Unbiased.Playwright.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Unbiased.Shared.Dtos/1.0.0": {
+        "runtime": {
+          "Unbiased.Shared.Dtos.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -565,12 +604,26 @@
       "path": "microsoft.extensions.apidescription.server/6.0.5",
       "hashPath": "microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512"
     },
+    "Microsoft.Extensions.Configuration.Abstractions/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lqvd7W3FGKUO1+ZoUEMaZ5XDJeWvjpy2/M/ptCGz3tXLD4HWVaSzjufsAsjemasBEg+2SxXVtYVvGt5r2nKDlg==",
+      "path": "microsoft.extensions.configuration.abstractions/9.0.0",
+      "hashPath": "microsoft.extensions.configuration.abstractions.9.0.0.nupkg.sha512"
+    },
     "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-cjWrLkJXK0rs4zofsK4bSdg+jhDLTaxrkXu4gS6Y7MAlCvRyNNgwY/lJi5RDlQOnSZweHqoyvgvbdvQsRIW+hg==",
       "path": "microsoft.extensions.dependencyinjection.abstractions/8.0.0",
       "hashPath": "microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-N3qEBzmLMYiASUlKxxFIISP4AiwuPTHF5uCh+2CWSwwzAJiIYx0kBJsS30cp1nvhSySFAVi30jecD307jV+8Kg==",
+      "path": "microsoft.extensions.primitives/9.0.0",
+      "hashPath": "microsoft.extensions.primitives.9.0.0.nupkg.sha512"
     },
     "Microsoft.Identity.Client/4.61.3": {
       "type": "package",
@@ -822,12 +875,22 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Unbiased.Playwright.Common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Unbiased.Playwright.Domain/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
     "Unbiased.Playwright.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unbiased.Shared.Dtos/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

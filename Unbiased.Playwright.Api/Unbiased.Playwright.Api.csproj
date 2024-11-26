@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Unbiased.Playwright.Application\Unbiased.Playwright.Application.csproj" />
+    <ProjectReference Include="..\Unbiased.Shared.Dtos\Unbiased.Shared.Dtos.csproj" />
   </ItemGroup>
 
 </Project>

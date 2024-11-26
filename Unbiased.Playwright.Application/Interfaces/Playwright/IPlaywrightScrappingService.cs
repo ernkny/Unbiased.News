@@ -9,8 +9,8 @@ namespace Unbiased.Playwright.Application.Interfaces.Playwright
 {
     public interface IPlaywrightScrappingService
     {
-        Task<List<News>> PlaywrightScrappingNews();
-        Task<bool> SaveAllNewsWithRange(List<News> listOfNews);
-        Task<bool> PlaywrightScrappingNewsAndAddRangeNews();
+        Task<List<News>> PlaywrightScrappingNewsAsync();
+        Task<bool> SaveAllNewsWithRangeAsync(List<News> listOfNews);
+        Task<bool> PlaywrightScrappingNewsAndAddRangeNewsAsync();
     }
 }
