@@ -10,7 +10,12 @@
         "dependencies": {
           "MediatR": "12.4.1",
           "Microsoft.Playwright": "1.48.0",
+<<<<<<< HEAD
           "Unbiased.Playwright.Common": "1.0.0",
+=======
+          "SixLabors.ImageSharp": "3.1.6",
+          "SixLabors.ImageSharp.Drawing": "2.1.4",
+>>>>>>> 7b4131d2a8d60a58f976c253a4c3c9efebfdd123
           "Unbiased.Playwright.Domain": "1.0.0",
           "Unbiased.Playwright.Infrastructure": "1.0.0"
         },
@@ -319,6 +324,34 @@
           "lib/netstandard2.0/Microsoft.SqlServer.Server.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SixLabors.Fonts/2.0.4": {
+        "runtime": {
+          "lib/net6.0/SixLabors.Fonts.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.4.0"
+          }
+        }
+      },
+      "SixLabors.ImageSharp/3.1.6": {
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.1.6.0"
+          }
+        }
+      },
+      "SixLabors.ImageSharp.Drawing/2.1.4": {
+        "dependencies": {
+          "SixLabors.Fonts": "2.0.4",
+          "SixLabors.ImageSharp": "3.1.6"
+        },
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.Drawing.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.1.4.0"
           }
         }
       },
@@ -660,6 +693,27 @@
       "sha512": "sha512-N4KeF3cpcm1PUHym1RmakkzfkEv3GRMyofVv40uXsQhCQeglr2OHNcUk2WOG51AKpGO8ynGpo9M/kFXSzghwug==",
       "path": "microsoft.sqlserver.server/1.0.0",
       "hashPath": "microsoft.sqlserver.server.1.0.0.nupkg.sha512"
+    },
+    "SixLabors.Fonts/2.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4+NKz8W36injp98lmmM07ncp08HAK8c6FZz8vLoKxRPfJeEVWpBHlLYEbQa5rcqKKYqxUv/RVCrb8XcPhfMKUQ==",
+      "path": "sixlabors.fonts/2.0.4",
+      "hashPath": "sixlabors.fonts.2.0.4.nupkg.sha512"
+    },
+    "SixLabors.ImageSharp/3.1.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dHQ5jugF9v+5/LCVHCWVzaaIL6WOehqJy6eju/0VFYFPEj2WtqkGPoEV9EVQP83dHsdoqYaTuWpZdwAd37UwfA==",
+      "path": "sixlabors.imagesharp/3.1.6",
+      "hashPath": "sixlabors.imagesharp.3.1.6.nupkg.sha512"
+    },
+    "SixLabors.ImageSharp.Drawing/2.1.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p4VwtAABggDUhUS5zXldCZHVGfjJl76+SrBHY4biNQ8+890igFK6RL87qIv9GqvEjMcYOar1sPkf2iMQ6uq9/g==",
+      "path": "sixlabors.imagesharp.drawing/2.1.4",
+      "hashPath": "sixlabors.imagesharp.drawing.2.1.4.nupkg.sha512"
     },
     "System.ClientModel/1.0.0": {
       "type": "package",

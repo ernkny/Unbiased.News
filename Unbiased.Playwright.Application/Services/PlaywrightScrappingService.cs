@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
+using Unbiased.Playwright.Application.Playwright.Concrete;
 using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrappingProcess;
+using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
@@ -39,6 +41,27 @@ namespace Unbiased.Playwright.Application.Services
         public async Task<bool> SaveAllNewsWithRangeAsync(List<News> listOfNews)
         {
             var result = await _mediator.Send(new AddRangeAllNewsCommand(listOfNews));
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> GetImagesForCollectedNews()
+        {
+            // Get matchId's without images from the database
+            var newsWithoutImages = (await _mediator.Send(new GetNewsWithoutImagesQuery(DateTime.Now.AddDays(-100)))).ToList();
+
+            var titles = newsWithoutImages.Select(x => x.Title).ToList();
+
+            var imagesForTitles = await GetImageProcess.GetNewsImageForTitle(titles);
+
+            for ( var i = 0; i < imagesForTitles.Count; i++)
+            {
+                await _mediator.Send(new AddNewsImageCommand(new InsertNewsImageDto
+                {
+                    MatchId = newsWithoutImages[i].MatchId,
+                    ImageBase64 = imagesForTitles[i]
+                }));
+            }
+
             return await Task.FromResult(true);
         }
     }

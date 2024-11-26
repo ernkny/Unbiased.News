@@ -22,6 +22,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAppl
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
 
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<INewsImageRepository, NewsImageRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IPlaywrightScrappingService, PlaywrightScrappingService>();
 

@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Unbiased.Shared.Dtos\Unbiased.Shared.Dtos.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Watermark\watermark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

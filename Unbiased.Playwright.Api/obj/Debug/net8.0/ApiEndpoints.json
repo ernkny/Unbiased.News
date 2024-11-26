@@ -1,9 +1,15 @@
 [
   {
     "ContainingType": "Unbiased.Playwright.Api.Controllers.NewsController",
+<<<<<<< HEAD
     "Method": "GenerateNewsWithAI",
     "RelativePath": "api/News/GenerateNewsWithAI",
     "HttpMethod": "POST",
+=======
+    "Method": "GetImagesForCollectedNews",
+    "RelativePath": "api/News/GetImagesForCollectedNews",
+    "HttpMethod": "GET",
+>>>>>>> 7b4131d2a8d60a58f976c253a4c3c9efebfdd123
     "IsController": true,
     "Order": 0,
     "Parameters": [],
