@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Unbiased.News.Api.props" />
+</Project>

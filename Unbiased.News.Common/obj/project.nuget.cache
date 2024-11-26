@@ -4,12 +4,5 @@
   "success": true,
   "projectFilePath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\Unbiased.News.Common.csproj",
   "expectedPackageFiles": [],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.News.Common\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }
