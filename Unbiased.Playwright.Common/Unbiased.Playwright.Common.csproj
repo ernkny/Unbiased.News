@@ -11,4 +11,8 @@
     <Folder Include="Concrete\Helper\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Unbiased.Playwright.Domain\Unbiased.Playwright.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

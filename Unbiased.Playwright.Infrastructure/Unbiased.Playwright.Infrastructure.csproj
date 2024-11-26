@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Unbiased.Playwright.Common\Unbiased.Playwright.Common.csproj" />
     <ProjectReference Include="..\Unbiased.Playwright.Domain\Unbiased.Playwright.Domain.csproj" />
   </ItemGroup>
 

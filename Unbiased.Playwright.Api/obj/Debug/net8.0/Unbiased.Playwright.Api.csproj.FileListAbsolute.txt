@@ -415,6 +415,10 @@ C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\Unbiased.Playwright.Application.pdb
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\Unbiased.Playwright.Domain.pdb
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\Unbiased.Playwright.Infrastructure.pdb
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\Watermark\watermark.png
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.Fonts.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.ImageSharp.dll
+C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.ImageSharp.Drawing.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\appsettings.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\.playwright\node\win32_x64\node.exe
@@ -757,6 +761,7 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\.p
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\playwright.ps1
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Unbiased.Playwright.Api.staticwebassets.endpoints.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Unbiased.Playwright.Api.exe
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Watermark\watermark.png
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Unbiased.Playwright.Api.deps.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Unbiased.Playwright.Api.runtimeconfig.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Unbiased.Playwright.Api.dll
@@ -781,6 +786,9 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Mi
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Microsoft.OpenApi.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Microsoft.Playwright.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.Fonts.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.ImageSharp.dll
+C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.ImageSharp.Drawing.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -842,7 +850,3 @@ C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\obj\Debug\net8.0\re
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\obj\Debug\net8.0\Unbiased.Playwright.Api.pdb
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\obj\Debug\net8.0\Unbiased.Playwright.Api.genruntimeconfig.cache
 C:\Users\erenk\source\repos\Unbiased\Unbiased.Playwright.Api\obj\Debug\net8.0\ref\Unbiased.Playwright.Api.dll
-C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\Watermark\watermark.png
-C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.Fonts.dll
-C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.ImageSharp.dll
-C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.Playwright.Api\bin\Debug\net8.0\SixLabors.ImageSharp.Drawing.dll

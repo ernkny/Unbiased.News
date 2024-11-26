@@ -784,6 +784,9 @@
       "Unbiased.Playwright.Common/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Unbiased.Playwright.Domain": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Unbiased.Playwright.Common.dll": {}
         },
@@ -809,6 +812,7 @@
           "MediatR": "12.4.1",
           "Microsoft.Data.SqlClient": "5.2.2",
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.0",
+          "Unbiased.Playwright.Common": "1.0.0",
           "Unbiased.Playwright.Domain": "1.0.0"
         },
         "compile": {

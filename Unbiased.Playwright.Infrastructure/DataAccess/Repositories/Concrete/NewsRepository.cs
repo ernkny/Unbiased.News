@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
@@ -202,6 +203,16 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return false;
+            }
+        }
+
+        public async Task<bool> UpdateNewsProcessValueAsTrueAsync(string matchId)
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("MatchId", matchId, DbType.String);
+                return await connection.ExecuteAsync("UB_sp_UpdateNewsProcessValueAsTrue", parameters, commandType: CommandType.StoredProcedure) == 1;
             }
         }
     }

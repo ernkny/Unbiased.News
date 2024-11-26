@@ -29,10 +29,14 @@ namespace Unbiased.Playwright.Application.Services
         public async Task<bool> SendNewsToApiForGenerateAsync()
         {
             var combindedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery());
-            var externalServiceSend=new GptApiExternalService(new HttpClient(), _configuration,_mediator);
+            var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
             foreach (var item in combindedNews)
             {
-                var result=await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails);
+                var result = await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails);
+                if (result is null || await _mediator.Send(new UpdateNewsProcessValueAsTrueCommand(item.MatchId)) is not true)
+                {
+                    throw new ArgumentException("Error");
+                }
                 if (result != null)
                 {
                     var generatedNews = new News()

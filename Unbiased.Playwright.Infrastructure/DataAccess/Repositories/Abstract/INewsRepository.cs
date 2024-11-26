@@ -13,5 +13,6 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         Task<IEnumerable<GeneratedNewsDto>> GetAllCombinedDetailsAsync();
         Task<bool> AddOpenAiResponseAsync(string responseBody);
         Task<bool> AddGeneratedNews(News generatedNews);
+        Task<bool> UpdateNewsProcessValueAsTrueAsync(string matchId);
     }
 }

@@ -2,5 +2,54 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-*.bin
+# Derleme çıktıları
+bin/
+obj/
+build/
+out/
+
+# IDE ve editör dosyaları
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.idea/
+
+# Geçici dosyalar
+[Tt]emp/
+[Tt]mp/
+
+# Log dosyaları
+*.log
+logs/
+
+# Paket yöneticisi dizinleri
+node_modules/
+packages/
+
+# Derleme sonucu oluşan dosyalar
+*.dll
+*.exe
+*.pdb
+
+# Çeşitli
+.DS_Store
+Thumbs.db
+
+# Özel yapılandırma dosyaları
+appsettings.*.json
+!appsettings.example.json
+
+# Test sonuçları
+TestResults/
+
+# Veritabanı dosyaları
+*.mdf
+*.ldf
+
+# Yedek dosyaları
+*~
+*.bak
 /.vs/Unbiased/FileContentIndex

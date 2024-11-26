@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Unbiased.Playwright.Application.Cqrs.Commands;
+using Unbiased.Playwright.Application.Cqrs.Queries;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Application.Playwright.Concrete;
 using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrappingProcess;
@@ -63,6 +65,21 @@ namespace Unbiased.Playwright.Application.Services
             }
 
             return await Task.FromResult(true);
+        }
+
+        public Task<List<News>> PlaywrightScrappingNews()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> SaveAllNewsWithRange(List<News> listOfNews)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> PlaywrightScrappingNewsAndAddRangeNews()
+        {
+            throw new NotImplementedException();
         }
     }
 }

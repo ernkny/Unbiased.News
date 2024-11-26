@@ -212,7 +212,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj": {
+                "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -345,6 +349,9 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+              "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Common\\Unbiased.Playwright.Common.csproj": {
+                "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Common\\Unbiased.Playwright.Common.csproj"
+              },
               "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj": {
                 "projectPath": "C:\\Users\\erenk\\source\\repos\\Unbiased\\Unbiased.Playwright.Domain\\Unbiased.Playwright.Domain.csproj"
               }

@@ -78,8 +78,8 @@ C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.News.Api\obj\Debug\net8.0\refint
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.News.Api\obj\Debug\net8.0\Unbiased.News.Api.pdb
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.News.Api\obj\Debug\net8.0\Unbiased.News.Api.genruntimeconfig.cache
 C:\Users\pc\Source\Repos\Unbiased.News\Unbiased.News.Api\obj\Debug\net8.0\ref\Unbiased.News.Api.dll
-C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\bin\Debug\net8.0\appsettings.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\bin\Debug\net8.0\appsettings.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\bin\Debug\net8.0\Unbiased.News.Api.staticwebassets.endpoints.json
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\bin\Debug\net8.0\Unbiased.News.Api.exe
 C:\Users\erenk\source\repos\Unbiased\Unbiased.News.Api\bin\Debug\net8.0\Unbiased.News.Api.deps.json
