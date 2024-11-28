@@ -3,8 +3,16 @@ using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrapping
 {
+    /// <summary>
+    /// This class is responsible for searching news titles on Google and returning the URLs and GUIDs of the search results.
+    /// </summary>
     public class SearchWithTitlesMethod
     {
+        /// <summary>
+        /// Searches news titles on Google and returns the URLs and GUIDs of the search results.
+        /// </summary>
+        /// <param name="titleOfNews">A list of news titles to search for.</param>
+        /// <returns>A list of SaveSearchUrlAndGuidDto objects containing the URLs and GUIDs of the search results.</returns>
         public async Task<List<SaveSearchUrlAndGuidDto>> SearchWithTitles(List<string> titleOfNews)
         {
             try
@@ -52,7 +60,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
             catch (Exception exception)
             {
 
-                throw exception.InnerException;
+                throw ;
             }
 
         }

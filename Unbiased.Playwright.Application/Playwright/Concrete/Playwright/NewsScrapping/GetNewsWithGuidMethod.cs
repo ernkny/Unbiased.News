@@ -4,9 +4,18 @@ using System.Text;
 using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 using Unbiased.Playwright.Domain.Entities;
 
+/// <summary>
+/// Class responsible for retrieving news articles with GUIDs.
+/// </summary>
 public class GetNewsWithGuidMethod
 {
     private IPlaywright _playwright;
+
+    /// <summary>
+    /// Retrieves news articles with GUIDs from the provided URL and GUID pairs.
+    /// </summary>
+    /// <param name="urlAndGuidPairs">List of URL and GUID pairs.</param>
+    /// <returns>List of news articles.</returns>
 
     public async Task<List<News>> GetNewsWithGuid(List<SaveSearchUrlAndGuidDto> urlAndGuidPairs)
     {
@@ -44,7 +53,7 @@ public class GetNewsWithGuidMethod
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"URL işlenirken bir hata oluştu: {urlPair.Url} - {ex.Message}");
+                throw;
             }
         });
 

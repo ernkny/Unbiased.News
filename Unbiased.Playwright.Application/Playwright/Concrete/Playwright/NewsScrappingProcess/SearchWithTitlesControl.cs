@@ -4,16 +4,28 @@ using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrappi
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrappingProcess
 {
-    public  class SearchWithTitlesControl : AbstractHandlerChain
+    /// <summary>
+    /// This class is responsible for handling the search with titles control.
+    /// It implements the AbstractHandlerChain interface.
+    /// </summary>
+    public class SearchWithTitlesControl : AbstractHandlerChain
     {
         private  AbstractHandlerChain _abstractHandlerChain;
         private readonly IEnumerable<string> titlesOfNews;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchWithTitlesControl"/> class.
+        /// </summary>
+        /// <param name="titlesOfNews">The list of titles of news to search for.</param>
         public SearchWithTitlesControl(IEnumerable<string> titlesOfNews)
         {
             this.titlesOfNews = titlesOfNews;
         }
 
+        /// <summary>
+        /// Handles the search with titles.
+        /// </summary>
+        /// <returns>A list of SaveSearchUrlAndGuidDto objects.</returns>
         public override async Task<List<SaveSearchUrlAndGuidDto>> Handle()
         {
             
@@ -27,6 +39,11 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
 
         }
 
+        /// <summary>
+        /// Sets the next handler in the chain.
+        /// </summary>
+        /// <param name="abstractHandlerChain">The next handler in the chain.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public override async  Task SetNext(AbstractHandlerChain abstractHandlerChain)
         {
             _abstractHandlerChain = abstractHandlerChain;

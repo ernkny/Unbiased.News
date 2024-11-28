@@ -11,20 +11,38 @@ using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 
 namespace Unbiased.Playwright.Application.Services
 {
+    /// <summary>
+    /// PlaywrightScrappingService is responsible for handling news scraping and saving operations.
+    /// It implements the IPlaywrightScrappingService interface.
+    /// </summary>
     public sealed class PlaywrightScrappingService : IPlaywrightScrappingService
     {
         private readonly IMediator _mediator;
 
+        /// <summary>
+        /// Initializes a new instance of the PlaywrightScrappingService class.
+        /// </summary>
+        /// <param name="mediator">The mediator instance.</param>
         public PlaywrightScrappingService(IMediator mediator)
         {
             _mediator = mediator;
         }
+
+        /// <summary>
+        /// Scrapes news and adds them to the database in a single operation.
+        /// </summary>
+        /// <returns>A boolean indicating whether the operation was successful.</returns>
         public async Task<bool> PlaywrightScrappingNewsAndAddRangeNewsAsync()
         {
             var resultOfScrappingNews = await PlaywrightScrappingNewsAsync();
             var result = await SaveAllNewsWithRangeAsync(resultOfScrappingNews);
             return result;
         }
+
+        /// <summary>
+        /// Scrapes news from Google using the provided keywords.
+        /// </summary>
+        /// <returns>A list of scraped news.</returns>
         public async Task<List<News>> PlaywrightScrappingNewsAsync()
         {
             var keywords = await _mediator.Send(new GetAllActiveKeywordsForSearchQuery());
@@ -40,12 +58,21 @@ namespace Unbiased.Playwright.Application.Services
             return listOfNews;
         }
 
+        /// <summary>
+        /// Saves a list of news to the database.
+        /// </summary>
+        /// <param name="listOfNews">The list of news to save.</param>
+        /// <returns>A boolean indicating whether the operation was successful.</returns>
         public async Task<bool> SaveAllNewsWithRangeAsync(List<News> listOfNews)
         {
             var result = await _mediator.Send(new AddRangeAllNewsCommand(listOfNews));
             return await Task.FromResult(true);
         }
 
+        /// <summary>
+        /// Gets images for collected news.
+        /// </summary>
+        /// <returns>A boolean indicating whether the operation was successful.</returns>
         public async Task<bool> GetImagesForCollectedNews()
         {
             // Get matchId's without images from the database
@@ -67,16 +94,29 @@ namespace Unbiased.Playwright.Application.Services
             return await Task.FromResult(true);
         }
 
+        /// <summary>
+        /// Scrapes news (not implemented).
+        /// </summary>
+        /// <returns>A list of scraped news.</returns>
         public Task<List<News>> PlaywrightScrappingNews()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Saves a list of news to the database (not implemented).
+        /// </summary>
+        /// <param name="listOfNews">The list of news to save.</param>
+        /// <returns>A boolean indicating whether the operation was successful.</returns>
         public Task<bool> SaveAllNewsWithRange(List<News> listOfNews)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Scrapes news and adds them to the database in a single operation (not implemented).
+        /// </summary>
+        /// <returns>A boolean indicating whether the operation was successful.</returns>
         public Task<bool> PlaywrightScrappingNewsAndAddRangeNews()
         {
             throw new NotImplementedException();

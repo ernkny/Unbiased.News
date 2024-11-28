@@ -2,8 +2,17 @@
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrapping
 {
-    public  class SearchWithKeywordsMethod
+    /// <summary>
+    /// This class is responsible for searching keywords on Google and returning the titles of the search results.
+    /// </summary>
+    public class SearchWithKeywordsMethod
     {
+        /// <summary>
+        /// Searches for the given keyword on Google and returns the titles of the search results.
+        /// </summary>
+        /// <param name="keyword">The keyword to search for.</param>
+        /// <returns>A Task that represents the asynchronous operation. The task result contains a list of strings representing the titles of the search results.</returns>
+
         public async Task<IEnumerable<string>> SearchWithKeywords(string keyword)
         {
             try
@@ -39,7 +48,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
             catch (Exception exception)
             {
 
-                throw exception.InnerException;
+                throw ;
             }
 
         }

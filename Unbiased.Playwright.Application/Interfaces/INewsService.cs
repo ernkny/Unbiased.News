@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unbiased.Playwright.Domain.DTOs;
+﻿using Unbiased.Playwright.Domain.DTOs;
 
 namespace Unbiased.Playwright.Application.Interfaces
 {
+    /// <summary>
+    /// Interface for news service operations.
+    /// </summary>
     public interface INewsService
     {
+        /// <summary>
+        /// Adds a new news item asynchronously.
+        /// </summary>
+        /// <param name="addNewsDto">The DTO containing the news item data.</param>
+        /// <returns>A task representing the asynchronous operation, returning the GUID of the added news item.</returns>
         Task<Guid> AddNewsAsync(InsertNewsDto addNewsDto);
+
+        /// <summary>
+        /// Sends news to API for generation asynchronously.
+        /// </summary>
+        /// <returns>A task representing the asynchronous operation, returning a boolean indicating success or failure.</returns>
         Task<bool> SendNewsToApiForGenerateAsync();
     }
 }

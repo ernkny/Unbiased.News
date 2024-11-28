@@ -3,10 +3,19 @@ using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrapping
 {
+    /// <summary>
+    /// Method for retrieving news articles with URL addresses from Google.
+    /// </summary>
     public class GetAllNewsWithUrlAddressFromGoogleMethod
     {
         private IPlaywright _playwright;
         private IBrowser _browser;
+
+        /// <summary>
+        /// Retrieves a list of news articles with URL addresses from Google.
+        /// </summary>
+        /// <param name="searchUrl">The URL to search for news articles.</param>
+        /// <returns>A list of <see cref="SaveSearchUrlAndGuidDto"/> objects containing the news article URLs and GUIDs.</returns>
 
         public async Task<List<SaveSearchUrlAndGuidDto>> GetAllNewsWithUrlAddressFromGoogle(string searchUrl)
         {
@@ -77,7 +86,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"URL işlenirken bir hata oluştu: {url} - {ex.Message}");
+                        throw;
                     }
                     finally
                     {
@@ -87,7 +96,6 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Genel bir hata oluştu: {ex.Message}");
                 throw;
             }
             finally

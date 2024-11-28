@@ -1,23 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unbiased.Playwright.Application.Dto.PlaywrightDto;
+﻿using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 using Unbiased.Playwright.Application.Playwright.Abstract;
 using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrapping;
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrappingProcess
 {
+    /// <summary>
+    /// This class is responsible for handling the retrieval of news articles with URLs from Google.
+    /// It implements the AbstractHandlerChain interface.
+    /// </summary>
     public class GetAllNewsWithUrlAddressFromGoogleControl : AbstractHandlerChain
     {
         private AbstractHandlerChain _abstractHandlerChain;
         private readonly string _url;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetAllNewsWithUrlAddressFromGoogleControl"/> class.
+        /// </summary>
+        /// <param name="url">The URL to search for news articles.</param>
+
         public GetAllNewsWithUrlAddressFromGoogleControl(string url)
         {
             _url = url;
         }
+
+        /// <summary>
+        /// Handles the retrieval of news articles with URLs from Google.
+        /// </summary>
+        /// <returns>A Task that represents the asynchronous retrieval operation.
+        /// The Task result contains a list of SaveSearchUrlAndGuidDto objects
+        /// representing the retrieved news articles.</returns>
 
         public async override Task<List<SaveSearchUrlAndGuidDto>> Handle()
         {
@@ -30,6 +41,11 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
             return await Task.FromResult(Enumerable.Empty<SaveSearchUrlAndGuidDto>().ToList());
         }
 
+        /// <summary>
+        /// Sets the next handler in the chain.
+        /// </summary>
+        /// <param name="abstractHandlerChain">The next handler in the chain.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public override Task SetNext(AbstractHandlerChain abstractHandlerChain)
         {
             _abstractHandlerChain = abstractHandlerChain;
