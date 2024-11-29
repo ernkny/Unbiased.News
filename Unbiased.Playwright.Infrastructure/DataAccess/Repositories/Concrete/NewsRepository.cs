@@ -1,9 +1,6 @@
 ﻿using Dapper;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
@@ -11,15 +8,27 @@ using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 
 namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 {
+    /// <summary>
+    /// Repository for news operations.
+    /// </summary>
     public class NewsRepository : INewsRepository
     {
         private readonly UnbiasedSqlConnection _connection;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewsRepository"/> class.
+        /// </summary>
+        /// <param name="connection">The connection to the database.</param>
         public NewsRepository(UnbiasedSqlConnection connection)
         {
             _connection = connection;
         }
 
+        /// <summary>
+        /// Adds a new news item to the database.
+        /// </summary>
+        /// <param name="addNewsDto">The news item to add.</param>
+        /// <returns>The ID of the newly added news item.</returns>
         public async Task<Guid> AddNewsAsync(InsertNewsDto addNewsDto)
         {
             try
@@ -42,14 +51,18 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     return guid;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
 
-                throw new Exception("Failed to insert news: " + addNewsDto.Title);
+                throw;
             }
 
         }
 
+        /// <summary>
+        /// Retrieves all news items that have not been processed.
+        /// </summary>
+        /// <returns>A list of news items that have not been processed.</returns>
         public async Task<IEnumerable<News>> GetAllNewsByNotIncludedProcessAsync()
         {
             using (var connection = _connection.CreateConnection())
@@ -58,14 +71,18 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 {
                     return await connection.QueryAsync<News>("UB_sp_GetAllNewsNotIncludedProcess", commandType: CommandType.StoredProcedure);
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
 
-                    throw new Exception("Failed to get all news not included process ");
+                    throw;
                 }
             }
         }
 
+        /// <summary>
+        /// Retrieves all active keywords for search.
+        /// </summary>
+        /// <returns>A list of active keywords for search.</returns>
         public async Task<IEnumerable<string>> GetAllActiveKeywordsForSearchAsync()
         {
             using (var connection = _connection.CreateConnection())
@@ -78,11 +95,16 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 catch (Exception exception)
                 {
 
-                    throw new Exception("There no keyword for search");
+                    throw;
                 }
             }
         }
 
+        /// <summary>
+        /// Adds a range of news items to the database.
+        /// </summary>
+        /// <param name="listOfNews">The list of news items to add.</param>
+        /// <returns>True if the operation was successful, false otherwise.</returns>
         public async Task<bool> AddRangeAllNewsAsync(IEnumerable<News> listOfNews)
         {
             if (listOfNews == null || !listOfNews.Any())
@@ -131,16 +153,20 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return false;
+                throw;
             }
         }
 
+        /// <summary>
+        /// Validates a URL for search with a given title.
+        /// </summary>
+        /// <param name="title">The title to search for.</param>
+        /// <returns>True if the URL is valid, false otherwise.</returns>
         public async Task<bool> ValidateUrlForSearchWithTitleAsync(string title)
         {
             try
             {
-                using (var connection=_connection.CreateConnection())
+                using (var connection = _connection.CreateConnection())
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("Title", title, DbType.String);
@@ -154,6 +180,10 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Retrieves all combined details.
+        /// </summary>
+        /// <returns>A list of combined details.</returns>
         public async Task<IEnumerable<GeneratedNewsDto>> GetAllCombinedDetailsAsync()
         {
             try
@@ -171,16 +201,34 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Adds an OpenAI response to the database.
+        /// </summary>
+        /// <param name="responseBody">The response body from OpenAI.</param>
+        /// <returns>True if the response was added successfully, false otherwise.</returns>
         public async Task<bool> AddOpenAiResponseAsync(string responseBody)
         {
-            using (var connection=_connection.CreateConnection())
+            try
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("responseData", responseBody, DbType.String);
-                return await connection.ExecuteAsync("UB_sp_InsertOpenAiResponse", parameters, commandType: CommandType.StoredProcedure)==1;
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("responseData", responseBody, DbType.String);
+                    return await connection.ExecuteAsync("UB_sp_InsertOpenAiResponse", parameters, commandType: CommandType.StoredProcedure) == 1;
+                }
             }
+            catch (Exception exception)
+            {
+                throw;
+            }
+
         }
 
+        /// <summary>
+        /// Adds a generated news item to the database.
+        /// </summary>
+        /// <param name="generatedNews"></param>
+        /// <returns></returns>
         public async Task<bool> AddGeneratedNews(News generatedNews)
         {
             if (generatedNews == null)
@@ -196,16 +244,20 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("CategoryId", 1, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("MatchId", generatedNews.MatchId, DbType.String, ParameterDirection.Input);
 
-                  return  await connection.ExecuteAsync("UB_sp_InsertUBNewsGenerated", parameters, commandType: CommandType.StoredProcedure) == 1;
+                    return await connection.ExecuteAsync("UB_sp_InsertUBNewsGenerated", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return false;
+                throw;
             }
         }
 
+        /// <summary>
+        /// Updates the process value of a news item to true in the database.
+        /// </summary>
+        /// <param name="matchId"></param>
+        /// <returns></returns>
         public async Task<bool> UpdateNewsProcessValueAsTrueAsync(string matchId)
         {
             using (var connection = _connection.CreateConnection())

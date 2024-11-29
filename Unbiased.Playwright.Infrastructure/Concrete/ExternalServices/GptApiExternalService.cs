@@ -8,6 +8,10 @@ using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 
 namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 {
+    /// <summary>
+    /// External service for interacting with the GPT API.
+    /// </summary>
+
     public class GptApiExternalService
     {
         private readonly HttpClient _httpClient;
@@ -20,6 +24,12 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client instance.</param>
+        /// <param name="configuration">The configuration instance.</param>
+        /// <param name="mediator">The mediator instance.</param>
         public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews)
         {
             var result= new NewsExtractDto();

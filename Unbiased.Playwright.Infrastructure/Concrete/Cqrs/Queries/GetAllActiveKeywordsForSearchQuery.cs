@@ -2,5 +2,9 @@
 
 namespace Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries
 {
-    public record GetAllActiveKeywordsForSearchQuery:IRequest<IEnumerable<string>>;
+    /// <summary>
+    /// Represents a query to retrieve all active keywords for search.
+    /// </summary>
+    /// <remarks>This query does not contain any parameters.</remarks>
+    public record GetAllActiveKeywordsForSearchQuery : IRequest<IEnumerable<string>>;
 }
