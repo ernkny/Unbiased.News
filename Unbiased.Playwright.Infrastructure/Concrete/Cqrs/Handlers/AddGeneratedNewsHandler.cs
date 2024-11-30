@@ -29,7 +29,6 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Handlers
         /// <returns>A boolean indicating whether the operation was successful.</returns>
         public async Task<bool> Handle(AddGeneratedNewsCommand request, CancellationToken cancellationToken)
         {
-            // Add the generated news to the repository
             return await _newsRepository.AddGeneratedNews(request.News);
         }
     }

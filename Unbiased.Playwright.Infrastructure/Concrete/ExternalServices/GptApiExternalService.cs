@@ -32,7 +32,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <param name="mediator">The mediator instance.</param>
         public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews)
         {
-            var result= new NewsExtractDto();
+            var result = new NewsExtractDto();
+            var newsAnalysis = $@"Bir gazeteci gibi bu paylaştığım haberi oku ve bir yeni haber olarak ilk satırı başlığı olacak şekilde bana analiz edip bir haber olarak içerik çıkar. Bunu senin abonelerin okuyacakmış gibi haber çıkart aynı zamanda haberi analiz edip yorumunu ekle. Haber içeriği:  -----{DetailIOfNews}-----";
+
+            var prompt = $@"
+            {newsAnalysis}
+
+            Lütfen yanıtını aşağıdaki formatta ver:
+
+            {{
+                ""Title"": ""[Haber başlığı]"",
+                ""Detail"": ""[Haber detayı ve analizi]""
+            }}
+            ";
+
             try
             {
                 var url = _configuration.GetSection("Urls:GptApi").Value;
@@ -42,7 +55,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     model = "gpt-4o-mini",
                     messages = new[]
                     {
-                    new { role = "user", content = $"Bir gazeteci gibi bu paylaştığım haberi oku ve bir yeni haber olarak ilk satırı başlığı olacak şekilde bana analiz edip bir haber olarak içerik çıkar. Bunu senin abonelerin okuyacakmış gibi haber çıkart aynı zamanda haberi analiz edip yorumunu ekle. Birde Title: ve Detail: olacak şekilde döner misin yazıyı? apiden okuyacağım -----{DetailIOfNews}----- " }
+                    new { role = "user", content = prompt }
                 }
                 };
 
@@ -62,7 +75,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 if (response.IsSuccessStatusCode)
                 {
                     await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
-                    result= NewsExtractExtensionMethod.ExtractNewsDetails(await response.Content.ReadAsStringAsync());
+                    result = NewsExtractExtensionMethod.ExtractNewsDetails(await response.Content.ReadAsStringAsync());
 
                 }
 
