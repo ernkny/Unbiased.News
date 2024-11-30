@@ -24,7 +24,7 @@ public class GetNewsWithGuidMethod
         {
             _playwright = await Microsoft.Playwright.Playwright.CreateAsync();
         }
-        var browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+        var browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
         await Parallel.ForEachAsync(urlAndGuidPairs, async (urlPair, cancellationToken) =>
         {
             try
@@ -53,7 +53,7 @@ public class GetNewsWithGuidMethod
             }
             catch (Exception ex)
             {
-                throw;
+                Console.WriteLine($"Diğer bir hata meydana geldi: {ex.Message}");
             }
         });
 

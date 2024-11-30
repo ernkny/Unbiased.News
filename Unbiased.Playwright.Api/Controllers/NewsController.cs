@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Domain.DTOs;
@@ -11,6 +12,7 @@ public class NewsController : ControllerBase
     private readonly INewsService _insertNewsService;
     private readonly IPlaywrightScrappingService _playwrightScrapping;
     private readonly INewsService _newsService;
+    
 
     /// <summary>
     /// Initializes a new instance of the NewsController class.
@@ -54,6 +56,7 @@ public class NewsController : ControllerBase
     [HttpGet("GetNewsWithPlaywright")]
     public async Task<IActionResult> GetNewsWithPlaywright()
     {
+        Stopwatch stopwatch = Stopwatch.StartNew();
         try
         {
             var response = new ResponseDto<bool>();
@@ -71,6 +74,11 @@ public class NewsController : ControllerBase
         {
 
             throw;
+        }
+        finally
+        {
+            stopwatch.Stop();
+            Console.WriteLine($"Response time: {stopwatch.ElapsedMilliseconds} ms");
         }
     }
 
