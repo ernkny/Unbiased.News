@@ -90,6 +90,7 @@ public class NewsController : ControllerBase
     {
         try
         {
+            throw new NotImplementedException();
             var response = new ResponseDto<bool>();
             var result = await _newsService.SendNewsToApiForGenerateAsync();
             if (result)

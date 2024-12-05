@@ -260,12 +260,21 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// <returns></returns>
         public async Task<bool> UpdateNewsProcessValueAsTrueAsync(string matchId)
         {
-            using (var connection = _connection.CreateConnection())
+            try
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("MatchId", matchId, DbType.String);
-                return await connection.ExecuteAsync("UB_sp_UpdateNewsProcessValueAsTrue", parameters, commandType: CommandType.StoredProcedure) == 1;
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("MatchId", matchId, DbType.String);
+                    return await connection.ExecuteAsync("UB_sp_UpdateNewsProcessValueAsTrue", parameters, commandType: CommandType.StoredProcedure) == 1;
+                }
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }

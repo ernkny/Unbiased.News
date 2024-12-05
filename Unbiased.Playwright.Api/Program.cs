@@ -1,3 +1,4 @@
+using MassTransit;
 using Unbiased.Playwright.Application;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
@@ -6,6 +7,7 @@ using Unbiased.Playwright.Infrastructure;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,17 @@ builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsImageRepository, NewsImageRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IPlaywrightScrappingService, PlaywrightScrappingService>();
-
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration.GetSection("ConnectionStrings:RabbitMqUrl").Value, "/", host =>
+        {
+            host.Username("guest");
+            host.Password("guest");
+        });
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,7 +48,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<GlobalActivityLogMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
