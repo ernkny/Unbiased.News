@@ -67,5 +67,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         /// <param name="matchId">The ID of the news item to update.</param>
         /// <returns>A task containing a boolean indicating whether the operation was successful.</returns>
         Task<bool> UpdateNewsProcessValueAsTrueAsync(string matchId);
+
+        Task<IEnumerable<GeneratedNews>> GetGeneratedNewsAsync();
     }
 }

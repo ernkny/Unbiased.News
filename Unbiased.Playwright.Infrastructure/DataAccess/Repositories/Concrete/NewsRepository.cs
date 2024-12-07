@@ -274,7 +274,22 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 
                 throw;
             }
-
         }
+
+        public async Task<IEnumerable<GeneratedNews>> GetGeneratedNewsAsync() 
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryAsync<GeneratedNews>("UB_sp_GetAllGeneratedNews", commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        } 
     }
 }

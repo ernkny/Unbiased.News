@@ -24,7 +24,7 @@ public class GetNewsWithGuidMethod
         {
             _playwright = await Microsoft.Playwright.Playwright.CreateAsync();
         }
-        var browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+        var browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
         await Parallel.ForEachAsync(urlAndGuidPairs, async (urlPair, cancellationToken) =>
         {
             try
@@ -37,23 +37,27 @@ public class GetNewsWithGuidMethod
                 {
                     contentBuilder.AppendLine(await paragraph.InnerTextAsync());
                 }
-                newsArticles.Add(new News
+                if (!string.IsNullOrEmpty(contentBuilder.ToString()))
                 {
-                    CreatedTime = DateTime.Now,
-                    CreatedUser = "system",
-                    Detail = contentBuilder.ToString(),
-                    IsActive = true,
-                    IsProcessed = false,
-                    MatchId = urlPair.MatchId,
-                    IsDeleted = false,
-                    Title = urlPair.Title,
-                    Url = urlPair.Url,
-                });
+                    newsArticles.Add(new News
+                    {
+                        CreatedTime = DateTime.Now,
+                        CreatedUser = "system",
+                        Detail = contentBuilder.ToString(),
+                        IsActive = true,
+                        IsProcessed = false,
+                        MatchId = urlPair.MatchId,
+                        IsDeleted = false,
+                        Title = urlPair.Title,
+                        Url = urlPair.Url,
+                    });
+                }
+                
                 await page.CloseAsync();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Diğer bir hata meydana geldi: {ex.Message}");
+                Console.WriteLine($"Someting went wrong: {ex.Message}");
             }
         });
 

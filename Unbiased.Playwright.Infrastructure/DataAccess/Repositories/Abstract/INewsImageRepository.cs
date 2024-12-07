@@ -14,7 +14,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         /// </summary>
         /// <param name="addNewsImageDto">The DTO containing the news image data to be added.</param>
         /// <returns>A Task that represents the asynchronous operation. The task result contains the ID of the newly added image.</returns>
-        Task<Guid> AddNewsImageAsync(InsertNewsImageDto addNewsImageDto);
+        Task<bool> AddNewsImageAsync(InsertNewsImageDto addNewsImageDto);
 
         /// <summary>
         /// Retrieves news items from the repository that do not have an associated image.

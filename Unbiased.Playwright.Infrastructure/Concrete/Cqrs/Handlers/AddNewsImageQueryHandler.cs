@@ -7,7 +7,7 @@ namespace Unbiased.Playwright.Application.Cqrs.Handlers
     /// <summary>
     /// Handles the AddNewsImageCommand by adding a new news image to the repository.
     /// </summary>
-    public class AddNewsImageQueryHandler : IRequestHandler<AddNewsImageCommand, Guid>
+    public class AddNewsImageQueryHandler : IRequestHandler<AddNewsImageCommand, bool>
     {
         /// <summary>
         /// The repository for news images.
@@ -29,9 +29,8 @@ namespace Unbiased.Playwright.Application.Cqrs.Handlers
         /// <param name="request">The AddNewsImageCommand to handle.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The ID of the newly added news image.</returns>
-        public async Task<Guid> Handle(AddNewsImageCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(AddNewsImageCommand request, CancellationToken cancellationToken)
         {
-            // Add the news image to the repository and return the ID
             return await _newsImageRepository.AddNewsImageAsync(request.addNewsImageDto);
         }
     }

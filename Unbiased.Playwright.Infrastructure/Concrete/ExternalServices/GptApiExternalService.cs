@@ -12,7 +12,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
     /// External service for interacting with the GPT API.
     /// </summary>
 
-    public class GptApiExternalService
+    public sealed class GptApiExternalService
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
@@ -30,7 +30,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <param name="httpClient">The HTTP client instance.</param>
         /// <param name="configuration">The configuration instance.</param>
         /// <param name="mediator">The mediator instance.</param>
-        public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews)
+        public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews, CancellationToken cancellationToken)
         {
             var result = new NewsExtractDto();
             var newsAnalysis = $@"Bir gazeteci gibi bu paylaştığım haberi oku ve bir yeni haber olarak ilk satırı başlığı olacak şekilde bana analiz edip bir haber olarak içerik çıkar. Bunu senin abonelerin okuyacakmış gibi haber çıkart aynı zamanda haberi analiz edip yorumunu ekle. Haber içeriği:  -----{DetailIOfNews}-----";
@@ -65,7 +65,11 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 };
                 request.Headers.Add("Authorization", $"Bearer {apiKey}");
 
-                HttpResponseMessage response = await _httpClient.SendAsync(request);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    throw new OperationCanceledException();
+                }
+                HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -83,6 +87,10 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 return result;
             }
             catch (HttpRequestException e)
+            {
+                throw;
+            }
+            catch (OperationCanceledException)
             {
                 throw;
             }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Unbiased.Playwright.Application.Interfaces;
+using Unbiased.Playwright.Common.Concrete.Helper;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
@@ -43,30 +44,55 @@ namespace Unbiased.Playwright.Application.Services
         /// <summary>
         /// Sends news to the API for generation asynchronously.
         /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A task representing the asynchronous operation, containing a boolean indicating success.</returns>
-        public async Task<bool> SendNewsToApiForGenerateAsync()
+        public async Task<bool> SendNewsToApiForGenerateAsync(CancellationToken cancellationToken = default)
         {
-            var combindedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery());
-            var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
-            foreach (var item in combindedNews)
+            try
             {
-                var result = await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails);
-                if (result is null)
+                var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), cancellationToken);
+                var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
+                var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator);
+
+                foreach (var item in combinedNews)
                 {
-                    throw new ArgumentException("Error");
-                }
-                if (result != null)
-                {
-                    var generatedNews = new News()
+                    var result = await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails, cancellationToken);
+                    if (result == null) throw new ArgumentException("Error");
+
+                    var generatedNews = new News
                     {
                         Detail = result.Detail,
                         Title = result.Title,
                         MatchId = item.MatchId
                     };
-                    await _mediator.Send(new AddGeneratedNewsCommand(generatedNews));
+
+                    if (await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken))
+                    {
+
+                        var imageBase64 = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);
+                        if (imageBase64 is not null)
+                        {
+                            await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+                            {
+                                MatchId = item.MatchId,
+                                ImageBase64 = Convert.ToBase64String(imageBase64)
+                            }), cancellationToken);
+                        }
+                    }
                 }
+                return true;
             }
-            return true;
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async Task<byte[]> SendNewsToApiForGenerateAsync(string Title, CancellationToken cancellationToken)
+        {
+            var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator);
+            var generatedImage = await externalServiceImageSend.GetImageDataFromGpt(Title, cancellationToken);
+            return generatedImage != null ? await new SaveGeneratedImage().SaveGeneratedImageAsBase64(generatedImage.Data.First().Url, cancellationToken) : null;
         }
     }
 }

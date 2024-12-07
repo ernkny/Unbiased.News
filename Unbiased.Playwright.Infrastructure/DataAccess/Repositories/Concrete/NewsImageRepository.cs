@@ -27,7 +27,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// </summary>
         /// <param name="addNewsImageDto">The news image to add.</param>
         /// <returns>The ID of the newly added news image.</returns>
-        public async Task<Guid> AddNewsImageAsync(InsertNewsImageDto addNewsImageDto)
+        public async Task<bool> AddNewsImageAsync(InsertNewsImageDto addNewsImageDto)
         {
             using (var connection = _connection.CreateConnection())
             {
@@ -37,9 +37,9 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 parameters.Add("matchId", addNewsImageDto.MatchId, DbType.String);
                 parameters.Add("imageBase64", addNewsImageDto.ImageBase64, DbType.String);
 
-                await connection.ExecuteAsync("UB_sp_InsertNewsImage", parameters, commandType: CommandType.StoredProcedure);
+               var result= await connection.ExecuteAsync("UB_sp_InsertNewsImage", parameters, commandType: CommandType.StoredProcedure);
 
-                return guid;
+                return result==1;
             }
         }
 

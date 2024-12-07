@@ -54,7 +54,7 @@ namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares
                 EventType = $"{context.Request.Headers}",
                 EventSeverity = "Error",
                 Message = $"{exception.Message} ----- {exception.StackTrace} --- {exception.InnerException?.Message} --- {exception.InnerException?.StackTrace}",
-                EventDate = DateTime.UtcNow
+                EventDate = DateTime.Now
             };
             await SendEventLogToQueue(context, logMessage);
             context.Response.StatusCode = 500;

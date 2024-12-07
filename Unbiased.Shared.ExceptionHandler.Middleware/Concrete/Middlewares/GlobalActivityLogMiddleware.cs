@@ -58,7 +58,7 @@ namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares
                     ActionType = context.Request.Method,
                     Endpoint = context.Request.Path,
                     Message = $"Info for {context.Request.Headers["Accept"]} performed action {context.Request.Method} on endpoint {context.Request.Path}",
-                    ActivityDate = DateTime.UtcNow,
+                    ActivityDate = DateTime.Now,
                     XForwardedFor = $"{context.Request.Headers["X-Forwarded-For"]}",
                     Referer = $"{context.Request.Headers["Referer"]}",
                     IP=context.Connection.RemoteIpAddress.ToString()

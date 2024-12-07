@@ -18,6 +18,6 @@ namespace Unbiased.Playwright.Application.Interfaces
         /// Sends news to API for generation asynchronously.
         /// </summary>
         /// <returns>A task representing the asynchronous operation, returning a boolean indicating success or failure.</returns>
-        Task<bool> SendNewsToApiForGenerateAsync();
+        Task<bool> SendNewsToApiForGenerateAsync(CancellationToken cancellationToken);
     }
 }
