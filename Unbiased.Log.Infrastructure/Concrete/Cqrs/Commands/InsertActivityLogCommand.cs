@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Unbiased.Log.Domain.Entities;
+using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 
 namespace Unbiased.Log.Infrastructure.Concrete.Cqrs.Commands
 {

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Unbiased.Log.Domain\Unbiased.Log.Domain.csproj" />
+    <ProjectReference Include="..\Unbiased.Shared.ExceptionHandler.Middleware\Unbiased.Shared.ExceptionHandler.Middleware.csproj" />
   </ItemGroup>
 
 </Project>

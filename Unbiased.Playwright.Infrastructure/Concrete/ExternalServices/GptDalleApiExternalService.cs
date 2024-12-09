@@ -1,20 +1,23 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
+using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Logs;
+using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 
 namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 {
-    public class GptDalleApiExternalService
+    public class GptDalleApiExternalService : AbstractEventAndActivityLog
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
+        private readonly IServiceProvider _serviceProvider;
 
-        public GptDalleApiExternalService(HttpClient httpClient, IConfiguration configuration, IMediator mediator)
+        public GptDalleApiExternalService(HttpClient httpClient, IConfiguration configuration, IMediator mediator, IServiceProvider serviceProvider)
         {
             _httpClient = httpClient;
             _configuration = configuration;
@@ -24,7 +27,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         public async Task<DalleImageGenerateResponseDto> GetImageDataFromGpt(string titleOfNewsForGenerateImage, CancellationToken cancellationToken)
         {
             var result = new DalleImageGenerateResponseDto();
-            var imageGeneratePrompt = $@"'{titleOfNewsForGenerateImage}' bu başlığa uygun bir banner oluştur ve üzerinde hiçbir şekilde yazı olmasın, Herhangi bir ülke bayrağı belirtmesin. Banner ana konuya odaklı bir banner olsun";
+            var imageGeneratePrompt = $@"'{titleOfNewsForGenerateImage}' bu başlığa uygun bir banner oluştur ve bu oluşturacağın resim üzerinde hiçbir şekilde yazı olmasın, Herhangi bir ülke bayrağı belirtmesin. Banner ana konuya odaklı bir banner olsun";
             try
             {
                 var url = _configuration.GetSection("Urls:GptDalleApi").Value;
@@ -32,11 +35,11 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 var requestData = new
                 {
                     model = "dall-e-3",
-                    prompt=imageGeneratePrompt,
-                    n=1,
-                    size= "1792x1024"
+                    prompt = imageGeneratePrompt,
+                    n = 1,
+                    size = "1792x1024"
                 };
-                var bisi= JsonSerializer.Serialize(requestData);
+                var bisi = JsonSerializer.Serialize(requestData);
                 var request = new HttpRequestMessage(HttpMethod.Post, url)
                 {
                     Content = new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/json")
@@ -51,8 +54,18 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"API returned error: {response.StatusCode}");
+                    var message = ($"API returned error: {response.StatusCode}");
+                    var eventLog = new EventLog()
+                    {
+                        EventDate = DateTime.Now,
+                        EventSeverity = "Error",
+                        Message = message,
+                        EventType = "GptDalleApiExternalService",
+
+                    };
+                    await SendEventLogToQueue(eventLog, _serviceProvider);
+                    return null;
+
                 }
                 if (response.IsSuccessStatusCode)
                 {

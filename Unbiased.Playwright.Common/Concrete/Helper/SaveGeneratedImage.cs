@@ -1,28 +1,37 @@
-﻿using System;
-using System.Buffers.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace Unbiased.Playwright.Common.Concrete.Helper
 {
     public class SaveGeneratedImage : IDisposable
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public SaveGeneratedImage()
+        public SaveGeneratedImage(IConfiguration configuration)
         {
             _httpClient = new HttpClient(new HttpClientHandler());
+            _configuration = configuration;
         }
 
-        public async Task<byte[]> SaveGeneratedImageAsBase64(string url, CancellationToken cancellationToken)
+        public async Task<string> SaveGeneratedImageToFile(string url,string fileName, CancellationToken cancellationToken)
         {
-            using (var response = await _httpClient.GetAsync(url, cancellationToken))
+            try
             {
-                response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
+                string filePath = Path.Combine($"{_configuration.GetSection("Paths:ImageFilePath").Value}", $"{Guid.NewGuid()}.jpg");
+                using (var response = await _httpClient.GetAsync(url, cancellationToken))
+                {
+                    byte[] imageBytes = await _httpClient.GetByteArrayAsync(url);
+                    
+                    await File.WriteAllBytesAsync(filePath, imageBytes, cancellationToken);
+                }
+                return filePath;
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+          
         }
 
         public void Dispose()

@@ -13,6 +13,6 @@
         /// <summary>
         /// Base64-encoded image data.
         /// </summary>
-        public string ImageBase64 { get; set; }
+        public string filePath { get; set; }
     }
 }

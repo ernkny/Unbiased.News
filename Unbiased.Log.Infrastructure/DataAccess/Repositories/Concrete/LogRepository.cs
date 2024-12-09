@@ -1,7 +1,7 @@
 ﻿using Dapper;
-using Unbiased.Log.Domain.Entities;
 using Unbiased.Log.Infrastructure.DataAccess.Connections;
 using Unbiased.Log.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 
 namespace Unbiased.Log.Infrastructure.DataAccess.Repositories.Concrete
 {

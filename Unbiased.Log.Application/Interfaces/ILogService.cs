@@ -1,4 +1,4 @@
-﻿using Unbiased.Log.Domain.Entities;
+﻿using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 
 namespace Unbiased.Log.Application.Interfaces
 {

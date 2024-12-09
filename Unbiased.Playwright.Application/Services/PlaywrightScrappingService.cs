@@ -87,7 +87,7 @@ namespace Unbiased.Playwright.Application.Services
                 await _mediator.Send(new AddNewsImageCommand(new InsertNewsImageDto
                 {
                     MatchId = newsWithoutImages[i].MatchId,
-                    ImageBase64 = imagesForTitles[i]
+                    filePath = imagesForTitles[i]
                 }));
             }
 

@@ -10,6 +10,7 @@
     <Folder Include="Abstract\" />
     <Folder Include="Concrete\" />
     <Folder Include="DTOs\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
 
 </Project>

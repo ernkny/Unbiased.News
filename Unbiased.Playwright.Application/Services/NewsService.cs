@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Common.Concrete.Helper;
@@ -18,16 +19,18 @@ namespace Unbiased.Playwright.Application.Services
     {
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
         /// Initializes a new instance of the NewsService class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
         /// <param name="configuration">The configuration instance.</param>
-        public NewsService(IMediator mediator, IConfiguration configuration)
+        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _mediator = mediator;
             _configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace Unbiased.Playwright.Application.Services
             {
                 var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), cancellationToken);
                 var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
-                var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator);
+                var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
 
                 foreach (var item in combinedNews)
                 {
@@ -69,13 +72,13 @@ namespace Unbiased.Playwright.Application.Services
                     if (await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken))
                     {
 
-                        var imageBase64 = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);
-                        if (imageBase64 is not null)
+                        var imageFile = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);
+                        if (imageFile is not null)
                         {
                             await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
                             {
                                 MatchId = item.MatchId,
-                                ImageBase64 = Convert.ToBase64String(imageBase64)
+                                filePath = imageFile
                             }), cancellationToken);
                         }
                     }
@@ -88,11 +91,11 @@ namespace Unbiased.Playwright.Application.Services
             }
         }
 
-        private async Task<byte[]> SendNewsToApiForGenerateAsync(string Title, CancellationToken cancellationToken)
+        private async Task<string> SendNewsToApiForGenerateAsync(string Title, CancellationToken cancellationToken)
         {
-            var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator);
+            var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
             var generatedImage = await externalServiceImageSend.GetImageDataFromGpt(Title, cancellationToken);
-            return generatedImage != null ? await new SaveGeneratedImage().SaveGeneratedImageAsBase64(generatedImage.Data.First().Url, cancellationToken) : null;
+            return generatedImage != null ? await new SaveGeneratedImage(_configuration).SaveGeneratedImageToFile(generatedImage.Data.First().Url, Title, cancellationToken) : null;
         }
     }
 }

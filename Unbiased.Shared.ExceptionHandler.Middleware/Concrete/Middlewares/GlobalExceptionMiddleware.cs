@@ -1,14 +1,15 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Unbiased.Log.Domain.Entities;
+using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Logs;
+using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 
 namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares
 {
     /// <summary>
     /// Global exception middleware to catch and handle exceptions in the application.
     /// </summary>
-    public class GlobalExceptionMiddleware
+    public class GlobalExceptionMiddleware: AbstractEventAndActivityLog
     {
         private readonly RequestDelegate _next;
         private readonly IServiceProvider _serviceProvider;
@@ -56,38 +57,10 @@ namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares
                 Message = $"{exception.Message} ----- {exception.StackTrace} --- {exception.InnerException?.Message} --- {exception.InnerException?.StackTrace}",
                 EventDate = DateTime.Now
             };
-            await SendEventLogToQueue(context, logMessage);
+            await SendEventLogToQueue(logMessage,_serviceProvider);
             context.Response.StatusCode = 500;
             await context.Response.WriteAsync("Internal Server Error");
         }
 
-        /// <summary>
-        /// Sends an event log to the queue.
-        /// </summary>
-        /// <param name="context">The HTTP context.</param>
-        /// <param name="logMessage">The log message to send.</param>
-        /// <returns>A task that represents the asynchronous operation.</returns>
-        private async Task<bool> SendEventLogToQueue(HttpContext context, EventLog logMessage)
-        {
-            try
-            {
-                using var scope = _serviceProvider.CreateScope();
-                var sendEndpointProvider = scope.ServiceProvider.GetRequiredService<ISendEndpointProvider>();
-
-                var timeout = TimeSpan.FromSeconds(30);
-                using var source = new CancellationTokenSource(timeout);
-                var sendEndpoint = await sendEndpointProvider.GetSendEndpoint(new Uri("queue:EventLogMessageQueue"));
-                if (sendEndpoint == null)
-                {
-                    throw new Exception("SendEndpoint is null");
-                }
-                await sendEndpoint.Send(logMessage, source.Token);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
     }
 }

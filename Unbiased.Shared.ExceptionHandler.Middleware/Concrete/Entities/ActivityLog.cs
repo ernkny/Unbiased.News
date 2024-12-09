@@ -1,4 +1,4 @@
-﻿namespace Unbiased.Log.Domain.Entities
+﻿namespace Unbiased.Shared.ExceptionHandler.Middleware.Entities
 {
     /// <summary>
     /// Represents an activity log entity.

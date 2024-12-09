@@ -35,7 +35,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 var parameters = new DynamicParameters();
                 parameters.Add("id", Guid.NewGuid(), DbType.Guid);
                 parameters.Add("matchId", addNewsImageDto.MatchId, DbType.String);
-                parameters.Add("imageBase64", addNewsImageDto.ImageBase64, DbType.String);
+                parameters.Add("path", addNewsImageDto.filePath, DbType.String);
 
                var result= await connection.ExecuteAsync("UB_sp_InsertNewsImage", parameters, commandType: CommandType.StoredProcedure);
 

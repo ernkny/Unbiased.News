@@ -33,12 +33,12 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews, CancellationToken cancellationToken)
         {
             var result = new NewsExtractDto();
-            var newsAnalysis = $@"Bir gazeteci gibi bu paylaştığım haberi oku ve bir yeni haber olarak ilk satırı başlığı olacak şekilde bana analiz edip bir haber olarak içerik çıkar. Bunu senin abonelerin okuyacakmış gibi haber çıkart aynı zamanda haberi analiz edip yorumunu ekle. Haber içeriği:  -----{DetailIOfNews}-----";
+            var newsAnalysis = $@"Bir gazeteci gibi bu paylaştığım haberi oku ve bana analiz edip bir haber olarak içerik çıkar. Bunu senin abonelerin okuyacakmış gibi haber çıkart aynı zamanda haberi analiz edip yorumlarını ekle. Haberin kesinlikle başlığı olmadlı ve içeriği olmalı. Haber içeriği:  -----{DetailIOfNews}-----";
 
             var prompt = $@"
             {newsAnalysis}
 
-            Lütfen yanıtını aşağıdaki formatta ver:
+            KESINLIKLE yanıtını aşağıdaki formatta ver:
 
             {{
                 ""Title"": ""[Haber başlığı]"",
@@ -74,6 +74,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 if (!response.IsSuccessStatusCode)
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
+
                     throw new Exception($"API returned error: {response.StatusCode}");
                 }
                 if (response.IsSuccessStatusCode)
