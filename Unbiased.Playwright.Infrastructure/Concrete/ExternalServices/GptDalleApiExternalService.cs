@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Text.Json;
@@ -10,6 +9,9 @@ using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 
 namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 {
+    /// <summary>
+    /// External service for interacting with the GPT DALL-E API.
+    /// </summary>
     public class GptDalleApiExternalService : AbstractEventAndActivityLog
     {
         private readonly HttpClient _httpClient;
@@ -17,6 +19,13 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GptDalleApiExternalService"/> class.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client instance.</param>
+        /// <param name="configuration">The application configuration.</param>
+        /// <param name="mediator">The mediator instance.</param>
+        /// <param name="serviceProvider">The service provider instance.</param>
         public GptDalleApiExternalService(HttpClient httpClient, IConfiguration configuration, IMediator mediator, IServiceProvider serviceProvider)
         {
             _httpClient = httpClient;
@@ -24,6 +33,12 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Retrieves image data from the GPT DALL-E API based on the provided title.
+        /// </summary>
+        /// <param name="titleOfNewsForGenerateImage">The title of the news article to generate an image for.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The generated image data as a <see cref="DalleImageGenerateResponseDto"/> instance.</returns>
         public async Task<DalleImageGenerateResponseDto> GetImageDataFromGpt(string titleOfNewsForGenerateImage, CancellationToken cancellationToken)
         {
             var result = new DalleImageGenerateResponseDto();

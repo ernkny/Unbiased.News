@@ -1,6 +1,4 @@
-﻿using MassTransit;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
 using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Logs;
 using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 

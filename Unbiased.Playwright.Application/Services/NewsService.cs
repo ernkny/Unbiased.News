@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Common.Concrete.Helper;
