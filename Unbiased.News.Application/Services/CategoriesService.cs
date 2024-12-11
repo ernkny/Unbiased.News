@@ -1,12 +1,7 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unbiased.News.Application.Cqrs.Queries.Categories;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.Entities;
+using Unbiased.News.Infrastructure.Cqrs.Queries.Categories;
 
 namespace Unbiased.News.Application.Services
 {

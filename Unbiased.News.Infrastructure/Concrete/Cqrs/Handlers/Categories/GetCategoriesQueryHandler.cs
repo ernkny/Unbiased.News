@@ -1,14 +1,9 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unbiased.News.Application.Cqrs.Queries.Categories;
 using Unbiased.News.Domain.Entities;
+using Unbiased.News.Infrastructure.Cqrs.Queries.Categories;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 
-namespace Unbiased.News.Application.Cqrs.Handlers.Categories
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.Categories
 {
     public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, List<Category>>
     {
@@ -21,7 +16,7 @@ namespace Unbiased.News.Application.Cqrs.Handlers.Categories
 
         public async Task<List<Category>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var result=await _categoriesRepository.GetAllCategoriesAsync();
+            var result = await _categoriesRepository.GetAllCategoriesAsync();
             return result.ToList();
         }
     }

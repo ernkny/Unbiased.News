@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Cqrs\Commands\" />
     <Folder Include="Dto\" />
     <Folder Include="Mappings\" />
     <Folder Include="Validators\" />
