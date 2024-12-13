@@ -18,7 +18,7 @@ namespace Unbiased.News.Api.Controllers
             _newsService = newsService;
         }
 
-        [HttpGet("GetAllGeneratedNews")]
+        [HttpGet("/GetAllGeneratedNews")]
         public async Task<IActionResult> GetAllGeneratedNews()
         {
             try
@@ -41,7 +41,7 @@ namespace Unbiased.News.Api.Controllers
             
         }
 
-        [HttpGet("GetAllGeneratedNewsWithImage")]
+        [HttpGet("/GetAllGeneratedNewsWithImage")]
         public async Task<IActionResult> GetAllGeneratedNewsWithImage()
         {
             try
