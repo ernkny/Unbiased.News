@@ -13,7 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(); 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:5001")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlConnection");
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!)); builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
@@ -43,7 +52,7 @@ builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCors("MyCorsPolicy");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

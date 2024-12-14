@@ -10,13 +10,18 @@ using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:5001")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlConnection");
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
@@ -39,8 +44,8 @@ builder.Services.AddMassTransit(x =>
     });
 });
 var app = builder.Build();
+app.UseCors("MyCorsPolicy");
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

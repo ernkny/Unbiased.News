@@ -9,6 +9,15 @@ using Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlConnection");
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:5001")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -22,7 +31,7 @@ builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCors("MyCorsPolicy");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
