@@ -7,15 +7,26 @@ using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 
 namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
 {
+    /// <summary>
+    /// Repository for news-related operations.
+    /// </summary>
     public class NewsRepository:INewsRepository
     {
         private readonly UnbiasedSqlConnection _connection;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewsRepository"/> class.
+        /// </summary>
+        /// <param name="connection">The Unbiased SQL connection.</param>
         public NewsRepository(UnbiasedSqlConnection connection)
         {
             _connection = connection;
         }
 
+        /// <summary>
+        /// Retrieves all generated news asynchronously.
+        /// </summary>
+        /// <returns>A collection of <see cref="GeneratedNews"/> objects.</returns>
         public async Task<IEnumerable<GeneratedNews>> GetAllGeneratedNewsAsync()
         {
             try
@@ -33,6 +44,10 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Retrieves all generated news with images asynchronously.
+        /// </summary>
+        /// <returns>A collection of <see cref="GenerateNewsWithImageDto"/> objects.</returns>
         public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync()
         {
             try

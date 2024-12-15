@@ -36,12 +36,12 @@ namespace Unbiased.News.Domain.Entities
         /// <summary>
         /// Date and time when the news was last modified (nullable).
         /// </summary>
-        public DateTime? ModifiedDate { get; set; } // Nullable because it's not always set
+        public DateTime? ModifiedDate { get; set; } 
 
         /// <summary>
         /// User who created the news.
         /// </summary>
-        public string CreatedUser { get; set; } // Not nullable, always set
+        public string CreatedUser { get; set; }
 
         /// <summary>
         /// Flag indicating whether the news is active.
@@ -61,16 +61,16 @@ namespace Unbiased.News.Domain.Entities
         /// <summary>
         /// User who approved the news (nullable).
         /// </summary>
-        public string ApproveUser { get; set; } // Nullable because it's not always set
+        public string ApproveUser { get; set; } 
 
         /// <summary>
         /// Date and time when the news was approved (nullable).
         /// </summary>
-        public DateTime? ApproveDate { get; set; } // Nullable because it's not always set
+        public DateTime? ApproveDate { get; set; } 
 
         /// <summary>
         /// Match identifier for the news (nullable).
         /// </summary>
-        public string MatchId { get; set; } // Nullable because it's not always set
+        public string MatchId { get; set; }
     }
 }

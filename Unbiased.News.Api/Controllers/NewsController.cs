@@ -7,6 +7,9 @@ using Unbiased.Shared.Dtos.Concrete;
 
 namespace Unbiased.News.Api.Controllers
 {
+    /// <summary>
+    /// Controller for managing news.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class NewsController : ControllerBase
@@ -18,6 +21,10 @@ namespace Unbiased.News.Api.Controllers
             _newsService = newsService;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewsController"/> class.
+        /// </summary>
+        /// <param name="newsService">The news service instance.</param>
         [HttpGet("/GetAllGeneratedNews")]
         public async Task<IActionResult> GetAllGeneratedNews()
         {
@@ -41,6 +48,10 @@ namespace Unbiased.News.Api.Controllers
             
         }
 
+        /// <summary>
+        /// Gets all generated news.
+        /// </summary>
+        /// <returns>A list of generated news.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImage")]
         public async Task<IActionResult> GetAllGeneratedNewsWithImage()
         {

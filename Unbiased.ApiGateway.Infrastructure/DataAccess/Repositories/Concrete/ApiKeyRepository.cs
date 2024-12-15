@@ -4,15 +4,26 @@ using Unbiased.ApiGateway.Infrastructure.DataAccess.Repositories.Abstract;
 
 namespace Unbiased.ApiGateway.Infrastructure.DataAccess.Repositories.Concrete
 {
+    /// <summary>
+    /// Repository for managing API keys.
+    /// </summary>
     public class ApiKeyRepository : IApiKeyRepository
     {
         private readonly UnbiasedSqlConnection _connection;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiKeyRepository"/> class.
+        /// </summary>
+        /// <param name="connection">The database connection.</param>
         public ApiKeyRepository(UnbiasedSqlConnection connection)
         {
             _connection = connection;
         }
 
+        /// <summary>
+        /// Retrieves the API key from the database.
+        /// </summary>
+        /// <returns>The API key.</returns>
         public async Task<string> GetApiKeyAsync()
         {
             try
@@ -29,6 +40,11 @@ namespace Unbiased.ApiGateway.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Sets the API key in the database.
+        /// </summary>
+        /// <param name="apiKey">The API key to set.</param>
+        /// <returns>True if the API key was set successfully; otherwise, false.</returns>
         public async Task<bool> SetApiKeyAsync(string apiKey)
         {
 
