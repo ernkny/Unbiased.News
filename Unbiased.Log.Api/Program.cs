@@ -7,6 +7,7 @@ using Unbiased.Log.Infrastructure;
 using Unbiased.Log.Infrastructure.DataAccess.Connections;
 using Unbiased.Log.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Log.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,9 +61,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<GlobalActivityLogMiddleware>();
+app.UseMiddleware<ApiKeyAuthorizeMiddleware>();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

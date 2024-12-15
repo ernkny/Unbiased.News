@@ -1,3 +1,4 @@
+using MassTransit;
 using Unbiased.News.Application;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Application.Services;
@@ -5,6 +6,7 @@ using Unbiased.News.Infrastructure;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,17 @@ builder.Services.AddCors(options =>
         builder.WithOrigins("http://localhost:5001")
                .AllowAnyMethod()
                .AllowAnyHeader();
+    });
+});
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration.GetSection("ConnectionStrings:RabbitMqUrl").Value, "/", host =>
+        {
+            host.Username("guest");
+            host.Password("guest");
+        });
     });
 });
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
@@ -39,9 +52,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<GlobalActivityLogMiddleware>();
+app.UseMiddleware<ApiKeyAuthorizeMiddleware>();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
