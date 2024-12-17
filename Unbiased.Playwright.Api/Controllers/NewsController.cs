@@ -27,7 +27,7 @@ public class NewsController : ControllerBase
     /// <summary>
     /// Inserts new news.
     /// </summary>
-    [HttpPost("InsertNews")]
+    [HttpPost("/InsertNews")]
     public async Task<IActionResult> InsertNews(InsertNewsDto insertNewsDto)
     {
         try
@@ -53,7 +53,7 @@ public class NewsController : ControllerBase
     /// <summary>
     /// Gets news using playwright scrapping.
     /// </summary>
-    [HttpGet("GetNewsWithPlaywright")]
+    [HttpGet("/GetNewsWithPlaywright")]
     public async Task<IActionResult> GetNewsWithPlaywright()
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
@@ -85,13 +85,35 @@ public class NewsController : ControllerBase
     /// <summary>
     /// Generates news using AI.
     /// </summary>
-    [HttpPost("GenerateNewsWithAI")]
+    [HttpPost("/GenerateNewsWithAI")]
     public async Task<IActionResult> GenerateNewsWithAI()
     {
         try
         {
             var response = new ResponseDto<bool>();
             var result = await _newsService.SendNewsToApiForGenerateAsync(HttpContext.RequestAborted);
+            if (result)
+            {
+                response.IsSuccessful = true;
+                response.StatusCode = 200;
+                response.Data = result;
+                return Ok(response);
+            }
+            return Ok(response.IsSuccessful = false);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    [HttpPost("/GenerateImagesWhenAllNewsHasGenerated")]
+    public async Task<IActionResult> GenerateImagesWhenAllNewsHasGenerated()
+    {
+        try
+        {
+            var response = new ResponseDto<bool>();
+            var result = await _newsService.GenerateImagesWhenAllNewsHasGeneratedAsync(HttpContext.RequestAborted);
             if (result)
             {
                 response.IsSuccessful = true;

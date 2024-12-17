@@ -22,6 +22,8 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         /// </summary>
         /// <param name="startDate">The start date for filtering news items.</param>
         /// <returns>A Task that represents the asynchronous operation. The task result contains an IEnumerable of GetNewsWithoutImageDto.</returns>
-        Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImages(DateTime startDate);
+        Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImagesAsync(DateTime startDate);
+
+        Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesWithNoneHasGeneratedAsync(CancellationToken cancellationToken);
     }
 }

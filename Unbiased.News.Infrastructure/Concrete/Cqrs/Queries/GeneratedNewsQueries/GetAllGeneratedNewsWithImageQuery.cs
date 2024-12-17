@@ -6,5 +6,5 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNews
     /// <summary>
     /// Query to retrieve all generated news with images.
     /// </summary>
-    public record GetAllGeneratedNewsWithImageQuery : IRequest<IEnumerable<GenerateNewsWithImageDto>>;
+    public record GetAllGeneratedNewsWithImageQuery(int categoryId, int pageNumber) : IRequest<IEnumerable<GenerateNewsWithImageDto>>;
 }

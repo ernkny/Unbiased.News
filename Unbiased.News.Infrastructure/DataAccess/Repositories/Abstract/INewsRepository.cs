@@ -18,6 +18,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         /// Retrieves all generated news with images asynchronously.
         /// </summary>
         /// <returns>A collection of generated news with images.</returns>
-        Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync();
+        Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber);
+        Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId);
     }
 }

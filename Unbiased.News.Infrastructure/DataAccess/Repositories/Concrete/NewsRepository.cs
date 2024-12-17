@@ -10,7 +10,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
     /// <summary>
     /// Repository for news-related operations.
     /// </summary>
-    public class NewsRepository:INewsRepository
+    public class NewsRepository : INewsRepository
     {
         private readonly UnbiasedSqlConnection _connection;
 
@@ -33,7 +33,6 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             {
                 using (var connection = _connection.CreateConnection())
                 {
-                    var parameters = new DynamicParameters();
                     return await connection.QueryAsync<GeneratedNews>("UB_sp_GetAllGeneratedNews", commandType: CommandType.StoredProcedure);
                 }
             }
@@ -48,14 +47,34 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// Retrieves all generated news with images asynchronously.
         /// </summary>
         /// <returns>A collection of <see cref="GenerateNewsWithImageDto"/> objects.</returns>
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync()
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber)
         {
             try
             {
+                var parameters = new DynamicParameters();
+                parameters.Add("@PageNumber", pageNumber);
+                parameters.Add("@CategoryId", categoryId);
                 using (var connection = _connection.CreateConnection())
                 {
-                    var parameters = new DynamicParameters();
-                    return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetAllGeneratedNewsWithImagePath", commandType: CommandType.StoredProcedure);
+                    return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetAllGeneratedNewsWithImagePath", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@CategoryId", categoryId);
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryFirstAsync<int>("UB_sp_GetAllGeneratedNewsWithImagePathCount", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception)

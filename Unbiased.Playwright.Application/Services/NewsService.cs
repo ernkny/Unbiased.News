@@ -90,6 +90,36 @@ namespace Unbiased.Playwright.Application.Services
             }
         }
 
+        public async Task<bool> GenerateImagesWhenAllNewsHasGeneratedAsync(CancellationToken cancellationToken)
+        {
+            var isDone = false;
+            while (!isDone)
+            {
+                var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
+                _ = images.Count() == 0 ? isDone = true : isDone = false;
+                foreach (var item in images)
+                {
+                    var imageFile = await SendNewsToApiForGenerateAsync(item.Title, cancellationToken);
+                    if (imageFile is not null)
+                    {
+                        await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+                        {
+                            MatchId = item.Id,
+                            filePath = imageFile
+                        }), cancellationToken);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public async Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesAsyncWithNoneHasGenerated(CancellationToken cancellationToken)
+        {
+            var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
+            return images;
+        }
+
         private async Task<string> SendNewsToApiForGenerateAsync(string Title, CancellationToken cancellationToken)
         {
             var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);

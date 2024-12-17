@@ -36,7 +36,7 @@ namespace Unbiased.Playwright.Application.Cqrs.Handlers
         /// <returns>A task representing the asynchronous operation, returning a collection of news items without images.</returns>
         public async Task<IEnumerable<GetNewsWithoutImageDto>> Handle(GetNewsWithoutImagesQuery request, CancellationToken cancellationToken)
         {
-            var result = await _newsImageRepository.GetNewsWithoutImages(request.startDate);
+            var result = await _newsImageRepository.GetNewsWithoutImagesAsync(request.startDate);
             return result;
         }
     }

@@ -19,5 +19,8 @@ namespace Unbiased.Playwright.Application.Interfaces
         /// </summary>
         /// <returns>A task representing the asynchronous operation, returning a boolean indicating success or failure.</returns>
         Task<bool> SendNewsToApiForGenerateAsync(CancellationToken cancellationToken);
+
+        Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesAsyncWithNoneHasGenerated(CancellationToken cancellationToken);
+        Task<bool> GenerateImagesWhenAllNewsHasGeneratedAsync(CancellationToken cancellationToken);
     }
 }

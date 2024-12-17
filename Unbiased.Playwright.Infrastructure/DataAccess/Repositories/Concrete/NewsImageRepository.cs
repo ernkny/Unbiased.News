@@ -43,12 +43,21 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        public async Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesWithNoneHasGeneratedAsync(CancellationToken cancellationToken)
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+
+                return await connection.QueryAsync<GeneratedNewsWithNoneImageDto>("UB_sp_GetAllGeneratedNewsWithNoneImage", commandType: CommandType.StoredProcedure);
+            }
+        }
+
         /// <summary>
         /// Retrieves all news images that do not have an image.
         /// </summary>
         /// <param name="startDate">The start date for filtering.</param>
         /// <returns>A list of news images without images.</returns>
-        public async Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImages(DateTime startDate)
+        public async Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImagesAsync(DateTime startDate)
         {
             using (var connection = _connection.CreateConnection())
             {

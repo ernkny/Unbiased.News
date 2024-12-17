@@ -29,7 +29,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
         /// <returns>A list of GenerateNewsWithImageDto instances.</returns>
         public async Task<IEnumerable<GenerateNewsWithImageDto>> Handle(GetAllGeneratedNewsWithImageQuery request, CancellationToken cancellationToken)
         {
-            return await _newsRepository.GetAllGeneratedNewsWithImageAsync();
+            return await _newsRepository.GetAllGeneratedNewsWithImageAsync(request.categoryId,request.pageNumber);
         }
     }
 }
