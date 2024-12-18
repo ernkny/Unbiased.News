@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Polly;
 using System.Diagnostics;
+using System.Threading;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Domain.DTOs;
@@ -12,7 +14,7 @@ public class NewsController : ControllerBase
     private readonly INewsService _insertNewsService;
     private readonly IPlaywrightScrappingService _playwrightScrapping;
     private readonly INewsService _newsService;
-    
+
 
     /// <summary>
     /// Initializes a new instance of the NewsController class.
@@ -56,23 +58,32 @@ public class NewsController : ControllerBase
     [HttpGet("/GetNewsWithPlaywright")]
     public async Task<IActionResult> GetNewsWithPlaywright()
     {
-        Stopwatch stopwatch = Stopwatch.StartNew();
+        var asyncPolicy = Policy
+        .Handle<Exception>().
+        WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(5), (exception, timeSpan, retryCount, context) =>
+        {
+            Console.WriteLine($"Retry {retryCount} after {timeSpan.TotalSeconds} seconds");
+        });
+
+        var circuitBreakerPolicy = Policy
+        .Handle<Exception>()
+        .CircuitBreakerAsync(3, TimeSpan.FromSeconds(30));
+        var stopwatch = Stopwatch.StartNew();
         try
         {
-            var response = new ResponseDto<bool>();
-            var result = await _playwrightScrapping.PlaywrightScrappingNewsAndAddRangeNewsAsync();
-            if (result)
+            var result = await circuitBreakerPolicy.ExecuteAsync(async () =>
+            await asyncPolicy.ExecuteAsync(async () =>
+                await _playwrightScrapping.PlaywrightScrappingNewsAndAddRangeNewsAsync()));
+            var response = new ResponseDto<bool>
             {
-                response.IsSuccessful = true;
-                response.StatusCode = 200;
-                response.Data = result;
-                return Ok(response);
-            }
-            return Ok(response.IsSuccessful = false);
+                IsSuccessful = result,
+                StatusCode = result ? 200 : 400,
+                Data = result
+            };
+            return Ok(response);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
             throw;
         }
         finally
@@ -80,6 +91,7 @@ public class NewsController : ControllerBase
             stopwatch.Stop();
             Console.WriteLine($"Response time: {stopwatch.ElapsedMilliseconds} ms");
         }
+
     }
 
     /// <summary>
@@ -88,10 +100,22 @@ public class NewsController : ControllerBase
     [HttpPost("/GenerateNewsWithAI")]
     public async Task<IActionResult> GenerateNewsWithAI()
     {
+        var asyncPolicy = Policy
+        .Handle<Exception>().
+        WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(5), (exception, timeSpan, retryCount, context) =>
+        {
+            Console.WriteLine($"Retry {retryCount} after {timeSpan.TotalSeconds} seconds");
+        });
+
+        var circuitBreakerPolicy = Policy
+        .Handle<Exception>()
+        .CircuitBreakerAsync(3, TimeSpan.FromSeconds(30));
         try
         {
             var response = new ResponseDto<bool>();
-            var result = await _newsService.SendNewsToApiForGenerateAsync(HttpContext.RequestAborted);
+            var result = await circuitBreakerPolicy.ExecuteAsync(async () =>
+            await asyncPolicy.ExecuteAsync(async () =>
+                await _newsService.SendNewsToApiForGenerateAsync(HttpContext.RequestAborted)));
             if (result)
             {
                 response.IsSuccessful = true;

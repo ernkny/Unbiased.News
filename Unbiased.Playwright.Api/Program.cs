@@ -1,4 +1,7 @@
 using MassTransit;
+using Polly.Retry;
+using Polly;
+using System.Threading;
 using Unbiased.Playwright.Application;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
@@ -13,6 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var pipeline = new ResiliencePipelineBuilder()
+    .AddRetry(new RetryStrategyOptions())
+    .AddTimeout(TimeSpan.FromSeconds(10)) 
+    .Build();
+await pipeline.ExecuteAsync(static async token => {  await Task.Delay(1000, token); }, CancellationToken.None);
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy", builder =>
