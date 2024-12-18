@@ -83,14 +83,14 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// Retrieves all active keywords for search.
         /// </summary>
         /// <returns>A list of active keywords for search.</returns>
-        public async Task<IEnumerable<string>> GetAllActiveKeywordsForSearchAsync()
+        public async Task<IEnumerable<ActiveUrlsForSearchDto>> GetAllActiveUrlsForSearchAsync()
         {
             using (var connection = _connection.CreateConnection())
             {
                 try
                 {
 
-                    return await connection.QueryAsync<string>("UB_sp_GetAllActiveKeywords", commandType: CommandType.StoredProcedure);
+                    return await connection.QueryAsync<ActiveUrlsForSearchDto>("UB_sp_GetAllActiveUrls", commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception exception)
                 {
@@ -241,7 +241,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     var parameters = new DynamicParameters();
                     parameters.Add("Title", generatedNews.Title, DbType.String, ParameterDirection.Input);
                     parameters.Add("Detail", generatedNews.Detail, DbType.String, ParameterDirection.Input);
-                    parameters.Add("CategoryId", 1, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("CategoryId", generatedNews.CategoryId, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("MatchId", generatedNews.MatchId, DbType.String, ParameterDirection.Input);
 
                     return await connection.ExecuteAsync("UB_sp_InsertUBNewsGenerated", parameters, commandType: CommandType.StoredProcedure) == 1;

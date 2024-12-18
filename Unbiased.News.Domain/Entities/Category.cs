@@ -19,5 +19,7 @@
         /// Order level of the category.
         /// </summary>
         public int OrderLevel { get; set; }
+
+        public string Description { get; set; }
     }
 }

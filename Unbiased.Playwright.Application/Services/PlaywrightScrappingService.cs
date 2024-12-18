@@ -45,14 +45,15 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A list of scraped news.</returns>
         public async Task<List<News>> PlaywrightScrappingNewsAsync()
         {
-            var keywords = await _mediator.Send(new GetAllActiveKeywordsForSearchQuery());
+            var urls = await _mediator.Send(new GetAllActiveUrlsForSearchQuery());
             var listOfNews = new List<News>();
-            foreach (var keyword in keywords)
+            foreach (var url in urls)
             {
-                var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(keyword);
+                var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url);
                 var titles = await searchWithKeywordControl.Handle();
                 var newsContents = new GetNewsWithGuidControl(titles);
                 var news = await newsContents.Handle();
+                news.ForEach(item => item.CategoryId = url.categoryId);
                 listOfNews.AddRange(news);
             }
             return listOfNews;

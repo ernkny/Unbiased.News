@@ -14,5 +14,10 @@
         /// Gets or sets the combined details of the news.
         /// </summary>
         public string CombinedDetails { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CategorId of the news.
+        /// </summary>
+        public int CategoryId { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
             try
             {
                 _playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-                _browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+                _browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
 
                 if (_browser == null)
                 {
@@ -36,11 +36,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                     Timeout = 60000,
                     WaitUntil = WaitUntilState.DOMContentLoaded
                 });
-
-                await page.WaitForSelectorAsync(".aqvwYd", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
-                await page.WaitForSelectorAsync("#i11", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
-                await page.ClickAsync("#i11");
-                await Task.Delay(10000);
+                await Task.Delay(5000);
 
                 var newsUrls = await page.QuerySelectorAllAsync(".jKHa4e");
                 await page.WaitForSelectorAsync(".jKHa4e", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });

@@ -65,7 +65,9 @@ namespace Unbiased.Playwright.Application.Services
                     {
                         Detail = result.Detail,
                         Title = result.Title,
-                        MatchId = item.MatchId
+                        MatchId = item.MatchId,
+                        CategoryId = item.CategoryId
+
                     };
 
                     if (await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken))
