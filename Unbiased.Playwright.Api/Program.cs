@@ -1,8 +1,9 @@
-using MassTransit;
-using Polly.Retry;
+﻿using MassTransit;
 using Polly;
-using System.Threading;
+using Polly.Retry;
+using Quartz;
 using Unbiased.Playwright.Application;
+using Unbiased.Playwright.Application.Configurations.Quartz;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Application.Services;
@@ -11,6 +12,7 @@ using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
+using static MassTransit.MessageHeaders;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -36,7 +38,34 @@ var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlCon
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
+builder.Services.AddQuartz(q =>
+{
+    q.SchedulerName = "MyScheduler";
 
+    q.UsePersistentStore(s =>
+    {
+        s.UseProperties = true;
+        s.RetryInterval = TimeSpan.FromSeconds(15);
+        s.UseSqlServer(sqlServer =>
+        {
+            sqlServer.ConnectionString = connectionString!;
+        });
+        s.UseSystemTextJsonSerializer();
+        s.UseClustering(c =>
+        {
+            c.CheckinMisfireThreshold = TimeSpan.FromSeconds(20);
+            c.CheckinInterval = TimeSpan.FromSeconds(10);
+        });
+
+    });
+    QuartzConfiguration.ConfigureJobs(q);
+    q.UseDefaultThreadPool(tp => tp.MaxConcurrency = 10);
+    q.UseSimpleTypeLoader();
+});
+builder.Services.AddQuartzHostedService(q =>
+{
+    q.WaitForJobsToComplete = true;
+});
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsImageRepository, NewsImageRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
