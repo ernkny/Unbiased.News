@@ -1,4 +1,5 @@
 ﻿using Unbiased.Playwright.Domain.DTOs;
+using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 
 namespace Unbiased.Playwright.Application.Interfaces
 {
@@ -22,5 +23,6 @@ namespace Unbiased.Playwright.Application.Interfaces
 
         Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesAsyncWithNoneHasGenerated(CancellationToken cancellationToken);
         Task<bool> GenerateImagesWhenAllNewsHasGeneratedAsync(CancellationToken cancellationToken);
+        Task<bool> GenerateNewsWithApiAsync(IEnumerable<GeneratedNewsDto> combinedNews, CancellationToken cancellationToken, GptApiExternalService externalServiceSend);
     }
 }

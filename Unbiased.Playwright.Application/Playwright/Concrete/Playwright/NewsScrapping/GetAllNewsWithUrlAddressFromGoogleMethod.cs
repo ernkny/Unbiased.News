@@ -23,7 +23,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
             try
             {
                 _playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-                _browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
+                _browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
 
                 if (_browser == null)
                 {

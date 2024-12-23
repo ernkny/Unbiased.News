@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Common.Concrete.Helper;
 using Unbiased.Playwright.Domain.DTOs;
@@ -7,6 +8,7 @@ using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
+using static MassTransit.ValidationResultExtensions;
 
 namespace Unbiased.Playwright.Application.Services
 {
@@ -54,37 +56,8 @@ namespace Unbiased.Playwright.Application.Services
             {
                 var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), cancellationToken);
                 var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
-                var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
-
-                foreach (var item in combinedNews)
-                {
-                    var result = await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails, cancellationToken);
-                    if (result == null) throw new ArgumentException("Error");
-
-                    var generatedNews = new News
-                    {
-                        Detail = result.Detail,
-                        Title = result.Title,
-                        MatchId = item.MatchId,
-                        CategoryId = item.CategoryId
-
-                    };
-
-                    if (await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken))
-                    {
-
-                        var imageFile = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);
-                        if (imageFile is not null)
-                        {
-                            await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
-                            {
-                                MatchId = item.MatchId,
-                                filePath = imageFile
-                            }), cancellationToken);
-                        }
-                    }
-                }
-                return true;
+                var result = await GenerateNewsWithApiAsync(combinedNews, cancellationToken, externalServiceSend);
+                return result;
             }
             catch (Exception)
             {
@@ -120,6 +93,47 @@ namespace Unbiased.Playwright.Application.Services
         {
             var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
             return images;
+        }
+
+        public async Task<bool> GenerateNewsWithApiAsync(IEnumerable<GeneratedNewsDto> combinedNews, CancellationToken cancellationToken, GptApiExternalService externalServiceSend)
+        {
+            try
+            {
+                foreach (var item in combinedNews)
+                {
+                    var result = await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails, cancellationToken);
+                    if (result == null) throw new ArgumentException("Error");
+
+                    var generatedNews = new News
+                    {
+                        Detail = result.Detail,
+                        Title = result.Title,
+                        MatchId = item.MatchId,
+                        CategoryId = item.CategoryId
+                    };
+
+                    if (await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken))
+                    {
+
+                        var imageFile = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);
+                        if (imageFile is not null)
+                        {
+                            await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+                            {
+                                MatchId = item.MatchId,
+                                filePath = imageFile
+                            }), cancellationToken);
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
         private async Task<string> SendNewsToApiForGenerateAsync(string Title, CancellationToken cancellationToken)
