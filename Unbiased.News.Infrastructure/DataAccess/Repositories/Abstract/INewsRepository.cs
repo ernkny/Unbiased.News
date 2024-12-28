@@ -12,13 +12,13 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         /// Retrieves all generated news asynchronously.
         /// </summary>
         /// <returns>A collection of generated news.</returns>
-        Task<IEnumerable<GeneratedNews>> GetAllGeneratedNewsAsync();
+        Task<IEnumerable<GeneratedNews>> GetAllGeneratedNewsAsync(string language);
 
         /// <summary>
         /// Retrieves all generated news with images asynchronously.
         /// </summary>
         /// <returns>A collection of generated news with images.</returns>
-        Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber);
-        Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId);
+        Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber, string language);
+        Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId, string language);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 using System.Data.Common;
+using System.Text.RegularExpressions;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
@@ -46,6 +47,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("IsDeleted", false, DbType.Boolean, ParameterDirection.Input);
                     parameters.Add("Url", addNewsDto.Url, DbType.String, ParameterDirection.Input);
                     parameters.Add("IsProcessed", false, DbType.Boolean, ParameterDirection.Input);
+                    parameters.Add("Language", addNewsDto.Language, DbType.String, ParameterDirection.Input);
 
                     await connection.ExecuteAsync("UB_sp_InsertUBNews", parameters, commandType: CommandType.StoredProcedure);
                     return guid;
@@ -132,6 +134,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                                 parameters.Add("IsDeleted", news.IsDeleted, DbType.Boolean);
                                 parameters.Add("Url", news.Url, DbType.String);
                                 parameters.Add("IsProcessed", false, DbType.Boolean);
+                                parameters.Add("Language", news.Language, DbType.String, ParameterDirection.Input);
 
                                 var result = await connection.ExecuteAsync(query, parameters, transaction, commandType: CommandType.StoredProcedure);
                                 if (result != 1)
@@ -243,6 +246,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("Detail", generatedNews.Detail, DbType.String, ParameterDirection.Input);
                     parameters.Add("CategoryId", generatedNews.CategoryId, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("MatchId", generatedNews.MatchId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("Language", generatedNews.Language, DbType.String, ParameterDirection.Input);
 
                     return await connection.ExecuteAsync("UB_sp_InsertUBNewsGenerated", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
@@ -276,13 +280,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<IEnumerable<GeneratedNews>> GetGeneratedNewsAsync() 
+        public async Task<IEnumerable<GeneratedNews>> GetGeneratedNewsAsync(string language)
         {
             try
             {
                 using (var connection = _connection.CreateConnection())
                 {
-                    return await connection.QueryAsync<GeneratedNews>("UB_sp_GetAllGeneratedNews", commandType: CommandType.StoredProcedure);
+                    var parameters = new DynamicParameters();
+                    parameters.Add("language", language, DbType.String);
+                    return await connection.QueryAsync<GeneratedNews>("UB_sp_GetAllGeneratedNews", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception)

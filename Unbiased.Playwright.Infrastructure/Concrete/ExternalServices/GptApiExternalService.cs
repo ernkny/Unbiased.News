@@ -33,7 +33,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews, CancellationToken cancellationToken)
         {
             var result = new NewsExtractDto();
-            var newsAnalysis = $@"Bir gazeteci gibi bu paylaştığım haberi oku ve bana analiz edip bir haber olarak içerik çıkar. Bunu senin abonelerin okuyacakmış gibi haber çıkart aynı zamanda haberi analiz edip yorumlarını ekle. Haberin kesinlikle başlığı olmadlı ve içeriği olmalı. Haber içeriği:  -----{DetailIOfNews}-----";
+            var newsAnalysis = $@"Bir gazeteci gibi bu haber metnini oku ve yeni bir haber olarak analiz et. İlk cümle başlık olacak şekilde içerik oluştur ve bunu sanki kendi abonelerin okuyacakmış gibi hazırla. Aynı zamanda haberi analiz edip, kendi yorumunu da ekle. Yazının yapay zeka tarafından incelenip analiz edildiğini belirt. Analiz Edilecek Haber içeriği='{DetailIOfNews}'";
 
             var prompt = $@"
             {newsAnalysis}

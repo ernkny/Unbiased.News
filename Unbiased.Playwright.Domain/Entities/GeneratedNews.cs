@@ -80,5 +80,10 @@ namespace Unbiased.Playwright.Domain.Entities
         /// Match ID associated with the generated news.
         /// </summary>
         public string MatchId { get; set; }
+
+        /// <summary>
+        /// Language of the generated news.
+        /// </summary>
+        public string Language { get; set; }
     }
 }

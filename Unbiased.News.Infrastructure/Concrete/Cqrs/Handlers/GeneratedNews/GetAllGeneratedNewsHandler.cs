@@ -29,7 +29,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
         /// <returns>The generated news.</returns>
         public async Task<IEnumerable<Entities.GeneratedNews>> Handle(GetAllGeneratedNewsQuery request, CancellationToken cancellationToken)
         {
-            return await _newsRepository.GetAllGeneratedNewsAsync();
+            return await _newsRepository.GetAllGeneratedNewsAsync(request.language);
         }
     }
 }

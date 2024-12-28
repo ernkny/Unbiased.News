@@ -24,5 +24,10 @@
         /// Gets or sets the URL associated with the news.
         /// </summary>
         public string Url { get; set; }
+
+        /// <summary>
+        /// Language of the news.
+        /// </summary>
+        public string Language { get; set; }
     }
 }

@@ -92,6 +92,11 @@ namespace Unbiased.Playwright.Domain.Entities
         /// <remarks>Required.</remarks>
         [Required]
         public bool IsProcessed { get; set; }
+
+        /// <summary>
+        /// Language of the generated news.
+        /// </summary>
+        public string Language { get; set; }
     }
 }
 

@@ -111,20 +111,23 @@ namespace Unbiased.Playwright.Application.Services
                         MatchId = item.MatchId,
                         CategoryId = item.CategoryId
                     };
-
-                    if (await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken))
+                    if (!string.IsNullOrEmpty(result.Title) || !string.IsNullOrEmpty(result.Detail))
                     {
-
-                        var imageFile = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);
-                        if (imageFile is not null)
+                        if (await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken))
                         {
-                            await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+
+                            var imageFile = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);
+                            if (imageFile is not null)
                             {
-                                MatchId = item.MatchId,
-                                filePath = imageFile
-                            }), cancellationToken);
+                                await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+                                {
+                                    MatchId = item.MatchId,
+                                    filePath = imageFile
+                                }), cancellationToken);
+                            }
                         }
                     }
+                    
                 }
                 return true;
             }

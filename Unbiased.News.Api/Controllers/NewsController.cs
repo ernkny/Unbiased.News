@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
@@ -26,12 +25,13 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <param name="newsService">The news service instance.</param>
         [HttpGet("/GetAllGeneratedNews")]
-        public async Task<IActionResult> GetAllGeneratedNews()
+        public async Task<IActionResult> GetAllGeneratedNews(string language)
         {
             try
             {
+                language = string.IsNullOrEmpty(language) ? "tr" : language;
                 var response = new ResponseDto<List<GeneratedNews>>();
-                var result = await _newsService.GetAllGeneratedNewsAsync();
+                var result = await _newsService.GetAllGeneratedNewsAsync(language);
                 if (result.Count()>0)
                 {
                     response.IsSuccessful = true;
@@ -53,12 +53,13 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <returns>A list of generated news.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImage")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImage(int categoryId,int pageNumber = 1)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImage(int categoryId, string language,int pageNumber = 1)
         {
             try
             {
+                language=string.IsNullOrEmpty(language)?"tr":language;
                 var response = new ResponseDto<List<GenerateNewsWithImageDto>>();
-                var result = await _newsService.GetAllGeneratedNewsWithImageAsync(categoryId, pageNumber);
+                var result = await _newsService.GetAllGeneratedNewsWithImageAsync(categoryId, pageNumber, language);
                 if (result.Count() > 0)
                 {
                     response.IsSuccessful = true;
@@ -83,12 +84,13 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <returns>A list of generated news.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImageCount")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(int categoryId, string language)
         {
              try
             {
+                language = string.IsNullOrEmpty(language) ? "tr" : language;
                 var response = new ResponseDto<int>();
-                var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(categoryId);
+                var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(categoryId, language);
                 if (result > 0)
                 {
                     response.IsSuccessful = true;

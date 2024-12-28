@@ -72,5 +72,10 @@ namespace Unbiased.News.Domain.Entities
         /// Match identifier for the news (nullable).
         /// </summary>
         public string MatchId { get; set; }
+
+        /// <summary>
+        /// Language of the generated news.
+        /// </summary>
+        public string Language { get; set; }
     }
 }

@@ -54,6 +54,7 @@ namespace Unbiased.Playwright.Application.Services
                 var newsContents = new GetNewsWithGuidControl(titles);
                 var news = await newsContents.Handle();
                 news.ForEach(item => item.CategoryId = url.categoryId);
+                news.ForEach(item => item.Language = url.Language);
                 listOfNews.AddRange(news);
             }
             return listOfNews;

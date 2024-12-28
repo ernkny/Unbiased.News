@@ -68,6 +68,6 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         /// <returns>A task containing a boolean indicating whether the operation was successful.</returns>
         Task<bool> UpdateNewsProcessValueAsTrueAsync(string matchId);
 
-        Task<IEnumerable<GeneratedNews>> GetGeneratedNewsAsync();
+        Task<IEnumerable<GeneratedNews>> GetGeneratedNewsAsync(string language);
     }
 }

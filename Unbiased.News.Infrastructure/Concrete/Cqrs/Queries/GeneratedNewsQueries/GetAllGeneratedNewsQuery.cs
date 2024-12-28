@@ -6,5 +6,5 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQuerie
     /// <summary>
     /// Represents a query to retrieve all generated news.
     /// </summary>
-    public record GetAllGeneratedNewsQuery() : IRequest<IEnumerable<Entities.GeneratedNews>>;
+    public record GetAllGeneratedNewsQuery(string language) : IRequest<IEnumerable<Entities.GeneratedNews>>;
 }

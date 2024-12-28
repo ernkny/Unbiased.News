@@ -4,5 +4,6 @@
     {
         public string url { get; set; }
         public int categoryId { get; set; }
+        public string Language { get; set; }
     }
 }
