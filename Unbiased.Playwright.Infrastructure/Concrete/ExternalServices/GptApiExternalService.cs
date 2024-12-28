@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using Unbiased.Playwright.Common.Concrete.Utils;
 using Unbiased.Playwright.Domain.DTOs;
+using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 
 namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
@@ -30,21 +31,10 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <param name="httpClient">The HTTP client instance.</param>
         /// <param name="configuration">The configuration instance.</param>
         /// <param name="mediator">The mediator instance.</param>
-        public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews, CancellationToken cancellationToken)
+        public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews,LanguageEnums language, CancellationToken cancellationToken)
         {
             var result = new NewsExtractDto();
-            var newsAnalysis = $@"Bir gazeteci gibi bu haber metnini oku ve yeni bir haber olarak analiz et. İlk cümle başlık olacak şekilde içerik oluştur ve bunu sanki kendi abonelerin okuyacakmış gibi hazırla. Aynı zamanda haberi analiz edip, kendi yorumunu da ekle. Yazının yapay zeka tarafından incelenip analiz edildiğini belirt. Analiz Edilecek Haber içeriği='{DetailIOfNews}'";
-
-            var prompt = $@"
-            {newsAnalysis}
-
-            KESINLIKLE yanıtını aşağıdaki formatta ver:
-
-            {{
-                ""Title"": ""[Haber başlığı]"",
-                ""Detail"": ""[Haber detayı ve analizi]""
-            }}
-            ";
+            var prompt=await SetPromptMessageLanguageWithDetailOfNews(language, DetailIOfNews);
 
             try
             {
@@ -95,6 +85,52 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             {
                 throw;
             }
+        }
+
+        private async Task<string> SetPromptMessageLanguageWithDetailOfNews(LanguageEnums language, string DetailIOfNews)
+        {
+            switch (language)
+            {
+                case LanguageEnums.en:
+                    return await EnglishPromptMessage(DetailIOfNews);
+                case LanguageEnums.tr:
+                    return await TurkishPromptMessage(DetailIOfNews);
+                default: throw new Exception("Language not supported");
+
+            }
+        }
+
+        private async Task<string> TurkishPromptMessage(string DetailIOfNews)
+        {
+            var newsAnalysis = $@"Bir gazeteci gibi bu haber metnini oku ve yeni bir haber olarak analiz et. İlk cümle başlık olacak şekilde içerik oluştur ve bunu sanki kendi abonelerin okuyacakmış gibi hazırla. Aynı zamanda haberi analiz edip, kendi yorumunu da ekle. Yazının yapay zeka tarafından incelenip analiz edildiğini belirt. Analiz Edilecek Haber içeriği='{DetailIOfNews}'";
+
+            var prompt = $@"
+            {newsAnalysis}
+
+            KESINLIKLE yanıtını aşağıdaki formatta ver:
+
+            {{
+                ""Title"": ""[Haber başlığı]"",
+                ""Detail"": ""[Haber detayı ve analizi]""
+            }}
+            ";
+
+            return await Task.FromResult(newsAnalysis);
+        }
+
+        private async Task<string> EnglishPromptMessage(string DetailIOfNews)
+        {
+            var newsAnalysis = $@"Read this news text like a journalist and analyze it as a new article. Create the content with the first sentence as the title, and prepare it as if it were for your own subscribers. Also, analyze the news and add your own commentary. Mention that the article has been analyzed and reviewed by artificial intelligence. Start your response with 'Title:' and continue with 'Detail:', because I will read your article from an API. '{DetailIOfNews}'";
+
+            var prompt = $@"
+            {newsAnalysis}
+
+            Please respond in the following format:
+
+            {{ ""Title"": ""[News headline]"", ""Detail"": ""[News detail and analysis]"" }} 
+            ";
+
+            return await Task.FromResult(newsAnalysis);
         }
     }
 }

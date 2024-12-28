@@ -19,5 +19,10 @@
         /// Gets or sets the CategorId of the news.
         /// </summary>
         public int CategoryId { get; set; }
+
+        /// <summary>
+        /// Language of the generated news.
+        /// </summary>
+        public string Language { get; set; }
     }
 }

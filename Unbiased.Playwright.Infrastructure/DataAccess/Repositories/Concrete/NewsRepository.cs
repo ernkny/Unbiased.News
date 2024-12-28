@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using System.Data;
 using System.Data.Common;
-using System.Text.RegularExpressions;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
@@ -139,7 +138,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                                 var result = await connection.ExecuteAsync(query, parameters, transaction, commandType: CommandType.StoredProcedure);
                                 if (result != 1)
                                 {
-                                    throw new Exception("Failed to insert news: " + news.Title);
+                                    throw new Exception("Failed to insert news url: " + news.Url);
                                 }
                             }
 

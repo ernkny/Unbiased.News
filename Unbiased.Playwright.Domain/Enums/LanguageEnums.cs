@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Unbiased.Playwright.Application.Dto.Enums
+namespace Unbiased.Playwright.Domain.Enums
 {
     public enum LanguageEnums
     {
-        tr=1,
-        en=2
+        TR=1,
+        EN=2
     }
 }

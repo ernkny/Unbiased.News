@@ -28,9 +28,9 @@ namespace Unbiased.News.Application.Services
             return result;
         }
 
-        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId,string language)
+        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
         {
-            var result = await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(categoryId, language));
+            var result = await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(categoryId));
             return result;
         }
     }

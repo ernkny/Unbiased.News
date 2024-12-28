@@ -70,13 +70,12 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId,string language)
+        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
         {
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@CategoryId", categoryId);
-                parameters.Add("@Language", language);
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryFirstAsync<int>("UB_sp_GetAllGeneratedNewsWithImagePathCount", parameters, commandType: CommandType.StoredProcedure);

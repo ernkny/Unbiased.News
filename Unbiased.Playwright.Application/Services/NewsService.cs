@@ -5,6 +5,7 @@ using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Common.Concrete.Helper;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
+using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
@@ -101,7 +102,8 @@ namespace Unbiased.Playwright.Application.Services
             {
                 foreach (var item in combinedNews)
                 {
-                    var result = await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails, cancellationToken);
+                    LanguageEnums language = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), item.Language);
+                    var result = await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails, language, cancellationToken);
                     if (result == null) throw new ArgumentException("Error");
 
                     var generatedNews = new News

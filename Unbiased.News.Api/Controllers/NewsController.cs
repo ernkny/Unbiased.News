@@ -57,7 +57,8 @@ namespace Unbiased.News.Api.Controllers
         {
             try
             {
-                language=string.IsNullOrEmpty(language)?"tr":language;
+                language=language.ToUpper();
+                language=string.IsNullOrEmpty(language)?"TR":language;
                 var response = new ResponseDto<List<GenerateNewsWithImageDto>>();
                 var result = await _newsService.GetAllGeneratedNewsWithImageAsync(categoryId, pageNumber, language);
                 if (result.Count() > 0)
@@ -84,13 +85,12 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <returns>A list of generated news.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImageCount")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(int categoryId, string language)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
         {
              try
             {
-                language = string.IsNullOrEmpty(language) ? "tr" : language;
                 var response = new ResponseDto<int>();
-                var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(categoryId, language);
+                var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(categoryId);
                 if (result > 0)
                 {
                     response.IsSuccessful = true;

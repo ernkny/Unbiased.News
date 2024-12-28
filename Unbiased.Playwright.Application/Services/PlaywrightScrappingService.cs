@@ -34,29 +34,39 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A boolean indicating whether the operation was successful.</returns>
         public async Task<bool> PlaywrightScrappingNewsAndAddRangeNewsAsync()
         {
-            var resultOfScrappingNews = await PlaywrightScrappingNewsAsync();
-            var result = await SaveAllNewsWithRangeAsync(resultOfScrappingNews);
-            return result;
+            try
+            {
+                var urls = await _mediator.Send(new GetAllActiveUrlsForSearchQuery());
+                foreach (var url in urls)
+                {
+                    var resultOfScrappingNews = await PlaywrightScrappingNewsAsync(url);
+                    await SaveAllNewsWithRangeAsync(resultOfScrappingNews);
+                }
+                return Task.CompletedTask.IsCompleted;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
         }
 
         /// <summary>
         /// Scrapes news from Google using the provided keywords.
         /// </summary>
         /// <returns>A list of scraped news.</returns>
-        public async Task<List<News>> PlaywrightScrappingNewsAsync()
+        public async Task<List<News>> PlaywrightScrappingNewsAsync(ActiveUrlsForSearchDto url)
         {
             var urls = await _mediator.Send(new GetAllActiveUrlsForSearchQuery());
-            var listOfNews = new List<News>();
-            foreach (var url in urls)
-            {
-                var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url);
-                var titles = await searchWithKeywordControl.Handle();
-                var newsContents = new GetNewsWithGuidControl(titles);
-                var news = await newsContents.Handle();
-                news.ForEach(item => item.CategoryId = url.categoryId);
-                news.ForEach(item => item.Language = url.Language);
-                listOfNews.AddRange(news);
-            }
+            var listOfNews =  Enumerable.Empty<News>().ToList();
+            var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url);
+            var titles = await searchWithKeywordControl.Handle();
+            var newsContents = new GetNewsWithGuidControl(titles);
+            var news = await newsContents.Handle();
+            news.ForEach(item => item.CategoryId = url.categoryId);
+            news.ForEach(item => item.Language = url.Language);
+            listOfNews.AddRange(news);
             return listOfNews;
         }
 
@@ -84,7 +94,7 @@ namespace Unbiased.Playwright.Application.Services
 
             var imagesForTitles = await GetImageProcess.GetNewsImageForTitle(titles);
 
-            for ( var i = 0; i < imagesForTitles.Count; i++)
+            for (var i = 0; i < imagesForTitles.Count; i++)
             {
                 await _mediator.Send(new AddNewsImageCommand(new InsertNewsImageDto
                 {

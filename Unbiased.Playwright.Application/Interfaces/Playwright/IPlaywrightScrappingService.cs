@@ -1,4 +1,5 @@
-﻿using Unbiased.Playwright.Domain.Entities;
+﻿using Unbiased.Playwright.Domain.DTOs;
+using Unbiased.Playwright.Domain.Entities;
 
 namespace Unbiased.Playwright.Application.Interfaces.Playwright
 {
@@ -11,7 +12,7 @@ namespace Unbiased.Playwright.Application.Interfaces.Playwright
         /// Asynchronously scrapes news using Playwright
         /// </summary>
         /// <returns>A list of scraped news</returns>
-        Task<List<News>> PlaywrightScrappingNewsAsync();
+        Task<List<News>> PlaywrightScrappingNewsAsync(ActiveUrlsForSearchDto url);
 
         /// <summary>
         /// Saves a list of news with a specified range
