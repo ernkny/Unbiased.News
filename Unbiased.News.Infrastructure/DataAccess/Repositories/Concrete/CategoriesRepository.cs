@@ -27,10 +27,9 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// <returns>A task that represents the asynchronous operation. The task result contains the list of categories.</returns>
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            // Use the provided connection to query the database for all categories.
             using (var connection = _connection.CreateConnection())
             {
-                var result = await connection.QueryAsync<Category>("Select * from UB_Categories");
+                var result = await connection.QueryAsync<Category>($"Exec UB_sp_GetAllcategoriesWithCount");
                 return result;
             }
         }

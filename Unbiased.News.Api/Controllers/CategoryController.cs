@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unbiased.News.Application.Interfaces;
+using Unbiased.News.Domain.Entities;
+using Unbiased.Shared.Dtos.Concrete;
 
 namespace Unbiased.News.Api.Controllers
 {
@@ -26,11 +28,29 @@ namespace Unbiased.News.Api.Controllers
         /// Gets all categories.
         /// </summary>
         /// <returns>A list of categories.</returns>
-        [HttpGet("GetAllCategories")]
+        [HttpGet("/GetAllCategories")]
         public async Task<IActionResult> GetAllCategories()
         {
-            var result = await _categoriesService.GetAllCategoriesAsync();
-            return Ok(result);
+            try
+            {
+                var response = new ResponseDto<List<Category>>();
+                var result = await _categoriesService.GetAllCategoriesAsync();
+                if (result.Count() > 0)
+                {
+                    response.IsSuccessful = true;
+                    response.StatusCode = 200;
+                    response.Data = result;
+                    return Ok(response);
+                }
+                response.IsSuccessful = true;
+                response.Data = Enumerable.Empty<Category>().ToList();
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
     }
 }

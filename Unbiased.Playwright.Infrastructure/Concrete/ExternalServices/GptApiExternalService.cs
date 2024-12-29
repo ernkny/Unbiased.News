@@ -91,9 +91,9 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         {
             switch (language)
             {
-                case LanguageEnums.en:
+                case LanguageEnums.EN:
                     return await EnglishPromptMessage(DetailIOfNews);
-                case LanguageEnums.tr:
+                case LanguageEnums.TR:
                     return await TurkishPromptMessage(DetailIOfNews);
                 default: throw new Exception("Language not supported");
 

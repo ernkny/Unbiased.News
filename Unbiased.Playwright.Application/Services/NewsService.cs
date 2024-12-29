@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
-using System.Threading;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Common.Concrete.Helper;
 using Unbiased.Playwright.Domain.DTOs;
@@ -9,7 +8,6 @@ using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
-using static MassTransit.ValidationResultExtensions;
 
 namespace Unbiased.Playwright.Application.Services
 {
