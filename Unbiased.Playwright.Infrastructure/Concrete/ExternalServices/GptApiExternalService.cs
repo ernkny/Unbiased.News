@@ -102,7 +102,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
         private async Task<string> TurkishPromptMessage(string DetailIOfNews)
         {
-            var newsAnalysis = $@"Bir gazeteci gibi bu haber metnini oku ve yeni bir haber olarak analiz et. İlk cümle başlık olacak şekilde içerik oluştur ve bunu sanki kendi abonelerin okuyacakmış gibi hazırla. Aynı zamanda haberi analiz edip, kendi yorumunu da ekle. Yazının yapay zeka tarafından incelenip analiz edildiğini belirt. Analiz Edilecek Haber içeriği='{DetailIOfNews}'";
+            var newsAnalysis = $@"Bir gazeteci gibi bu haber metnini oku ve yeni bir haber olarak analiz et. İlk cümle başlık olacak şekilde içerik oluştur ve bunu sanki kendi abonelerin okuyacakmış gibi hazırla. Aynı zamanda haberi analiz edip, kendi yorumunu da ekle. Yazının yapay zeka tarafından incelenip analiz edildiğini belirt. Api cevabının bana JSON format olarak ver çünkü Kendimin oluşturduğu API den senin cevabını okuyacağım. Analiz Edilecek Haber içeriği='{DetailIOfNews}'";
 
             var prompt = $@"
             {newsAnalysis}
@@ -112,25 +112,28 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             {{
                 ""Title"": ""[Haber başlığı]"",
                 ""Detail"": ""[Haber detayı ve analizi]""
-            }}
-            ";
+            }} bu dönüş formatı çok önemli buna dikkat et!!
+            asla bunu kullanma '```json\n";
 
-            return await Task.FromResult(newsAnalysis);
+            return await Task.FromResult(prompt);
         }
 
         private async Task<string> EnglishPromptMessage(string DetailIOfNews)
         {
-            var newsAnalysis = $@"Read this news text like a journalist and analyze it as a new article. Create the content with the first sentence as the title, and prepare it as if it were for your own subscribers. Also, analyze the news and add your own commentary. Mention that the article has been analyzed and reviewed by artificial intelligence. Start your response with 'Title:' and continue with 'Detail:', because I will read your article from an API. '{DetailIOfNews}'";
+            var newsAnalysis = $@"Read this news text like a journalist and analyze it as a new article. Create the content with the first sentence as the title, and prepare it as if it were for your own subscribers. Also, analyze the news and add your own commentary. Mention that the article has been analyzed and reviewed by artificial intelligence. Start your response with 'Title:' and continue with 'Detail:', Your api response has to be JSON formatted because I will read your article from an API. '{DetailIOfNews}'";
 
             var prompt = $@"
             {newsAnalysis}
 
-            Please respond in the following format:
+            This json format response type is very important!! not incluede any more than this. Please respond in the following format:
 
-            {{ ""Title"": ""[News headline]"", ""Detail"": ""[News detail and analysis]"" }} 
-            ";
+            {{ 
+                ""Title"": ""[News headline]"", 
+                ""Detail"": ""[News detail and analysis or your commantary]"",
+            }} 
+            Dont put them '```json\n";
 
-            return await Task.FromResult(newsAnalysis);
+            return await Task.FromResult(prompt);
         }
     }
 }

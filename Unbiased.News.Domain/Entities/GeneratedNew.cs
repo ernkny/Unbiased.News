@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Unbiased.News.Domain.Entities
+﻿namespace Unbiased.News.Domain.Entities
 {
     /// <summary>
     /// Represents a generated news entity.
     /// </summary>
-    public class GeneratedNews
+    public class GeneratedNew
     {
         /// <summary>
         /// Unique identifier for the news.

@@ -6,6 +6,7 @@ using Unbiased.Playwright.Application.Playwright.Concrete;
 using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrappingProcess;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
+using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 
@@ -39,8 +40,11 @@ namespace Unbiased.Playwright.Application.Services
                 var urls = await _mediator.Send(new GetAllActiveUrlsForSearchQuery());
                 foreach (var url in urls)
                 {
-                    var resultOfScrappingNews = await PlaywrightScrappingNewsAsync(url);
-                    await SaveAllNewsWithRangeAsync(resultOfScrappingNews);
+                    if (url.LastUpdatedTime.Value.AddHours(2) > DateTime.UtcNow)
+                    {
+                        var resultOfScrappingNews = await PlaywrightScrappingNewsAsync(url);
+                        await SaveAllNewsWithRangeAsync(resultOfScrappingNews);
+                    }
                 }
                 return Task.CompletedTask.IsCompleted;
             }
@@ -58,9 +62,10 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A list of scraped news.</returns>
         public async Task<List<News>> PlaywrightScrappingNewsAsync(ActiveUrlsForSearchDto url)
         {
-            var urls = await _mediator.Send(new GetAllActiveUrlsForSearchQuery());
+            
             var listOfNews =  Enumerable.Empty<News>().ToList();
-            var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url);
+            var languageEnum = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), url.Language);
+            var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url, languageEnum);
             var titles = await searchWithKeywordControl.Handle();
             var newsContents = new GetNewsWithGuidControl(titles);
             var news = await newsContents.Handle();

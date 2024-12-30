@@ -1,6 +1,7 @@
 ﻿using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 using Unbiased.Playwright.Application.Playwright.Abstract;
 using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrapping;
+using Unbiased.Playwright.Domain.Enums;
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrappingProcess
 {
@@ -12,15 +13,17 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
     {
         private AbstractHandlerChain _abstractHandlerChain;
         private readonly string _url;
+        private readonly LanguageEnums _language;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetAllNewsWithUrlAddressFromGoogleControl"/> class.
         /// </summary>
         /// <param name="url">The URL to search for news articles.</param>
 
-        public GetAllNewsWithUrlAddressFromGoogleControl(string url)
+        public GetAllNewsWithUrlAddressFromGoogleControl(string url,LanguageEnums language)
         {
             _url = url;
+            _language = language;
         }
 
         /// <summary>
@@ -34,7 +37,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         {
             if (!String.IsNullOrEmpty(_url))
             {
-                var result = await new GetAllNewsWithUrlAddressFromGoogleMethod().GetAllNewsWithUrlAddressFromGoogle(_url);
+                var result = await new GetAllNewsWithUrlAddressFromGoogleMethod().GetAllNewsWithUrlAddressFromGoogle(_url, _language);
                 return result;
             }
 

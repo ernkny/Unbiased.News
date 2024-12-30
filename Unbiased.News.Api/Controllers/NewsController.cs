@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
@@ -30,7 +31,7 @@ namespace Unbiased.News.Api.Controllers
             try
             {
                 language = string.IsNullOrEmpty(language) ? "tr" : language;
-                var response = new ResponseDto<List<GeneratedNews>>();
+                var response = new ResponseDto<List<GeneratedNew>>();
                 var result = await _newsService.GetAllGeneratedNewsAsync(language);
                 if (result.Count()>0)
                 {
@@ -100,6 +101,31 @@ namespace Unbiased.News.Api.Controllers
                 }
                 response.IsSuccessful = true;
                 response.Data =0;
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
+        }
+
+        [HttpGet("/GetGeneratedNewById")]
+        public async Task<IActionResult> GetGeneratedNewBydId(string id)
+        {
+            try
+            {
+                var response = new ResponseDto<GenerateNewsWithImageDto>();
+                var result = await _newsService.GetGeneratedNewsByIdAsync(id);
+                if (result is not null)
+                {
+                    response.IsSuccessful = true;
+                    response.StatusCode = 200;
+                    response.Data = result;
+                    return Ok(response);
+                }
+                response.IsSuccessful = true;
+                response.Data = null;
                 return Ok(response);
             }
             catch (Exception)

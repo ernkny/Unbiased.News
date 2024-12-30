@@ -12,7 +12,7 @@ namespace Unbiased.News.Application.Interfaces
         /// Retrieves all generated news asynchronously.
         /// </summary>
         /// <returns>A task containing a collection of generated news.</returns>
-        Task<IEnumerable<GeneratedNews>> GetAllGeneratedNewsAsync(string language);
+        Task<IEnumerable<GeneratedNew>> GetAllGeneratedNewsAsync(string language);
 
         /// <summary>
         /// Retrieves all generated news with images asynchronously.
@@ -20,5 +20,7 @@ namespace Unbiased.News.Application.Interfaces
         /// <returns>A task containing a collection of generated news with images.</returns>
         Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId,int pageNumber, string language);
         Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId);
+
+        Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdAsync(string id);
     }
 }

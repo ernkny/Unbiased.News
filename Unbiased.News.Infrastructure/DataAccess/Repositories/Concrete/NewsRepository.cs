@@ -27,8 +27,8 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Retrieves all generated news asynchronously.
         /// </summary>
-        /// <returns>A collection of <see cref="GeneratedNews"/> objects.</returns>
-        public async Task<IEnumerable<GeneratedNews>> GetAllGeneratedNewsAsync(string language)
+        /// <returns>A collection of <see cref="GeneratedNew"/> objects.</returns>
+        public async Task<IEnumerable<GeneratedNew>> GetAllGeneratedNewsAsync(string language)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("@Language", language);
-                    return await connection.QueryAsync<GeneratedNews>("UB_sp_GetAllGeneratedNews", parameters, commandType: CommandType.StoredProcedure);
+                    return await connection.QueryAsync<GeneratedNew>("UB_sp_GetAllGeneratedNews", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception)
@@ -79,6 +79,24 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryFirstAsync<int>("UB_sp_GetAllGeneratedNewsWithImagePathCount", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImage(string id)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", id);
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryFirstAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsById", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception)

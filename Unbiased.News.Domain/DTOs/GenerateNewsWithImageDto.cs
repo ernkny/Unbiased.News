@@ -30,6 +30,10 @@ namespace Unbiased.News.Domain.DTOs
         /// </summary>
         public string MatchId { get; set; }
 
+        public DateTime CreatedTime { get; set; }
+
+        public string Langauge { get; set; }
+
         public string Path { get; set; }
     }
 }

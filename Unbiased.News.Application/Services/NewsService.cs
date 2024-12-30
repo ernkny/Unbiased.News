@@ -16,7 +16,7 @@ namespace Unbiased.News.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<IEnumerable<GeneratedNews>> GetAllGeneratedNewsAsync(string language)
+        public async Task<IEnumerable<GeneratedNew>> GetAllGeneratedNewsAsync(string language)
         {
             var result = await _mediator.Send(new GetAllGeneratedNewsQuery(language));
             return result;
@@ -31,6 +31,12 @@ namespace Unbiased.News.Application.Services
         public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
         {
             var result = await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(categoryId));
+            return result;
+        }
+
+        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdAsync(string id)
+        {
+            var result= await _mediator.Send(new GetGeneratedNewsByIdWithImagePathQuery(id));
             return result;
         }
     }

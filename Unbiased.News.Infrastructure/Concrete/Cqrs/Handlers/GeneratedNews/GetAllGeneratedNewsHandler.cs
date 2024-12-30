@@ -8,7 +8,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
     /// <summary>
     /// Handles the GetAllGeneratedNewsQuery request.
     /// </summary>
-    public class GetAllGeneratedNewsHandler : IRequestHandler<GetAllGeneratedNewsQuery, IEnumerable<Entities.GeneratedNews>>
+    public class GetAllGeneratedNewsHandler : IRequestHandler<GetAllGeneratedNewsQuery, IEnumerable<Entities.GeneratedNew>>
     {
         private readonly INewsRepository _newsRepository;
 
@@ -27,7 +27,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
         /// <param name="request">The request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The generated news.</returns>
-        public async Task<IEnumerable<Entities.GeneratedNews>> Handle(GetAllGeneratedNewsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Entities.GeneratedNew>> Handle(GetAllGeneratedNewsQuery request, CancellationToken cancellationToken)
         {
             return await _newsRepository.GetAllGeneratedNewsAsync(request.language);
         }

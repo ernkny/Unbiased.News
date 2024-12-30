@@ -136,7 +136,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                                 parameters.Add("Language", news.Language, DbType.String, ParameterDirection.Input);
 
                                 var result = await connection.ExecuteAsync(query, parameters, transaction, commandType: CommandType.StoredProcedure);
-                                if (result != 1)
+                                if (result == 0)
                                 {
                                     throw new Exception("Failed to insert news url: " + news.Url);
                                 }

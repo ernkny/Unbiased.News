@@ -14,5 +14,6 @@
         /// Gets or sets the detailed content of the news.
         /// </summary>
         public string Detail { get; set; }
+        public string Commentary { get; set; }
     }
 }

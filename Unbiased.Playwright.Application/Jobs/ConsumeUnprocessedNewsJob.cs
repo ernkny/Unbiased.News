@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Quartz;
+using System;
+using Unbiased.Playwright.Application.Exceptions.Custom;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
+using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
@@ -32,9 +35,17 @@ namespace Unbiased.Playwright.Application.Jobs
                     await _newsService.GenerateNewsWithApiAsync(combinedNews, context.CancellationToken, externalServiceSend);
                 }
             }
+            catch (Exception ex) when (ex.Message.Contains("TooManyRequests"))
+            {
+                throw new TooManyRequestsException("API returned error: TooManyRequests", ex);
+            }
+            catch (TooManyRequestsException exception)
+            {
+                Console.WriteLine(exception.Message);
+                await Task.Delay(TimeSpan.FromMinutes(1));
+            }
             catch (Exception)
             {
-
                 throw;
             }
 

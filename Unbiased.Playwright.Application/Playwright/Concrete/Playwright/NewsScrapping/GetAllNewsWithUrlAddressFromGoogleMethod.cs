@@ -1,5 +1,6 @@
 ﻿using Microsoft.Playwright;
 using Unbiased.Playwright.Application.Dto.PlaywrightDto;
+using Unbiased.Playwright.Domain.Enums;
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrapping
 {
@@ -17,13 +18,17 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         /// <param name="searchUrl">The URL to search for news articles.</param>
         /// <returns>A list of <see cref="SaveSearchUrlAndGuidDto"/> objects containing the news article URLs and GUIDs.</returns>
 
-        public async Task<List<SaveSearchUrlAndGuidDto>> GetAllNewsWithUrlAddressFromGoogle(string searchUrl)
+        public async Task<List<SaveSearchUrlAndGuidDto>> GetAllNewsWithUrlAddressFromGoogle(string searchUrl,LanguageEnums languageEnum)
         {
+
+            var closeDialog= languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase)? "İletişim kutusunu kapat": "Close dialog";
+            var CopyLink = languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase)? "Bağlantıyı kopyala":"Copy link";
+            var Share = languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase)? "Paylaş" : "Share";
             var newsArticles = new List<SaveSearchUrlAndGuidDto>();
             try
             {
                 _playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-                _browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+                _browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
 
                 if (_browser == null)
                 {
@@ -40,7 +45,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
 
                 var newsUrls = await page.QuerySelectorAllAsync(".jKHa4e");
                 await page.WaitForSelectorAsync(".jKHa4e", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
-                var urlList = await Task.WhenAll(newsUrls.Take(10).Select(async url => await url.GetAttributeAsync("href")));
+                var urlList = await Task.WhenAll(newsUrls.Take(3).Select(async url => await url.GetAttributeAsync("href")));
 
                 foreach (var url in urlList)
                 {
@@ -53,13 +58,13 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                             WaitUntil = WaitUntilState.DOMContentLoaded
                         });
 
-                        var shareButtons = await newPage.QuerySelectorAllAsync("[aria-label='Paylaş']");
+                        var shareButtons = await newPage.QuerySelectorAllAsync($"[aria-label='{Share}']");
                         var guid = Guid.NewGuid().ToString();
 
-                        foreach (var button in shareButtons.Skip(1).Take(8))
+                        foreach (var button in shareButtons.Skip(1).Take(3))
                         {
                             await button.ClickAsync();
-                            var copyButton = await newPage.WaitForSelectorAsync("[aria-label='Bağlantıyı kopyala']", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
+                            var copyButton = await newPage.WaitForSelectorAsync($"[aria-label='{CopyLink}']", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
                             await copyButton.ClickAsync();
                             var clipboardText = await newPage.EvaluateAsync<string>("navigator.clipboard.readText();");
 
@@ -76,7 +81,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                                 Console.WriteLine($"Failed to retrieve clipboard text for URL: {url}");
                             }
 
-                            var closeButton = await newPage.WaitForSelectorAsync("[aria-label='İletişim kutusunu kapat']", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
+                            var closeButton = await newPage.WaitForSelectorAsync($"[aria-label='{closeDialog}']", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
                             await closeButton.ClickAsync();
                         }
                     }
