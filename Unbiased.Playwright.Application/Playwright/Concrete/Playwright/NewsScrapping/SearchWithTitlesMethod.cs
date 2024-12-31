@@ -48,7 +48,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                             saveSearchUrlAndGuidDto.MatchId = guidForMatchedNews;
                             saveSearchUrlAndGuidDto.Url = url;
                             saveSearchUrlAndGuidDto.IsProcessed = false;
-                            saveSearchUrlAndGuidDto.CreatedTime = DateTime.Now;
+                            saveSearchUrlAndGuidDto.CreatedTime = DateTime.UtcNow;
                             saveSearchUrlAndGuidDto.IsActive = true;
                             model.Add(saveSearchUrlAndGuidDto);
                         }

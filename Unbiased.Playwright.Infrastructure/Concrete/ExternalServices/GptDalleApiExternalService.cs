@@ -72,7 +72,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     var message = ($"API returned error: {response.StatusCode}");
                     var eventLog = new EventLog()
                     {
-                        EventDate = DateTime.Now,
+                        EventDate = DateTime.UtcNow,
                         EventSeverity = "Error",
                         Message = message,
                         EventType = "GptDalleApiExternalService",

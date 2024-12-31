@@ -41,7 +41,7 @@ public class GetNewsWithGuidMethod
                 {
                     newsArticles.Add(new News
                     {
-                        CreatedTime = DateTime.Now,
+                        CreatedTime = DateTime.UtcNow,
                         CreatedUser = "system",
                         Detail = contentBuilder.ToString(),
                         IsActive = true,

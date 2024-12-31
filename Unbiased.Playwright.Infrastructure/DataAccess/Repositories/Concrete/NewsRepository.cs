@@ -41,7 +41,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("Title", addNewsDto.Title, DbType.String, ParameterDirection.Input);
                     parameters.Add("Detail", addNewsDto.Detail, DbType.String, ParameterDirection.Input);
                     parameters.Add("CategoryId", addNewsDto.CategoryId, DbType.Guid, ParameterDirection.Input);
-                    parameters.Add("CreatedTime", DateTime.Now, DbType.DateTime, ParameterDirection.Input);
+                    parameters.Add("CreatedTime", DateTime.UtcNow, DbType.DateTime, ParameterDirection.Input);
                     parameters.Add("IsActive", true, DbType.Boolean, ParameterDirection.Input);
                     parameters.Add("IsDeleted", false, DbType.Boolean, ParameterDirection.Input);
                     parameters.Add("Url", addNewsDto.Url, DbType.String, ParameterDirection.Input);
