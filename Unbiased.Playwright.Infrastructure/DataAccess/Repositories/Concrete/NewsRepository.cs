@@ -81,27 +81,6 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         }
 
         /// <summary>
-        /// Retrieves all active keywords for search.
-        /// </summary>
-        /// <returns>A list of active keywords for search.</returns>
-        public async Task<IEnumerable<ActiveUrlsForSearchDto>> GetAllActiveUrlsForSearchAsync()
-        {
-            using (var connection = _connection.CreateConnection())
-            {
-                try
-                {
-
-                    return await connection.QueryAsync<ActiveUrlsForSearchDto>("UB_sp_GetAllActiveUrls", commandType: CommandType.StoredProcedure);
-                }
-                catch (Exception exception)
-                {
-
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
         /// Adds a range of news items to the database.
         /// </summary>
         /// <param name="listOfNews">The list of news items to add.</param>
@@ -295,8 +274,8 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 
                 throw;
             }
-        } 
+        }
 
-        
+
     }
 }

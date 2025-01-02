@@ -7,5 +7,6 @@
         public string Language { get; set; }
 
         public DateTime? LastUpdatedTime { get; set; }
+        public DateTime NextRunTime { get; set; }
     }
 }

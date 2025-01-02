@@ -22,12 +22,6 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         Task<IEnumerable<News>> GetAllNewsByNotIncludedProcessAsync();
 
         /// <summary>
-        /// Retrieves all active keywords for search.
-        /// </summary>
-        /// <returns>A task containing a collection of active urls.</returns>
-        Task<IEnumerable<ActiveUrlsForSearchDto>> GetAllActiveUrlsForSearchAsync();
-
-        /// <summary>
         /// Adds a range of news items to the repository.
         /// </summary>
         /// <param name="news">The news items to add.</param>

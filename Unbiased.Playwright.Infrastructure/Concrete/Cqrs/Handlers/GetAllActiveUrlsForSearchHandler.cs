@@ -13,15 +13,15 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Handlers
         /// <summary>
         /// The news repository instance used to perform the operation.
         /// </summary>
-        private readonly INewsRepository _newsRepository;
+        private readonly ISearchUrlRepository _searchUrlRepository;
 
         /// <summary>
         /// Initializes a new instance of the GetAllActiveUrlsForSearchHandler class.
         /// </summary>
         /// <param name="newsRepository">The news repository to use for retrieving active keywords.</param>
-        public GetAllActiveUrlsForSearchHandler(INewsRepository newsRepository)
+        public GetAllActiveUrlsForSearchHandler(ISearchUrlRepository searchUrlRepository)
         {
-            _newsRepository = newsRepository;
+            _searchUrlRepository = searchUrlRepository;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Handlers
         /// <returns>A task representing the asynchronous operation, returning a collection of active keywords.</returns>
         public async Task<IEnumerable<ActiveUrlsForSearchDto>> Handle(GetAllActiveUrlsForSearchQuery request, CancellationToken cancellationToken)
         {
-            return await _newsRepository.GetAllActiveUrlsForSearchAsync();
+            return await _searchUrlRepository.GetAllActiveUrlsForSearchAsync();
         }
     }
 }

@@ -115,6 +115,7 @@ namespace Unbiased.Playwright.Application.Services
                     };
                     if (!string.IsNullOrEmpty(result.Title) || !string.IsNullOrEmpty(result.Detail))
                     {
+                        // Todo burada duplicat durumu mevcut bunu önünce geçmen gerekli
                         var saveGeneratedNews =  await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken);
                         var imageMathchValidate= await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
                         if (imageMathchValidate && saveGeneratedNews)

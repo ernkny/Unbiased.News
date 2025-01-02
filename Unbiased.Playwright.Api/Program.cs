@@ -1,19 +1,23 @@
 ﻿using MassTransit;
+using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Polly;
 using Polly.Retry;
 using Quartz;
 using Unbiased.Playwright.Application;
 using Unbiased.Playwright.Application.Configurations.Quartz;
+using Unbiased.Playwright.Application.Configurations.Startup;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Application.Jobs.Listeners;
 using Unbiased.Playwright.Application.Services;
 using Unbiased.Playwright.Infrastructure;
+using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
+using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Handlers;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
-using static MassTransit.MessageHeaders;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -21,9 +25,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var pipeline = new ResiliencePipelineBuilder()
     .AddRetry(new RetryStrategyOptions())
-    .AddTimeout(TimeSpan.FromSeconds(10)) 
+    .AddTimeout(TimeSpan.FromSeconds(10))
     .Build();
-await pipeline.ExecuteAsync(static async token => {  await Task.Delay(1000, token); }, CancellationToken.None);
+await pipeline.ExecuteAsync(static async token => { await Task.Delay(1000, token); }, CancellationToken.None);
 
 builder.Services.AddCors(options =>
 {
@@ -39,7 +43,7 @@ var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlCon
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
-builder.Services.AddSingleton<IJobListener, RescheduleJobListener>();
+builder.Services.AddSingleton<IJobListener, RescheduleJobListener>(); 
 builder.Services.AddQuartz(q =>
 {
     q.SchedulerName = "MyScheduler";
@@ -71,6 +75,7 @@ builder.Services.AddQuartzHostedService(q =>
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsImageRepository, NewsImageRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
+builder.Services.AddScoped<ISearchUrlRepository, SearchUrlRepository>();
 builder.Services.AddScoped<IPlaywrightScrappingService, PlaywrightScrappingService>();
 builder.Services.AddMassTransit(x =>
 {
@@ -83,6 +88,7 @@ builder.Services.AddMassTransit(x =>
         });
     });
 });
+builder.Services.AddHostedService<UpdateScrappingRunTimes>();
 var app = builder.Build();
 app.UseCors("MyCorsPolicy");
 
