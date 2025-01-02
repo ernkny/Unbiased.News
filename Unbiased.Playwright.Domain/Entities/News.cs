@@ -97,6 +97,9 @@ namespace Unbiased.Playwright.Domain.Entities
         /// Language of the generated news.
         /// </summary>
         public string Language { get; set; }
+
+        public DateTime LastProcessTime { get; set; }
+        public DateTime NextRunTime { get; set; }
     }
 }
 

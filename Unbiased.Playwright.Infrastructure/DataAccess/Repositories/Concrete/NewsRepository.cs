@@ -133,7 +133,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                                 parameters.Add("IsDeleted", news.IsDeleted, DbType.Boolean);
                                 parameters.Add("Url", news.Url, DbType.String);
                                 parameters.Add("IsProcessed", false, DbType.Boolean);
-                                parameters.Add("Language", news.Language, DbType.String, ParameterDirection.Input);
+                                parameters.Add("Language", news.Language, DbType.String);
 
                                 var result = await connection.ExecuteAsync(query, parameters, transaction, commandType: CommandType.StoredProcedure);
                                 if (result == 0)
@@ -296,5 +296,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 throw;
             }
         } 
+
+        
     }
 }

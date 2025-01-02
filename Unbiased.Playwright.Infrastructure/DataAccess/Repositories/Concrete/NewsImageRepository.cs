@@ -37,9 +37,9 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 parameters.Add("matchId", addNewsImageDto.MatchId, DbType.String);
                 parameters.Add("path", addNewsImageDto.filePath, DbType.String);
 
-               var result= await connection.ExecuteAsync("UB_sp_InsertNewsImage", parameters, commandType: CommandType.StoredProcedure);
+                var result = await connection.ExecuteAsync("UB_sp_InsertNewsImage", parameters, commandType: CommandType.StoredProcedure);
 
-                return result==1;
+                return result == 1;
             }
         }
 
@@ -65,6 +65,17 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 parameters.Add("startDate", startDate, DbType.DateTime);
 
                 return await connection.QueryAsync<GetNewsWithoutImageDto>("UB_sp_GetNewsWithoutImages", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task<bool> GetNewsImageWithMatchIdAsync(string matchId)
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("matchId", matchId, DbType.String);
+                return await connection.QueryFirstAsync<int>("UB_sp_ValidateNewsImage", parameters, commandType: CommandType.StoredProcedure)==1;
+
             }
         }
     }

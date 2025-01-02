@@ -25,5 +25,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImagesAsync(DateTime startDate);
 
         Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesWithNoneHasGeneratedAsync(CancellationToken cancellationToken);
+
+        Task<bool> GetNewsImageWithMatchIdAsync(string matchId);
     }
 }

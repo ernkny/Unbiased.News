@@ -8,7 +8,6 @@ using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Unbiased.Playwright.Application.Services
 {
@@ -110,11 +109,15 @@ namespace Unbiased.Playwright.Application.Services
                         Detail = result.Detail,
                         Title = result.Title,
                         MatchId = item.MatchId,
-                        CategoryId = item.CategoryId
+                        CategoryId = item.CategoryId,
+                        Language=item.Language
+                        
                     };
                     if (!string.IsNullOrEmpty(result.Title) || !string.IsNullOrEmpty(result.Detail))
                     {
-                        if (await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken))
+                        var saveGeneratedNews =  await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken);
+                        var imageMathchValidate= await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
+                        if (imageMathchValidate && saveGeneratedNews)
                         {
 
                             var imageFile = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);

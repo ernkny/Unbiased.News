@@ -40,11 +40,8 @@ namespace Unbiased.Playwright.Application.Services
                 var urls = await _mediator.Send(new GetAllActiveUrlsForSearchQuery());
                 foreach (var url in urls)
                 {
-                    if (url.LastUpdatedTime.Value.AddHours(2) > DateTime.UtcNow)
-                    {
-                        var resultOfScrappingNews = await PlaywrightScrappingNewsAsync(url);
-                        await SaveAllNewsWithRangeAsync(resultOfScrappingNews);
-                    }
+                    var resultOfScrappingNews = await PlaywrightScrappingNewsAsync(url);
+                    await SaveAllNewsWithRangeAsync(resultOfScrappingNews);
                 }
                 return Task.CompletedTask.IsCompleted;
             }
@@ -109,34 +106,6 @@ namespace Unbiased.Playwright.Application.Services
             }
 
             return await Task.FromResult(true);
-        }
-
-        /// <summary>
-        /// Scrapes news (not implemented).
-        /// </summary>
-        /// <returns>A list of scraped news.</returns>
-        public Task<List<News>> PlaywrightScrappingNews()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Saves a list of news to the database (not implemented).
-        /// </summary>
-        /// <param name="listOfNews">The list of news to save.</param>
-        /// <returns>A boolean indicating whether the operation was successful.</returns>
-        public Task<bool> SaveAllNewsWithRange(List<News> listOfNews)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Scrapes news and adds them to the database in a single operation (not implemented).
-        /// </summary>
-        /// <returns>A boolean indicating whether the operation was successful.</returns>
-        public Task<bool> PlaywrightScrappingNewsAndAddRangeNews()
-        {
-            throw new NotImplementedException();
         }
     }
 }

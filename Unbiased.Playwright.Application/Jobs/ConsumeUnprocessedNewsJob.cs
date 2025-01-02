@@ -1,12 +1,10 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Quartz;
-using System;
 using Unbiased.Playwright.Application.Exceptions.Custom;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
-using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
