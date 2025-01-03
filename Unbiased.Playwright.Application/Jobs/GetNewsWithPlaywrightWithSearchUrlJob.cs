@@ -8,7 +8,7 @@ namespace Unbiased.Playwright.Application.Jobs
 {
     public class GetNewsWithPlaywrightWithSearchUrlJob : IJob
     {
-        private readonly IPlaywrightScrappingService _playwrightScrappingService; 
+        private readonly IPlaywrightScrappingService _playwrightScrappingService;
         private readonly IMediator _mediator;
 
         public GetNewsWithPlaywrightWithSearchUrlJob(IPlaywrightScrappingService playwrightScrappingService, IMediator mediator)
@@ -22,20 +22,14 @@ namespace Unbiased.Playwright.Application.Jobs
             try
             {
                 var getUrl = await _mediator.Send(new GetAllActiveUrlsForSearchQuery());
-                var getSearchUrlsActiveNextRunTime = getUrl.Where(x => x.NextRunTime < DateTime.UtcNow).ToList();
-                var getNewsNoneProssed= await _mediator.Send(new GetAllNewsByNotIncludedProcessQuery());
+                var getSearchUrlsActiveNextRunTime = getUrl.Where(x => x.NextRunTime < DateTime.Now).ToList();
                 foreach (var url in getSearchUrlsActiveNextRunTime)
                 {
-                    var checkNewsNoneProssed = getNewsNoneProssed.Count()>0 ? getNewsNoneProssed.Any(x=>x.CategoryId==url.categoryId):false ;
-                    if (checkNewsNoneProssed)
+                    var result = await _playwrightScrappingService.PlaywrightScrappingNewsAsync(url);
+                    if (result != null)
                     {
-                        var result = await _playwrightScrappingService.PlaywrightScrappingNewsAsync(url);
-                        if (result != null)
-                        {
-                            await _mediator.Send(new AddRangeAllNewsCommand(result));
-                        }
+                        await _mediator.Send(new AddRangeAllNewsCommand(result));
                     }
-                    
                 }
             }
             catch (Exception)
@@ -43,7 +37,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 Console.WriteLine("Error in GetNewsWithPlaywrightWithSearchUrlJob");
                 throw;
             }
-            
+
         }
     }
 }
