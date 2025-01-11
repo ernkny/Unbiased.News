@@ -81,7 +81,66 @@ namespace Unbiased.News.Api.Controllers
             }
             catch (Exception ex)
             {
-                // Consider logging the exception here
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        /// <summary>
+        /// Gets all categories with article count and most visited news.
+        /// </summary>
+        /// <returns>A list of categories with details.</returns>
+        [HttpGet("/CategoriesWithRandomGeneratedNews")]
+        public async Task<IActionResult> CategoriesWithRandomGeneratedNews()
+        {
+            try
+            {
+                var result = await _categoriesService.GetHomePageCategoriesRandomGeneratedNewsAsync();
+                var response = new ResponseDto<List<HomePageCategoriesRandomLastGeneratedNewsDto>>
+                {
+                    IsSuccessful = true,
+                    StatusCode = result.Any() ? 200 : 404,
+                    Data = result
+                };
+                return result.Any() ? Ok(response) : NotFound(response);
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        /// <summary>
+        /// Gets all top categories with article news.
+        /// </summary>
+        /// <returns>A list of categories with details.</returns>
+        [HttpGet("/TopCategoriesWithGeneratedNews")]
+        public async Task<IActionResult> TopCategoriesWithGeneratedNews()
+        {
+            try
+            {
+                var result = await _categoriesService.GetHomePageTopCategoriesGeneratedNewsAsync();
+                var response = new ResponseDto<List<HomePageCategoriesRandomLastGeneratedNewsDto>>
+                {
+                    IsSuccessful = true,
+                    StatusCode = result.Any() ? 200 : 404,
+                    Data = result
+                };
+                return result.Any() ? Ok(response) : NotFound(response);
+            }
+            catch (Exception ex)
+            {
                 var errorResponse = new ResponseDto<string>
                 {
                     IsSuccessful = false,

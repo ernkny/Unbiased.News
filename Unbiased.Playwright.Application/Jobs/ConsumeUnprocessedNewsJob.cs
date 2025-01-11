@@ -25,13 +25,13 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                var checkNews = await _mediator.Send(new GetAllNewsByNotIncludedProcessQuery());
-                if (checkNews.Any())
-                {
-                    var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), context.CancellationToken);
-                    var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
-                    await _newsService.GenerateNewsWithApiAsync(combinedNews, context.CancellationToken, externalServiceSend);
-                }
+                //var checkNews = await _mediator.Send(new GetAllNewsByNotIncludedProcessQuery());
+                //if (checkNews.Any())
+                //{
+                //    var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), context.CancellationToken);
+                //    var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
+                //    await _newsService.GenerateNewsWithApiAsync(combinedNews, context.CancellationToken, externalServiceSend);
+                //}
             }
             catch (Exception ex) when (ex.Message.Contains("TooManyRequests"))
             {

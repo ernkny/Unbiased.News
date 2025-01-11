@@ -14,5 +14,7 @@ namespace Unbiased.News.Application.Interfaces
         /// <returns>A list of categories.</returns>
         Task<List<Category>> GetAllCategoriesAsync();
         Task<List<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync();
+        Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomGeneratedNewsAsync();
+        Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync();
     }
 }

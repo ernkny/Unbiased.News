@@ -43,5 +43,23 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                 return result;
             }
         }
+
+        public async Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomLastGeneratedNewsAsync()
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+                var result = await connection.QueryAsync<HomePageCategoriesRandomLastGeneratedNewsDto>($"Exec UB_sp_GetRandomLastGeneratedNews");
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync()
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+                var result = await connection.QueryAsync<HomePageCategoriesRandomLastGeneratedNewsDto>($"Exec UB_sp_GetTopCategoriesGeneratedNews");
+                return result;
+            }
+        }
     }
 }

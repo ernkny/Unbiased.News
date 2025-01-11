@@ -15,5 +15,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
 
         Task<IEnumerable<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync();
+        Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomLastGeneratedNewsAsync();
+        Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync();
     }
 }

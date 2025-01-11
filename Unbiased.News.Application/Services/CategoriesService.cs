@@ -3,6 +3,7 @@ using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.CategoriesQueris;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQueries;
 using Unbiased.News.Infrastructure.Cqrs.Queries.Categories;
 
 namespace Unbiased.News.Application.Services
@@ -37,6 +38,18 @@ namespace Unbiased.News.Application.Services
         {
             var result=await _mediator.Send(new GetHomePageCategorieSliderWithCountQuery());
             return result is not null ? result.ToList():Enumerable.Empty<HomePageCategorieSliderWithCountDto>().ToList();
+        }
+
+        public async Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomGeneratedNewsAsync()
+        {
+            var result = await _mediator.Send(new GetHomePageCategoriesRandomLastGeneratedNewsQuery());
+            return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategoriesRandomLastGeneratedNewsDto>().ToList();
+        }
+
+        public async Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync()
+        {
+             var result = await _mediator.Send(new GetHomePageTopCategoriesGeneratedNewsQuery());
+            return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategoriesRandomLastGeneratedNewsDto>().ToList();
         }
     }
 }
