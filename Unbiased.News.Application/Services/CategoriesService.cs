@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Unbiased.News.Application.Interfaces;
+using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.CategoriesQueris;
 using Unbiased.News.Infrastructure.Cqrs.Queries.Categories;
 
 namespace Unbiased.News.Application.Services
@@ -29,6 +31,12 @@ namespace Unbiased.News.Application.Services
         {
             var result=await _mediator.Send(new GetCategoriesQuery());
             return result;
+        }
+
+        public async Task<List<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync()
+        {
+            var result=await _mediator.Send(new GetHomePageCategorieSliderWithCountQuery());
+            return result is not null ? result.ToList():Enumerable.Empty<HomePageCategorieSliderWithCountDto>().ToList();
         }
     }
 }

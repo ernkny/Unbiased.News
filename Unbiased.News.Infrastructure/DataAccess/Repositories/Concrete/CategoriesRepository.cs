@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
@@ -30,6 +31,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             using (var connection = _connection.CreateConnection())
             {
                 var result = await connection.QueryAsync<Category>($"Exec UB_sp_GetAllcategoriesWithCount");
+                return result;
+            }
+        }
+
+        public async Task<IEnumerable<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync()
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+                var result = await connection.QueryAsync<HomePageCategorieSliderWithCountDto>($"Exec UB_sp_HomePageCategorieSliderWithCount");
                 return result;
             }
         }

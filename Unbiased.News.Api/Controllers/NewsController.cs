@@ -26,112 +26,147 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <param name="newsService">The news service instance.</param>
         [HttpGet("/GetAllGeneratedNews")]
-        public async Task<IActionResult> GetAllGeneratedNews(string language)
+        public async Task<IActionResult> GetAllGeneratedNews(string language = "tr")
         {
             try
             {
-                language = string.IsNullOrEmpty(language) ? "tr" : language;
-                var response = new ResponseDto<List<GeneratedNew>>();
-                var result = await _newsService.GetAllGeneratedNewsAsync(language);
-                if (result.Count()>0)
+                var result = await _newsService.GetAllGeneratedNewsAsync(language.Trim().ToLower());
+                var response = new ResponseDto<List<GeneratedNew>>
                 {
-                    response.IsSuccessful = true;
-                    response.StatusCode = 200;
-                    response.Data = result.ToList();
-                    return Ok(response);
-                }
-                return Ok(response.IsSuccessful = false);
+                    IsSuccessful = result.Any(),
+                    StatusCode = result.Any() ? 200 : 204,  
+                    Data = result.ToList()
+                };
+
+                return result.Any() ? Ok(response) : NoContent();  
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);  
             }
-            
         }
 
         /// <summary>
-        /// Gets all generated news.
+        /// Gets all generated news with images for a specific category.
         /// </summary>
-        /// <returns>A list of generated news.</returns>
+        /// <param name="categoryId">The category ID.</param>
+        /// <param name="language">The language of the news. Default is 'TR'.</param>
+        /// <param name="pageNumber">The page number for pagination. Default is 1.</param>
+        /// <returns>A list of generated news with images.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImage")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImage(int categoryId, string language,int pageNumber = 1)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImage(int categoryId, string language = "TR", int pageNumber = 1)
         {
             try
             {
-                language=language.ToUpper();
-                language=string.IsNullOrEmpty(language)?"TR":language;
-                var response = new ResponseDto<List<GenerateNewsWithImageDto>>();
+                language = string.IsNullOrEmpty(language) ? "TR" : language.ToUpper();
+
                 var result = await _newsService.GetAllGeneratedNewsWithImageAsync(categoryId, pageNumber, language);
-                if (result.Count() > 0)
+                if (!result.Any())
                 {
-                    response.IsSuccessful = true;
-                    response.StatusCode = 200;
-                    response.Data = result.ToList();
-                    return Ok(response);
+                    return NoContent();  
                 }
-                response.IsSuccessful = true;
-                response.Data = Enumerable.Empty<GenerateNewsWithImageDto>().ToList();
+
+                var response = new ResponseDto<List<GenerateNewsWithImageDto>>
+                {
+                    IsSuccessful = true,
+                    StatusCode = 200,
+                    Data = result.ToList()
+                };
                 return Ok(response);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
-                throw;
+                // Log the exception here
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);  
             }
-
         }
 
+
         /// <summary>
-        /// Gets all generated news.
+        /// Gets the count of all generated news items with images for a specific category.
         /// </summary>
-        /// <returns>A list of generated news.</returns>
+        /// <param name="categoryId">The category ID to count news items from.</param>
+        /// <returns>A count of generated news items with images.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImageCount")]
         public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
         {
-             try
+            try
             {
-                var response = new ResponseDto<int>();
                 var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(categoryId);
-                if (result > 0)
+                var response = new ResponseDto<int>
                 {
-                    response.IsSuccessful = true;
-                    response.StatusCode = 200;
-                    response.Data = result;
-                    return Ok(response);
-                }
-                response.IsSuccessful = true;
-                response.Data =0;
-                return Ok(response);
+                    IsSuccessful = true,
+                    StatusCode = result > 0 ? 200 : 204,
+                    Data = result
+                };
+
+                return result > 0 ? Ok(response) : NoContent();
             }
-            catch (Exception)
+            catch (Exception ex) 
             {
-                return BadRequest();
-                throw;
+                
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
             }
         }
 
+        /// <summary>
+        /// Retrieves a specific news item by its ID from the generated news database.
+        /// This method is designed to return detailed information about a news item, including associated images,
+        /// if available. It ensures a robust error handling mechanism that differentiates between not found scenarios
+        /// and server errors, providing clear and actionable HTTP responses for API consumers.
+        /// </summary>
         [HttpGet("/GetGeneratedNewById")]
-        public async Task<IActionResult> GetGeneratedNewBydId(string id)
+        public async Task<IActionResult> GetGeneratedNewsById(string id)
         {
             try
             {
-                var response = new ResponseDto<GenerateNewsWithImageDto>();
                 var result = await _newsService.GetGeneratedNewsByIdAsync(id);
-                if (result is not null)
+                if (result == null)
                 {
-                    response.IsSuccessful = true;
-                    response.StatusCode = 200;
-                    response.Data = result;
-                    return Ok(response);
+                   
+                    return NotFound(new ResponseDto<GenerateNewsWithImageDto>
+                    {
+                        IsSuccessful = false,
+                        StatusCode = 404,
+                        Data = null
+                    });
                 }
-                response.IsSuccessful = true;
-                response.Data = null;
+
+                var response = new ResponseDto<GenerateNewsWithImageDto>
+                {
+                    IsSuccessful = true,
+                    StatusCode = 200,
+                    Data = result
+                };
                 return Ok(response);
             }
-            catch (Exception)
+            catch (Exception ex) 
             {
-                return BadRequest();
-                throw;
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
             }
         }
     }

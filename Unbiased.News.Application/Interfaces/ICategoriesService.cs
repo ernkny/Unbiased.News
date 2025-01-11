@@ -1,4 +1,5 @@
-﻿using Unbiased.News.Domain.Entities;
+﻿using Unbiased.News.Domain.DTOs;
+using Unbiased.News.Domain.Entities;
 
 namespace Unbiased.News.Application.Interfaces
 {
@@ -12,5 +13,6 @@ namespace Unbiased.News.Application.Interfaces
         /// </summary>
         /// <returns>A list of categories.</returns>
         Task<List<Category>> GetAllCategoriesAsync();
+        Task<List<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync();
     }
 }

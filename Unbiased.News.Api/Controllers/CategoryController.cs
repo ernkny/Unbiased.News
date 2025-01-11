@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unbiased.News.Application.Interfaces;
+using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
 using Unbiased.Shared.Dtos.Concrete;
 
@@ -33,23 +34,61 @@ namespace Unbiased.News.Api.Controllers
         {
             try
             {
-                var response = new ResponseDto<List<Category>>();
                 var result = await _categoriesService.GetAllCategoriesAsync();
-                if (result.Count() > 0)
+                if (!result.Any())
                 {
-                    response.IsSuccessful = true;
-                    response.StatusCode = 200;
-                    response.Data = result;
-                    return Ok(response);
+                    return NoContent(); 
                 }
-                response.IsSuccessful = true;
-                response.Data = Enumerable.Empty<Category>().ToList();
+
+                var response = new ResponseDto<List<Category>>
+                {
+                    IsSuccessful = true,
+                    StatusCode = 200,
+                    Data = result.ToList()
+                };
                 return Ok(response);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
-                throw;
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse); 
+            }
+        }
+
+
+        /// <summary>
+        /// Gets all categories with article count and most visited news.
+        /// </summary>
+        /// <returns>A list of categories with details.</returns>
+        [HttpGet("/CategoriesWithArticleCountAndMostVisitedNews")]
+        public async Task<IActionResult> CategoriesWithArticleCountAndMostVisitedNews()
+        {
+            try
+            {
+                var result = await _categoriesService.GetHomePageCategorieSliderWithCountAsync();
+                var response = new ResponseDto<List<HomePageCategorieSliderWithCountDto>>
+                {
+                    IsSuccessful = true,
+                    StatusCode = result.Any() ? 200 : 404,
+                    Data = result
+                };
+                return result.Any() ? Ok(response) : NotFound(response); 
+            }
+            catch (Exception ex)
+            {
+                // Consider logging the exception here
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
             }
         }
     }
