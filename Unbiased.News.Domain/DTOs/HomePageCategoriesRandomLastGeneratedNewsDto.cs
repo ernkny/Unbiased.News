@@ -8,5 +8,6 @@
         public Guid Id { get; set; }
         public string Path { get; set; }
         public DateTime CreatedTime { get; set; }
+        public string UniqUrlPath { get; set; }
     }
 }

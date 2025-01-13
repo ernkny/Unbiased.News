@@ -39,5 +39,11 @@ namespace Unbiased.News.Application.Services
             var result= await _mediator.Send(new GetGeneratedNewsByIdWithImagePathQuery(id));
             return result;
         }
+
+        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlAsync(string UniqUrl)
+        {
+            var result = await _mediator.Send(new GetGeneratedNewsByUniqUrlWithImageQuery(UniqUrl));
+            return result;
+        }
     }
 }

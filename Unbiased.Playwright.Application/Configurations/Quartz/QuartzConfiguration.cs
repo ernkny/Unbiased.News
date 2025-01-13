@@ -22,20 +22,20 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
                     .RepeatForever())
                 .WithIdentity("NewsGenerateApiJobTrigger"));
 
-        //    var jobKeyForNewsApi = new JobKey("NewsApiJob");
-        //    quartz.AddJob<GetNewsWithPlaywrightWithSearchUrlJob>(opts => opts
-        //        .WithIdentity(jobKeyForNewsApi)
-        //        .StoreDurably()  
-        //        .DisallowConcurrentExecution());  
+            var jobKeyNewsGenerateImage = new JobKey("NewsGenerateImageApiJob");
+            quartz.AddJob<ConsumeUnprocessedImagesJob>(opts => opts
+                .WithIdentity(jobKeyNewsGenerateImage)
+                .StoreDurably()
+                .DisallowConcurrentExecution());
 
-        //    quartz.AddTrigger(opts => opts
-        //        .ForJob(jobKeyForNewsApi)  
-        //        .StartNow()
-        //        .WithSimpleSchedule(x => x
-        //            .WithIntervalInSeconds(10)
-        //            .RepeatForever())
-        //        .WithIdentity("jobKeyForNewsApiJobTrigger"));
-        //
+            quartz.AddTrigger(opts => opts
+                .ForJob(jobKeyNewsGenerateImage)
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInSeconds(10)
+                    .RepeatForever())
+                .WithIdentity("NewsGenerateImageApiJobTrigger"));
+
         }
     }
 }

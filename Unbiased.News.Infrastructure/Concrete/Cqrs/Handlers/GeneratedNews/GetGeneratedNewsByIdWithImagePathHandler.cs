@@ -16,7 +16,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
 
         public async Task<GenerateNewsWithImageDto> Handle(GetGeneratedNewsByIdWithImagePathQuery request, CancellationToken cancellationToken)
         {
-            var result= await _newsRepository.GetGeneratedNewsByIdWithImage(request.id);
+            var result= await _newsRepository.GetGeneratedNewsByIdWithImageAsync(request.id);
             return result;
         }
     }

@@ -1,6 +1,4 @@
 ﻿using MassTransit;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
 using Polly;
 using Polly.Retry;
 using Quartz;
@@ -12,8 +10,6 @@ using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Application.Jobs.Listeners;
 using Unbiased.Playwright.Application.Services;
 using Unbiased.Playwright.Infrastructure;
-using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
-using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Handlers;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete;
@@ -44,6 +40,7 @@ builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSql
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
 builder.Services.AddSingleton<IJobListener, RescheduleJobListener>(); 
+builder.Services.AddSingleton<IJobListener, RescheduleJobListenerForImage>(); 
 builder.Services.AddQuartz(q =>
 {
     q.SchedulerName = "MyScheduler";

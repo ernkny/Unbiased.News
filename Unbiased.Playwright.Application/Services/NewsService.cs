@@ -73,7 +73,7 @@ namespace Unbiased.Playwright.Application.Services
                 _ = images.Count() == 0 ? isDone = true : isDone = false;
                 foreach (var item in images)
                 {
-                    var imageFile = await SendNewsToApiForGenerateAsync(item.Title, cancellationToken);
+                    var imageFile = await SendNewsToApiForGenerateImageAsync(item.Title, cancellationToken);
                     if (imageFile is not null)
                     {
                         await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
@@ -116,11 +116,11 @@ namespace Unbiased.Playwright.Application.Services
                     if (!string.IsNullOrEmpty(result.Title) || !string.IsNullOrEmpty(result.Detail))
                     {
                         var saveGeneratedNews =  await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken);
-                        var imageMathchValidate= await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
-                        if (imageMathchValidate && saveGeneratedNews)
+                        var imageMatchValidate= await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
+                        if (imageMatchValidate && saveGeneratedNews)
                         {
 
-                            var imageFile = await SendNewsToApiForGenerateAsync(result.Title, cancellationToken);
+                            var imageFile = await SendNewsToApiForGenerateImageAsync(result.Title, cancellationToken);
                             if (imageFile is not null)
                             {
                                 await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
@@ -143,7 +143,7 @@ namespace Unbiased.Playwright.Application.Services
             
         }
 
-        private async Task<string> SendNewsToApiForGenerateAsync(string Title, CancellationToken cancellationToken)
+        private async Task<string> SendNewsToApiForGenerateImageAsync(string Title, CancellationToken cancellationToken)
         {
             var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
             var generatedImage = await externalServiceImageSend.GetImageDataFromGpt(Title, cancellationToken);

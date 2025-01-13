@@ -35,5 +35,7 @@ namespace Unbiased.News.Domain.DTOs
         public string Langauge { get; set; }
 
         public string Path { get; set; }
+
+        public string UniqUrlPath { get; set; }
     }
 }

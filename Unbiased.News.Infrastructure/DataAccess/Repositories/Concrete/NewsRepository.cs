@@ -88,7 +88,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImage(string id)
+        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id)
         {
             try
             {
@@ -97,6 +97,24 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryFirstAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsById", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlWithImageAsync(string uniqUrlPath)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@uniqurlpath", uniqUrlPath);
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryFirstAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsByUniqUrlPath", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception)

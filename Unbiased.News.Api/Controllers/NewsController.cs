@@ -169,5 +169,48 @@ namespace Unbiased.News.Api.Controllers
                 return StatusCode(500, errorResponse);
             }
         }
+
+        /// <summary>
+        /// Retrieves a specific news item by its ID from the generated news database.
+        /// This method is designed to return detailed information about a news item, including associated images,
+        /// if available. It ensures a robust error handling mechanism that differentiates between not found scenarios
+        /// and server errors, providing clear and actionable HTTP responses for API consumers.
+        /// </summary>
+        [HttpGet("/GetGeneratedNewByUniqUrl")]
+        public async Task<IActionResult> GetGeneratedNewsByUniqUrl(string UniqUrl)
+        {
+            try
+            {
+                var result = await _newsService.GetGeneratedNewsByUniqUrlAsync(UniqUrl);
+                if (result == null)
+                {
+
+                    return NotFound(new ResponseDto<GenerateNewsWithImageDto>
+                    {
+                        IsSuccessful = false,
+                        StatusCode = 404,
+                        Data = null
+                    });
+                }
+
+                var response = new ResponseDto<GenerateNewsWithImageDto>
+                {
+                    IsSuccessful = true,
+                    StatusCode = 200,
+                    Data = result
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
     }
 }

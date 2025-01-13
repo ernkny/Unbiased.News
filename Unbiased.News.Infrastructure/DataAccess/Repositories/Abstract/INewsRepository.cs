@@ -20,6 +20,8 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         /// <returns>A collection of generated news with images.</returns>
         Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber, string language);
         Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId);
-        Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImage(string id);
+
+        Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlWithImageAsync(string uniqUrlPath);
+        Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id);
     }
 }
