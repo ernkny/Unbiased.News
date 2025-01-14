@@ -36,6 +36,20 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
                     .RepeatForever())
                 .WithIdentity("NewsGenerateImageApiJobTrigger"));
 
+            var jobKeyHoroscopeGenerate = new JobKey("HoroscopeGenerateJob");
+
+            quartz.AddJob<GetDailyHoroscopeDataJob>(opts => opts
+                .WithIdentity(jobKeyHoroscopeGenerate)
+                .StoreDurably()
+                .DisallowConcurrentExecution());
+
+            quartz.AddTrigger(opts => opts
+                .ForJob(jobKeyHoroscopeGenerate)
+                .WithIdentity("HoroscopeGenerateJobTrigger")
+                .WithCronSchedule("0 54 2 * * ?") 
+            );
+
+
         }
     }
 }

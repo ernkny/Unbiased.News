@@ -89,7 +89,6 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A boolean indicating whether the operation was successful.</returns>
         public async Task<bool> GetImagesForCollectedNews()
         {
-            // Get matchId's without images from the database
             var newsWithoutImages = (await _mediator.Send(new GetNewsWithoutImagesQuery(DateTime.Now.AddDays(-100)))).ToList();
 
             var titles = newsWithoutImages.Select(x => x.Title).ToList();

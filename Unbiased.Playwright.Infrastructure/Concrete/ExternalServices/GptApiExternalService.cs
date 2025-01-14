@@ -66,10 +66,46 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             }
         }
 
-        //public async Task<> SendHoroscopeToGptAndGetResponse(string horoscope, CancellationToken cancellationToken)
-        //{
+        public async Task<string> SendHoroscopeToGptAndGetResponse(string horoscope, CancellationToken cancellationToken)
+        {
+            var prompt = await HoroscopePromptMessage(horoscope);
 
-        //}
+            try
+            {
+                var response = await SendPromtToGptAndGetResponse(prompt, cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    throw new Exception($"API returned error: {response.StatusCode}");
+                }
+                if (response.IsSuccessStatusCode)
+                {
+                    await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
+                   
+
+                }
+                var jsonDoc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                var root = jsonDoc.RootElement;
+                var choices = root.GetProperty("choices");
+                foreach (var choice in choices.EnumerateArray())
+                {
+                    var message = choice.GetProperty("message");
+                   return message.GetProperty("content").GetString();
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return responseContent;
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
@@ -185,7 +221,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <returns></returns>
         private async Task<string> HoroscopePromptMessage(string horoscope)
         {
-            var prompt = $@"bugün için günlük {horoscope} burcu yorumu yapar mısın? "+"{detail:[yorum]}" +" olacak şekilde paylaş. ve önerdiğin kitapları bana daha önce önermemiş ol! sadece json cevabı dönmen yeterli. '```json\n bunu cevabında kullanma";
+            var prompt = $@"bugün için günlük {horoscope}e sadece cevabını yaz, açıklayıcı ve uzun yaz" ;
 
 
             return await Task.FromResult(prompt);

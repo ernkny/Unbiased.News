@@ -73,6 +73,8 @@ builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsImageRepository, NewsImageRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<ISearchUrlRepository, SearchUrlRepository>();
+builder.Services.AddScoped<IContentRepository, ContentRepository>();
+builder.Services.AddScoped<IContentService, ContentService>();
 builder.Services.AddScoped<IPlaywrightScrappingService, PlaywrightScrappingService>();
 builder.Services.AddMassTransit(x =>
 {

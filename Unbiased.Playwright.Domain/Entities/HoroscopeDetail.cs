@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a detailed horoscope information.
     /// </summary>
-    public class HoroscopeDetail
+    public class HoroscopeDailyDetail
     {
         /// <summary>
         /// Unique identifier for the horoscope detail.
