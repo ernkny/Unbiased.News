@@ -30,26 +30,58 @@ namespace Unbiased.News.Application.Services
         /// <returns>A list of categories.</returns>
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            var result=await _mediator.Send(new GetCategoriesQuery());
-            return result;
+            try
+            {
+                var result = await _mediator.Send(new GetCategoriesQuery());
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<List<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync()
         {
-            var result=await _mediator.Send(new GetHomePageCategorieSliderWithCountQuery());
-            return result is not null ? result.ToList():Enumerable.Empty<HomePageCategorieSliderWithCountDto>().ToList();
+            try
+            {
+                var result = await _mediator.Send(new GetHomePageCategorieSliderWithCountQuery());
+                return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategorieSliderWithCountDto>().ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomGeneratedNewsAsync()
         {
-            var result = await _mediator.Send(new GetHomePageCategoriesRandomLastGeneratedNewsQuery());
-            return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategoriesRandomLastGeneratedNewsDto>().ToList();
+            try
+            {
+                var result = await _mediator.Send(new GetHomePageCategoriesRandomLastGeneratedNewsQuery());
+                return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategoriesRandomLastGeneratedNewsDto>().ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync()
         {
-             var result = await _mediator.Send(new GetHomePageTopCategoriesGeneratedNewsQuery());
-            return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategoriesRandomLastGeneratedNewsDto>().ToList();
+            try
+            {
+                var result = await _mediator.Send(new GetHomePageTopCategoriesGeneratedNewsQuery());
+                return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategoriesRandomLastGeneratedNewsDto>().ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

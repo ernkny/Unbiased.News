@@ -41,6 +41,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAppl
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
 builder.Services.AddSingleton<IJobListener, RescheduleJobListener>(); 
 builder.Services.AddSingleton<IJobListener, RescheduleJobListenerForImage>(); 
+builder.Services.AddSingleton<IJobListener, RescheduleJobListenerForHoroscope>(); 
 builder.Services.AddQuartz(q =>
 {
     q.SchedulerName = "MyScheduler";

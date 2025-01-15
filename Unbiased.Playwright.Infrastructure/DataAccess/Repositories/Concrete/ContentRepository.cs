@@ -6,7 +6,7 @@ using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 
 namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 {
-    public class ContentRepository:IContentRepository
+    public class ContentRepository : IContentRepository
     {
         private readonly UnbiasedSqlConnection _connection;
 
@@ -30,7 +30,20 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 parameters.Add("@HoroscopeId", horoscopeDetail.HoroscopeId, DbType.String, ParameterDirection.Input);
                 parameters.Add("@CreatedDate", turkeyTime, DbType.DateTime);
                 var result = await connection.ExecuteAsync("UB_sp_InsertHoroscopeDetail", parameters, commandType: CommandType.StoredProcedure);
-                return result==1;
+                return result == 1;
+            }
+        }
+
+        public async Task<bool> AddDailyContentInformationAsync(Contents content)
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@ContentDetail", content.ContentDetail, DbType.String, ParameterDirection.Input);
+                parameters.Add("@ContentCategoryId", content.ContentCategoryId, DbType.String, ParameterDirection.Input);
+                parameters.Add("@CreatedDate", content.CreatedDate, DbType.DateTime);
+                var result = await connection.ExecuteAsync("UB_sp_InsertContentDetail", parameters, commandType: CommandType.StoredProcedure);
+                return result == 1;
             }
         }
     }

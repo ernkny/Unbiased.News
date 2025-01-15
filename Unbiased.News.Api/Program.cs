@@ -2,6 +2,7 @@ using MassTransit;
 using Unbiased.News.Application;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Application.Services;
+using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
@@ -40,6 +41,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfr
 
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<ICategoriesService,CategoriesService>();
+builder.Services.AddScoped<IContentRepository, ContentRepository>();
+builder.Services.AddScoped<IContentService, ContentService>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
 var app = builder.Build();

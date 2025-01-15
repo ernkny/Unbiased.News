@@ -18,32 +18,77 @@ namespace Unbiased.News.Application.Services
 
         public async Task<IEnumerable<GeneratedNew>> GetAllGeneratedNewsAsync(string language)
         {
-            var result = await _mediator.Send(new GetAllGeneratedNewsQuery(language));
-            return result;
+            try
+            {
+
+                var result = await _mediator.Send(new GetAllGeneratedNewsQuery(language));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber, string language)
         {
-            var result = await _mediator.Send(new GetAllGeneratedNewsWithImageQuery( categoryId,pageNumber, language));
-            return result;
+            try
+            {
+
+                var result = await _mediator.Send(new GetAllGeneratedNewsWithImageQuery(categoryId, pageNumber, language));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
         {
-            var result = await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(categoryId));
-            return result;
+            try
+            {
+
+                var result = await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(categoryId));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdAsync(string id)
         {
-            var result= await _mediator.Send(new GetGeneratedNewsByIdWithImagePathQuery(id));
-            return result;
+            try
+            {
+
+                var result = await _mediator.Send(new GetGeneratedNewsByIdWithImagePathQuery(id));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlAsync(string UniqUrl)
         {
-            var result = await _mediator.Send(new GetGeneratedNewsByUniqUrlWithImageQuery(UniqUrl));
-            return result;
+            try
+            {
+
+                var result = await _mediator.Send(new GetGeneratedNewsByUniqUrlWithImageQuery(UniqUrl));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

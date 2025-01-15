@@ -107,6 +107,47 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             }
         }
 
+        public async Task<string> SendDailyInformationToGptAndGetResponse(CancellationToken cancellationToken)
+        {
+            var prompt = await DailyInformationPromptMessage();
+
+            try
+            {
+                var response = await SendPromtToGptAndGetResponse(prompt, cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    throw new Exception($"API returned error: {response.StatusCode}");
+                }
+                if (response.IsSuccessStatusCode)
+                {
+                    await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
+
+
+                }
+                var jsonDoc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                var root = jsonDoc.RootElement;
+                var choices = root.GetProperty("choices");
+                foreach (var choice in choices.EnumerateArray())
+                {
+                    var message = choice.GetProperty("message");
+                    return message.GetProperty("content").GetString();
+                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return responseContent;
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
         /// </summary>
@@ -221,7 +262,21 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <returns></returns>
         private async Task<string> HoroscopePromptMessage(string horoscope)
         {
-            var prompt = $@"bugün için günlük {horoscope}e sadece cevabını yaz, açıklayıcı ve uzun yaz" ;
+            var prompt = $@"Bir astroloji uzmanı gibi {DateTime.UtcNow.ToString("dd/MM/yyyy").ToString()} için günlük {horoscope} burcunun yorumunu yap. sadece cevabını yaz, açıklayıcı ve uzun yaz. Aynı zamanda buçların " ;
+
+
+            return await Task.FromResult(prompt);
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// </summary>
+        /// <param name="DetailIOfNews"></param>
+        /// <returns></returns>
+        private async Task<string> DailyInformationPromptMessage()
+        {
+            var prompt = $@"Bir tarih uzmanı gibi '{DateTime.UtcNow.ToString("dd/MM").ToString()}' için günün hem türkiye hemde dünya tarihi açısından önemli gelişmelerini yaz. sadece cevabını yaz, açıklayıcı ve uzun yaz. Profesyonel türkçe kullan";
 
 
             return await Task.FromResult(prompt);

@@ -23,7 +23,6 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                // todo datalar duplicate oluyor. yorumlar istenilen gibi değil prompt düzenle
                 foreach (HoroscopeEnums horoscope in Enum.GetValues(typeof(HoroscopeEnums)))
                 {
                     
