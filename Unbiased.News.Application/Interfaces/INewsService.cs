@@ -23,5 +23,7 @@ namespace Unbiased.News.Application.Interfaces
 
         Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdAsync(string id);
         Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlAsync(string UniqUrl);
+
+        Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync();
     }
 }

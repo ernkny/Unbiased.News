@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using System.Data;
-using System.Diagnostics.SymbolStore;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
@@ -79,6 +78,22 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryFirstAsync<int>("UB_sp_GetAllGeneratedNewsWithImagePathCount", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync()
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsForBannerWithImagePath", commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception)

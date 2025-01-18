@@ -61,6 +61,21 @@ namespace Unbiased.News.Application.Services
             }
         }
 
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync()
+        {
+            try
+            {
+
+                var result = await _mediator.Send(new GetBannerGeneratedNewsWithImageQuery());
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdAsync(string id)
         {
             try

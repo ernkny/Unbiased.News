@@ -262,7 +262,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <returns></returns>
         private async Task<string> HoroscopePromptMessage(string horoscope)
         {
-            var prompt = $@"Bir astroloji uzmanı gibi {DateTime.UtcNow.ToString("dd/MM/yyyy").ToString()} için günlük {horoscope} burcunun yorumunu yap. sadece cevabını yaz, açıklayıcı ve uzun yaz. Aynı zamanda buçların " ;
+            var prompt = $@"Bir astroloji uzmanı gibi {DateTime.UtcNow.ToString("dd/MM/yyyy").ToString()} tarihi için günlük {horoscope} burcunun yorumunu yap. sadece cevabını yaz, açıklayıcı ve uzun yaz.Profesyonel türkçe kullan ve 800 harfi aşmamaya çalış" ;
 
 
             return await Task.FromResult(prompt);
