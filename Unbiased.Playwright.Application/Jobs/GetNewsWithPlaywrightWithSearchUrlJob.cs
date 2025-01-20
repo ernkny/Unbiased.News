@@ -6,6 +6,7 @@ using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
+    [DisallowConcurrentExecution]
     public class GetNewsWithPlaywrightWithSearchUrlJob : IJob
     {
         private readonly IPlaywrightScrappingService _playwrightScrappingService;
@@ -31,6 +32,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 //        await _mediator.Send(new AddRangeAllNewsCommand(result));
                 //    }
                 //}
+                await Task.CompletedTask;
             }
             catch (Exception)
             {

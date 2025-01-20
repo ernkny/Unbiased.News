@@ -8,6 +8,7 @@ using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
+    [DisallowConcurrentExecution]
     public class GetDailyContentDataJob : IJob
     {
         private readonly IMediator _mediator;
@@ -36,6 +37,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     };
                     await _mediator.Send(new InsertDailyContentCommand(contentDetail), context.CancellationToken);
                 }
+                await Task.CompletedTask;
             }
             catch (Exception)
             {

@@ -8,6 +8,7 @@ using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
+    [DisallowConcurrentExecution]
     public class GetDailyHoroscopeDataJob : IJob
     {
         private readonly IMediator _mediator;
@@ -39,7 +40,9 @@ namespace Unbiased.Playwright.Application.Jobs
 
                         var result = await _mediator.Send(new InsertDailyHoroscopeCommand(horoscopeData));
                     }
+
                 }
+                await Task.CompletedTask;
             }
             catch (Exception)
             {

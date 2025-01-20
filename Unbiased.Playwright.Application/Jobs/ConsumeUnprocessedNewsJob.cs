@@ -8,6 +8,7 @@ using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
+    [DisallowConcurrentExecution]
     public class ConsumeUnprocessedNewsJob : IJob
     {
         private readonly IMediator _mediator;
@@ -32,6 +33,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
                     await _newsService.GenerateNewsWithApiAsync(combinedNews, context.CancellationToken, externalServiceSend);
                 }
+                await Task.CompletedTask;
             }
             catch (Exception ex) when (ex.Message.Contains("TooManyRequests"))
             {

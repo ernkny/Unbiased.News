@@ -7,7 +7,6 @@ using Unbiased.Playwright.Application.Configurations.Quartz;
 using Unbiased.Playwright.Application.Configurations.Startup;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
-using Unbiased.Playwright.Application.Jobs.Listeners;
 using Unbiased.Playwright.Application.Services;
 using Unbiased.Playwright.Infrastructure;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
@@ -39,9 +38,6 @@ var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlCon
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
-builder.Services.AddSingleton<IJobListener, RescheduleJobListener>(); 
-builder.Services.AddSingleton<IJobListener, RescheduleJobListenerForImage>(); 
-builder.Services.AddSingleton<IJobListener, RescheduleJobListenerForHoroscope>(); 
 builder.Services.AddQuartz(q =>
 {
     q.SchedulerName = "MyScheduler";

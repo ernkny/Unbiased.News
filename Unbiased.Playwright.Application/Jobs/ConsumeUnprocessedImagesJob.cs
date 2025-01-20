@@ -7,6 +7,7 @@ using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
+    [DisallowConcurrentExecution]
     public class ConsumeUnprocessedImagesJob : IJob
     {
         private readonly IMediator _mediator;
@@ -30,6 +31,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     }
 
                 }
+                await Task.CompletedTask;
             }
             catch (Exception ex) when (ex.Message.Contains("TooManyRequests"))
             {
