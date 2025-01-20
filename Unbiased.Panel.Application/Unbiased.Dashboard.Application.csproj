@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Dto\Enums\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Services\" />
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Unbiased.ApiGateway.Common\Unbiased.ApiGateway.Common.csproj" />
+    <ProjectReference Include="..\Unbiased.ApiGateway.Infrastructure\Unbiased.ApiGateway.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
