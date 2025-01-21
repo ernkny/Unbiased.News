@@ -10,12 +10,15 @@
     <Folder Include="Abstract\" />
     <Folder Include="Concrete\Cqrs\" />
     <Folder Include="Concrete\ExternalServices\" />
-    <Folder Include="DataAccess\Repositories\Abstract\" />
-    <Folder Include="DataAccess\Repositories\Concrete\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Unbiased.Identity.Domain\Unbiased.Identity.Domain.csproj" />
   </ItemGroup>
 
 </Project>
