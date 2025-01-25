@@ -61,6 +61,20 @@ namespace Unbiased.News.Application.Services
             }
         }
 
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(int categoryId, string uniqUrlPath)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetAllLastTopGeneratedNewsWithCategoryIdForDetailQuery(uniqUrlPath, categoryId));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync()
         {
             try

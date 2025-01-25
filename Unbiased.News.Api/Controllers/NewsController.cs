@@ -82,7 +82,6 @@ namespace Unbiased.News.Api.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception here
                 var errorResponse = new ResponseDto<string>
                 {
                     IsSuccessful = false,
@@ -247,6 +246,39 @@ namespace Unbiased.News.Api.Controllers
             }
             catch (Exception ex)
             {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        /// <summary>
+        /// Gets the count of all generated news items with images for a specific category.
+        /// </summary>
+        /// <param name="categoryId">The category ID to count news items from.</param>
+        /// <returns>A count of generated news items with images.</returns>
+        [HttpGet("/UB_sp_GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage")]
+        public async Task<IActionResult> UB_sp_GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage(int categoryId, string UniqUrl)
+        {
+            try
+            {
+                var result = await _newsService.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(categoryId, UniqUrl);
+                var response = new ResponseDto<List<GenerateNewsWithImageDto>>
+                {
+                    IsSuccessful = true,
+                    StatusCode = result.Count() > 0 ? 200 : 204,
+                    Data = result.ToList()
+                };
+
+                return result.Any() ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+
                 var errorResponse = new ResponseDto<string>
                 {
                     IsSuccessful = false,
