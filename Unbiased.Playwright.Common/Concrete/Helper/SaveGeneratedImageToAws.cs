@@ -1,5 +1,8 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 using System.IO;
 using Unbiased.Playwright.Domain.DTOs;
 
@@ -21,29 +24,38 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
         {
             try
             {
-                byte[] imageBytes = null;
-                using (var response = await _httpClient.GetAsync(url, cancellationToken))
+                using (var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
                 {
-                     imageBytes = await _httpClient.GetByteArrayAsync(url);
+                    if (!response.IsSuccessStatusCode)
+                        throw new HttpRequestException($"Failed to download image from {url}, Status code: {response.StatusCode}");
 
-                  
-                }
-                if (imageBytes == null) {
-                    throw new ArgumentNullException("imageBytes is null");
-                }
-                var stream= new MemoryStream(imageBytes);
-                var newguid = Guid.NewGuid();
-                string filePath = Path.Combine(picturesPath, $"{newguid}.jpg");
-                var putRequest = new PutObjectRequest
-                {
-                    BucketName = bucketName,
-                    Key = $"Pictures/{newguid}.jpg",
-                    InputStream = stream,
-                    ContentType = "image/jpeg",
-                };
+                    var imageBytes = await response.Content.ReadAsByteArrayAsync();
+                    var newGuid = Guid.NewGuid();
+                    var jpgFilePath = Path.Combine(picturesPath, $"{newGuid}.jpg");
+                    var jpegFilePath = Path.Combine(picturesPath, $"{newGuid}.jpeg");
 
-                await client.PutObjectAsync(putRequest);
-                return filePath;
+                    // Upload original image as .jpg
+                    using (var originalStream = new MemoryStream(imageBytes))
+                    {
+                        await UploadToS3(originalStream, $"Pictures/{newGuid}.jpg", "image/jpeg", bucketName);
+                    }
+
+                    // Convert and upload as .jpeg
+                    using (var streamForConversion = new MemoryStream(imageBytes))
+                    using (var image = Image.Load(streamForConversion))
+                    {
+                        image.Mutate(x => x.Resize(image.Width / 2, image.Height / 2));
+                        using (var outputStream = new MemoryStream())
+                        {
+                            var encoder = new JpegEncoder { Quality = 75 };
+                            image.Save(outputStream, encoder);
+                            outputStream.Seek(0, SeekOrigin.Begin);
+                            await UploadToS3(outputStream, $"Pictures/{newGuid}.jpeg", "image/jpeg", bucketName);
+                        }
+                    }
+
+                    return jpegFilePath;
+                }
             }
             catch (AmazonS3Exception ex)
             {
@@ -54,6 +66,33 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 throw;
+            }
+        }
+
+
+        private async Task UploadToS3(MemoryStream stream, string key, string contentType, string bucketName)
+        {
+            stream.Position = 0;
+            var putRequest = new PutObjectRequest
+            {
+                BucketName = bucketName,
+                Key = key,
+                InputStream = stream,
+                ContentType = contentType,
+            };
+
+            await client.PutObjectAsync(putRequest);
+        }
+
+        private async Task ConvertAndUploadToS3(Image image, string key, string contentType, string bucketName)
+        {
+            using (var outputStream = new MemoryStream())
+            {
+                var encoder = new JpegEncoder { Quality = 75 };
+                image.Save(outputStream, encoder);
+                outputStream.Seek(0, SeekOrigin.Begin);
+
+                await UploadToS3(outputStream, key, contentType, bucketName);
             }
         }
 
