@@ -45,7 +45,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
 
                 var newsUrls = await page.QuerySelectorAllAsync(".jKHa4e");
                 await page.WaitForSelectorAsync(".jKHa4e", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
-                var urlList = await Task.WhenAll(newsUrls.Take(2).Select(async url => await url.GetAttributeAsync("href")));
+                var urlList = await Task.WhenAll(newsUrls.Take(12).Select(async url => await url.GetAttributeAsync("href")));
 
                 foreach (var url in urlList)
                 {
@@ -61,7 +61,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                         var shareButtons = await newPage.QuerySelectorAllAsync($"[aria-label='{Share}']");
                         var guid = Guid.NewGuid().ToString();
 
-                        foreach (var button in shareButtons.Skip(1).Take(2))
+                        foreach (var button in shareButtons.Skip(1).Take(8))
                         {
                             await button.ClickAsync();
                             var copyButton = await newPage.WaitForSelectorAsync($"[aria-label='{CopyLink}']", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
