@@ -257,16 +257,17 @@ namespace Unbiased.News.Api.Controllers
         }
 
         /// <summary>
-        /// Gets the count of all generated news items with images for a specific category.
+        /// all generated news with images for a specific category.
         /// </summary>
         /// <param name="categoryId">The category ID to count news items from.</param>
+        /// <param name="UniqUrl">The UniqUrl ID.</param>
         /// <returns>A count of generated news items with images.</returns>
-        [HttpGet("/UB_sp_GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage")]
-        public async Task<IActionResult> UB_sp_GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage(int categoryId, string UniqUrl)
+        [HttpGet("/GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage")]
+        public async Task<IActionResult> GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage(int categoryId, string id)
         {
             try
             {
-                var result = await _newsService.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(categoryId, UniqUrl);
+                var result = await _newsService.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(categoryId, id);
                 var response = new ResponseDto<List<GenerateNewsWithImageDto>>
                 {
                     IsSuccessful = true,

@@ -8,6 +8,7 @@ using Unbiased.Playwright.Application.Configurations.Startup;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Application.Services;
+using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Infrastructure;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
@@ -23,7 +24,7 @@ var pipeline = new ResiliencePipelineBuilder()
     .AddTimeout(TimeSpan.FromSeconds(10))
     .Build();
 await pipeline.ExecuteAsync(static async token => { await Task.Delay(1000, token); }, CancellationToken.None);
-
+builder.Services.Configure<AwsCredentials>(builder.Configuration.GetSection("S3Settings"));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy", builder =>

@@ -8,6 +8,9 @@ using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
+
 
 namespace Unbiased.Playwright.Application.Services
 {
@@ -20,17 +23,19 @@ namespace Unbiased.Playwright.Application.Services
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
+        private readonly AwsCredentials _awsCredentials;
 
         /// <summary>
         /// Initializes a new instance of the NewsService class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
         /// <param name="configuration">The configuration instance.</param>
-        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider)
+        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions)
         {
             _mediator = mediator;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
+            _awsCredentials = awsOptions.Value;
         }
 
         /// <summary>
@@ -73,7 +78,7 @@ namespace Unbiased.Playwright.Application.Services
                 _ = images.Count() == 0 ? isDone = true : isDone = false;
                 foreach (var item in images)
                 {
-                    var imageFile = await SendNewsToApiForGenerateImageAsync(item.Title, cancellationToken);
+                    var imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.Title, cancellationToken);
                     if (imageFile is not null)
                     {
                         await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
@@ -110,17 +115,17 @@ namespace Unbiased.Playwright.Application.Services
                         Title = result.Title,
                         MatchId = item.MatchId,
                         CategoryId = item.CategoryId,
-                        Language=item.Language
-                        
+                        Language = item.Language
+
                     };
                     if (!string.IsNullOrEmpty(result.Title) || !string.IsNullOrEmpty(result.Detail))
                     {
-                        var saveGeneratedNews =  await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken);
-                        var imageMatchValidate= await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
+                        var saveGeneratedNews = await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken);
+                        var imageMatchValidate = await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
                         if (imageMatchValidate && saveGeneratedNews)
                         {
 
-                            var imageFile = await SendNewsToApiForGenerateImageAsync(result.Title, cancellationToken);
+                            var imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(result.Title, cancellationToken);
                             if (imageFile is not null)
                             {
                                 await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
@@ -131,7 +136,7 @@ namespace Unbiased.Playwright.Application.Services
                             }
                         }
                     }
-                    
+
                 }
                 return true;
             }
@@ -140,7 +145,7 @@ namespace Unbiased.Playwright.Application.Services
 
                 throw;
             }
-            
+
         }
 
         private async Task<string> SendNewsToApiForGenerateImageAsync(string Title, CancellationToken cancellationToken)
@@ -148,6 +153,13 @@ namespace Unbiased.Playwright.Application.Services
             var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
             var generatedImage = await externalServiceImageSend.GetImageDataFromGpt(Title, cancellationToken);
             return generatedImage != null ? await new SaveGeneratedImage(_configuration).SaveGeneratedImageToFile(generatedImage.Data.First().Url, Title, cancellationToken) : null;
+        }
+
+        private async Task<string> SendNewsToApiForGenerateImageAndSaveItAwsAsync(string Title, CancellationToken cancellationToken)
+        {
+            var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
+            var generatedImage = await externalServiceImageSend.GetImageDataFromGpt(Title, cancellationToken);
+            return generatedImage != null ? await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(_awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value, generatedImage.Data.First().Url,cancellationToken) : null;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
                 .ForJob(jobKeyNewsGenerateImage)
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(10)
+                    .WithIntervalInSeconds(20)
                     .RepeatForever())
                 .WithIdentity("NewsGenerateImageApiJob"));
 
