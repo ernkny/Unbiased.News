@@ -12,16 +12,6 @@ using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlConnection");
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MyCorsPolicy", builder =>
-    {
-        builder.WithOrigins("http://localhost:5001")
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
-builder.Services.AddMemoryCache();
 builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>
@@ -34,6 +24,17 @@ builder.Services.AddMassTransit(x =>
     });
 });
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:5001")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+builder.Services.AddMemoryCache();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
