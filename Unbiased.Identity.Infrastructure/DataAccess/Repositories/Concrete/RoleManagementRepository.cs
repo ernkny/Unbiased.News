@@ -75,6 +75,25 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        public async Task<int> DeleteRoleAsync(int id)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@RoleId", id);
+                    var result = await connection.ExecuteAsync("UBFMW_sp_DeleteRole", parameters,commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<bool> InsertRoleAsync(CreateRoleDto role)
         {
             try
@@ -96,6 +115,37 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("@@PermissionIdListType", permissions.AsTableValuedParameter("PermissionIdListType"));
 
                     var affectedRows = await connection.ExecuteAsync("UBFMW_sp_InsertRole", parameters, commandType: CommandType.StoredProcedure);
+                    return affectedRows > 0;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateRoleAsync(UpdateRoleDto role)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var permissions = new DataTable();
+                    permissions.Columns.Add("PermissionId", typeof(int));
+
+                    foreach (var id in role.PermissionIds)
+                    {
+                        permissions.Rows.Add(id);
+                    }
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@RoleId", role.RoleId);
+                    parameters.Add("@RoleName", role.RoleName);
+                    parameters.Add("@Description", role.Description);
+                    parameters.Add("@IsActive", role.IsActive);
+                    parameters.Add("@@PermissionIdListType", permissions.AsTableValuedParameter("PermissionIdListType"));
+
+                    var affectedRows = await connection.QueryFirstAsync<int>("UBFMW_sp_UpdateRole", parameters, commandType: CommandType.StoredProcedure);
                     return affectedRows > 0;
                 }
             }

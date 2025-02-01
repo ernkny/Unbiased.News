@@ -9,7 +9,10 @@ namespace Unbiased.Identity.Application.Interfaces
         Task<IEnumerable<Role>> GetAllRolesAsync(int pageNumber, int pageSize);
         Task<int> GetAllRolesCountAsync();
         Task<bool> CreateRoleAsync(CreateRoleDto role);
+        Task<bool> UpdateRoleAsync(UpdateRoleDto role);
         Task<RoleGetByIdDto> GetRoleByIdAsync(int id);
+
+        Task<bool> DeleteRoleAsync(int id);
 
     }
 }

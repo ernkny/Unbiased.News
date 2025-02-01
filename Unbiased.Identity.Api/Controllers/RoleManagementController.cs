@@ -169,5 +169,71 @@ namespace Unbiased.Identity.Api.Controllers
                 return StatusCode(500, errorResponse);
             }
         }
+
+        [HttpPut("/UpdateRole")]
+        public async Task<IActionResult> UpdateRole(UpdateRoleDto role)
+        {
+            try
+            {
+                var result = await _roleManagementService.UpdateRoleAsync(role);
+                if (result)
+                {
+                    var response = new ResponseDto<bool>
+                    {
+                        IsSuccessful = true,
+                        StatusCode = 200,
+                        Data = result
+                    };
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request: " + ex.Message
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        [HttpDelete("/DeleteRole")]
+        public async Task<IActionResult> DeleteRole(int id)
+        {
+            try
+            {
+                var result = await _roleManagementService.DeleteRoleAsync(id);
+                if (result)
+                {
+                    var response = new ResponseDto<bool>
+                    {
+                        IsSuccessful = true,
+                        StatusCode = 200,
+                        Data = result
+                    };
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request: " + ex.Message
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
     }
 }

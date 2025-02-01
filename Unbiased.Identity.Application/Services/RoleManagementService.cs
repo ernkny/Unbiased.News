@@ -83,5 +83,35 @@ namespace Unbiased.Identity.Application.Services
                 throw;
             }
         }
+
+        public async Task<bool> UpdateRoleAsync(UpdateRoleDto role)
+        {
+
+            try
+            {
+                var result = await _mediator.Send(new UpdateRoleCommand(role));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        
+        public async Task<bool> DeleteRoleAsync(int id)
+        {
+
+            try
+            {
+                var result = await _mediator.Send(new DeleteRoleCommand(id));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
