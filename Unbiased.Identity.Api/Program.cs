@@ -6,6 +6,7 @@ using Unbiased.Identity.Infrastructure;
 using Unbiased.Identity.Infrastructure.DataAccess.Connections;
 using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +43,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<GlobalActivityLogMiddleware>();
+app.UseMiddleware<ApiKeyAuthorizeMiddleware>();
 
 app.MapControllers();
 

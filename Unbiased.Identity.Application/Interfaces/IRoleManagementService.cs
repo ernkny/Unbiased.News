@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unbiased.Identity.Domain.Dto_s;
+﻿using Unbiased.Identity.Domain.Dto_s;
+using Unbiased.Identity.Domain.Entities;
 
 namespace Unbiased.Identity.Application.Interfaces
 {
     public interface IRoleManagementService
     {
         Task<IEnumerable<PagesWithPermissionsDto>> GetAllPagesWithPermissionsAsync();
+        Task<IEnumerable<Role>> GetAllRolesAsync(int pageNumber, int pageSize);
+        Task<int> GetAllRolesCountAsync();
+        Task<bool> CreateRoleAsync(CreateRoleDto role);
+        Task<RoleGetByIdDto> GetRoleByIdAsync(int id);
+
     }
 }

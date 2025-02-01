@@ -14,6 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Unbiased.Identity.Application\Unbiased.Identity.Application.csproj" />
+    <ProjectReference Include="..\Unbiased.Shared.Dtos\Unbiased.Shared.Dtos.csproj" />
+    <ProjectReference Include="..\Unbiased.Shared.ExceptionHandler.Middleware\Unbiased.Shared.ExceptionHandler.Middleware.csproj" />
   </ItemGroup>
 
 </Project>
