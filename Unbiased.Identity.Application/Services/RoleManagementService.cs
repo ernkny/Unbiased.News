@@ -84,6 +84,20 @@ namespace Unbiased.Identity.Application.Services
             }
         }
 
+        public async Task<IEnumerable<Role>> GetAllRolesWithoutPaginationAsync()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetAllRolesWithoutPaginationQuery());
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<bool> UpdateRoleAsync(UpdateRoleDto role)
         {
 

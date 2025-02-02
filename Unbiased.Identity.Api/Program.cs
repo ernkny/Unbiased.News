@@ -31,6 +31,8 @@ builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSql
 
 builder.Services.AddScoped<IRoleManagementRepository, RoleManagementRepository>();
 builder.Services.AddScoped<IRoleManagementService, RoleManagementService>();
+builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
+builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
 var app = builder.Build();

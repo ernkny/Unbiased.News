@@ -7,6 +7,7 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract
     {
         Task<IEnumerable<PagesWithPermissionsDto>> GetAllPagesWithPermissionsAsync();
         Task<IEnumerable<Role>> GetAllRolesAsync(int pageNumber, int pageSize);
+        Task<IEnumerable<Role>> GetAllRolessWithoutPaginationAsync();
         Task<int> GetAllRolesCountAsync();
         Task<bool> InsertRoleAsync(CreateRoleDto role);
         Task<RoleGetByIdDto> GetRoleById(int roleId);

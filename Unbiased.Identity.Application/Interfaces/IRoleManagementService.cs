@@ -7,6 +7,7 @@ namespace Unbiased.Identity.Application.Interfaces
     {
         Task<IEnumerable<PagesWithPermissionsDto>> GetAllPagesWithPermissionsAsync();
         Task<IEnumerable<Role>> GetAllRolesAsync(int pageNumber, int pageSize);
+        Task<IEnumerable<Role>> GetAllRolesWithoutPaginationAsync();
         Task<int> GetAllRolesCountAsync();
         Task<bool> CreateRoleAsync(CreateRoleDto role);
         Task<bool> UpdateRoleAsync(UpdateRoleDto role);

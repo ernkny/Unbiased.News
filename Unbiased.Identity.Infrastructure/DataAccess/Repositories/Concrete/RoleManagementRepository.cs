@@ -58,6 +58,23 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        public async Task<IEnumerable<Role>> GetAllRolessWithoutPaginationAsync()
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var result = await connection.QueryAsync<Role>("UBFMW_sp_GetAllRolesWithoutPagination", commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<int> GetAllRolesCountAsync()
         {
             try

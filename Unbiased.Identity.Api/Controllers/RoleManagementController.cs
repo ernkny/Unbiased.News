@@ -71,6 +71,33 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+        [HttpGet("/GetAllRolesWithoutPagination")]
+        public async Task<IActionResult> GetAllRolesWithoutPagination()
+        {
+            try
+            {
+                var result = await _roleManagementService.GetAllRolesWithoutPaginationAsync();
+                var response = new ResponseDto<List<Role>>
+                {
+                    IsSuccessful = result.Any(),
+                    StatusCode = result.Any() ? 200 : 204,
+                    Data = result.ToList()
+                };
+
+                return result.Any() ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
         [HttpGet("/GetAllRolesCount")]
         public async Task<IActionResult> GetAllRolesCount()
         {
