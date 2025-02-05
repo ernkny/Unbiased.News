@@ -129,7 +129,7 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("@RoleName", role.RoleName);
                     parameters.Add("@Description", role.Description);
                     parameters.Add("@IsActive", role.IsActive);
-                    parameters.Add("@@PermissionIdListType", permissions.AsTableValuedParameter("PermissionIdListType"));
+                    parameters.Add("@PermissionIdListType", permissions.AsTableValuedParameter("PermissionIdListType"));
 
                     var affectedRows = await connection.ExecuteAsync("UBFMW_sp_InsertRole", parameters, commandType: CommandType.StoredProcedure);
                     return affectedRows > 0;

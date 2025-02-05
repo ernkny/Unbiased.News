@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Unbiased.Identity.Application.Interfaces;
-using Unbiased.Identity.Application.Services;
+using Unbiased.Identity.Application.Validators.User;
+using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Entities;
 using Unbiased.Shared.Dtos.Concrete;
 
@@ -53,6 +53,39 @@ namespace Unbiased.Identity.Api.Controllers
                 if (result > 0)
                 {
                     var response = new ResponseDto<int>
+                    {
+                        IsSuccessful = true,
+                        StatusCode = 200,
+                        Data = result
+                    };
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request: " + ex.Message
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        [HttpPost("/InsertUserWithRoles")]
+        public async Task<IActionResult> InsertUserWithRoles([FromBody] InsertUserWithRolesDto user)
+        {
+            try
+            {
+                var result = await _userManagementService.InsertUserWithRoles(user);
+                if (result)
+                {
+                    var response = new ResponseDto<bool>
                     {
                         IsSuccessful = true,
                         StatusCode = 200,

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Entities;
 using Unbiased.Identity.Infrastructure.DataAccess.Connections;
 using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract;
@@ -57,6 +58,46 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             {
                 throw;
             }
+        }
+
+        public async Task<bool> InsertUserWithRolesAsync(InsertUserWithRolesDto user)
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+                var roles = new DataTable();
+                roles.Columns.Add("RoleID", typeof(int));  
+
+                foreach (var id in user.Roles)  
+                {
+                    roles.Rows.Add(id);
+                }
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserName", user.Username);  
+                parameters.Add("@Password", user.Password); 
+                parameters.Add("@Email", user.Email);
+                parameters.Add("@FirstName", user.FirstName);
+                parameters.Add("@Lastname", user.LastName);
+                parameters.Add("@Bio", user.Biography);
+                parameters.Add("@IsActive", user.IsActive);  
+                parameters.Add("@Roles", roles.AsTableValuedParameter("ListOfRoles"));  
+
+                return await connection.QueryFirstAsync<int>("UBFMW_InsertUsersWithRoles", parameters, commandType: CommandType.StoredProcedure)==1;
+            }
+
+        }
+
+        public async Task<bool> ValidateUserWithRolesAsync(InsertUserWithRolesDto user)
+        {
+            using (var connection = _connection.CreateConnection())
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserName", user.Username);
+                parameters.Add("@Email", user.Email);
+
+                return await connection.QueryFirstAsync<int>("UBFMW_sp_ValidateUserData", parameters, commandType: CommandType.StoredProcedure) == 0;
+            }
+
         }
     }
 }

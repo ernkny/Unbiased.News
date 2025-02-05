@@ -1,16 +1,17 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using MediatR;
 using Unbiased.Identity.Application.Interfaces;
+using Unbiased.Identity.Application.Validators.User;
+using Unbiased.Identity.Common.Concrete.Helpers;
+using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Entities;
+using Unbiased.Identity.Infrastructure.Concrete.Cqrs.Commands.RoleManagement;
+using Unbiased.Identity.Infrastructure.Concrete.Cqrs.Commands.UserManagement;
 using Unbiased.Identity.Infrastructure.Concrete.Cqrs.Queries.UserManagement;
 
 namespace Unbiased.Identity.Application.Services
 {
-    public class UserManagementService:IUserManagementService
+    public sealed class UserManagementService : IUserManagementService
     {
         private readonly IMediator _mediator;
 
@@ -23,7 +24,7 @@ namespace Unbiased.Identity.Application.Services
         {
             try
             {
-                var result= await _mediator.Send(new GetAllUsersQuery(pageNumber, pageSize));
+                var result = await _mediator.Send(new GetAllUsersQuery(pageNumber, pageSize));
                 return result;
             }
             catch (Exception)
@@ -49,5 +50,28 @@ namespace Unbiased.Identity.Application.Services
 
         }
         
+        public async Task<bool> InsertUserWithRoles(InsertUserWithRolesDto user)
+        {
+            try
+            {
+                var validationResult = new InsertUserCustomValidation().Validate(user);
+                if (!validationResult.IsValid)
+                {
+                    throw new ValidationException(validationResult.Errors);
+                }
+                if (await new UserEmailAndUsernameValidation(_mediator).UserEmailAndUsernameValidationMethod(user))
+                {
+                    throw new ValidationException("Email or Username already exists");
+                }
+                user.Password = PasswordHashingExtension.ToPBKDF2Hash(user.Password);
+                var result = await _mediator.Send(new InsertUserWithRolesCommand(user));
+                return result;
+            }
+            catch (Exception exception)
+            {
+
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

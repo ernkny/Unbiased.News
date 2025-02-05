@@ -7,7 +7,7 @@ using Unbiased.Identity.Infrastructure.Concrete.Cqrs.Queries.RoleManagement;
 
 namespace Unbiased.Identity.Application.Services
 {
-    public class RoleManagementService : IRoleManagementService
+    public sealed class RoleManagementService : IRoleManagementService
     {
         private readonly IMediator _mediator;
 
@@ -100,7 +100,6 @@ namespace Unbiased.Identity.Application.Services
 
         public async Task<bool> UpdateRoleAsync(UpdateRoleDto role)
         {
-
             try
             {
                 var result = await _mediator.Send(new UpdateRoleCommand(role));
@@ -115,7 +114,6 @@ namespace Unbiased.Identity.Application.Services
         
         public async Task<bool> DeleteRoleAsync(int id)
         {
-
             try
             {
                 var result = await _mediator.Send(new DeleteRoleCommand(id));

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Entities;
 
 namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract
@@ -11,5 +7,7 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract
     {
         Task<IEnumerable<User>> GetAllUsersAsync(int pageNumber, int pageSize);
         Task<int> GetAllUsersCountAsync();
+        Task<bool> InsertUserWithRolesAsync(InsertUserWithRolesDto user);
+        Task<bool> ValidateUserWithRolesAsync(InsertUserWithRolesDto user);
     }
 }

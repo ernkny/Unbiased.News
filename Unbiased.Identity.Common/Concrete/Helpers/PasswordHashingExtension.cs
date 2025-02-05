@@ -4,19 +4,19 @@ namespace Unbiased.Identity.Common.Concrete.Helpers
 {
     public static class PasswordHashingExtension
     {
-        public static string ToPBKDF2Hash(this string password, int iterations = 10000, int hashByteSize = 32)
+        private const int SaltSize = 16;
+        private const int HashSize = 32;
+        private const int Iterations = 10000;
+        public static string ToPBKDF2Hash(string password)
         {
             var salt = GenerateSalt();
-            using (var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA256))
-            {
-                byte[] hash = rfc2898DeriveBytes.GetBytes(hashByteSize);
-                return Convert.ToBase64String(hash);
-            }
+            var hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA256, HashSize);
+            return $"{Convert.ToBase64String(hash)}-{Convert.ToHexString(salt)}";
         }
 
-        private static byte[] GenerateSalt(int size = 16)
+        private static byte[] GenerateSalt()
         {
-            byte[] salt = new byte[size];
+            byte[] salt = new byte[SaltSize];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(salt);
