@@ -1,10 +1,5 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Entities;
 using Unbiased.Identity.Infrastructure.DataAccess.Connections;
@@ -17,7 +12,7 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
         private readonly UnbiasedSqlConnection _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CategoriesRepository"/> class.
+        /// Initializes a new instance of the <see cref="UserManagementRepository"/> class.
         /// </summary>
         /// <param name="connection">The connection to the database.</param>
         public UserManagementRepository(UnbiasedSqlConnection connection)
@@ -62,40 +57,97 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
 
         public async Task<bool> InsertUserWithRolesAsync(InsertUserWithRolesDto user)
         {
-            using (var connection = _connection.CreateConnection())
+            try
             {
-                var roles = new DataTable();
-                roles.Columns.Add("RoleID", typeof(int));  
-
-                foreach (var id in user.Roles)  
+                using (var connection = _connection.CreateConnection())
                 {
-                    roles.Rows.Add(id);
+                    var roles = new DataTable();
+                    roles.Columns.Add("RoleID", typeof(int));
+
+                    foreach (var id in user.Roles)
+                    {
+                        roles.Rows.Add(id);
+                    }
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@UserName", user.Username);
+                    parameters.Add("@Password", user.Password);
+                    parameters.Add("@Email", user.Email);
+                    parameters.Add("@FirstName", user.FirstName);
+                    parameters.Add("@Lastname", user.LastName);
+                    parameters.Add("@Bio", user.Biography);
+                    parameters.Add("@IsActive", user.IsActive);
+                    parameters.Add("@Roles", roles.AsTableValuedParameter("ListOfRoles"));
+
+                    return await connection.QueryFirstAsync<int>("UBFMW_InsertUsersWithRoles", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@UserName", user.Username);  
-                parameters.Add("@Password", user.Password); 
-                parameters.Add("@Email", user.Email);
-                parameters.Add("@FirstName", user.FirstName);
-                parameters.Add("@Lastname", user.LastName);
-                parameters.Add("@Bio", user.Biography);
-                parameters.Add("@IsActive", user.IsActive);  
-                parameters.Add("@Roles", roles.AsTableValuedParameter("ListOfRoles"));  
-
-                return await connection.QueryFirstAsync<int>("UBFMW_InsertUsersWithRoles", parameters, commandType: CommandType.StoredProcedure)==1;
             }
+            catch (Exception)
+            {
 
+                throw;
+            }
         }
 
         public async Task<bool> ValidateUserWithRolesAsync(InsertUserWithRolesDto user)
         {
-            using (var connection = _connection.CreateConnection())
+            try
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@UserName", user.Username);
-                parameters.Add("@Email", user.Email);
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@UserName", user.Username);
+                    parameters.Add("@Email", user.Email);
 
-                return await connection.QueryFirstAsync<int>("UBFMW_sp_ValidateUserData", parameters, commandType: CommandType.StoredProcedure) == 0;
+                    return await connection.QueryFirstAsync<int>("UBFMW_sp_ValidateUserData", parameters, commandType: CommandType.StoredProcedure) == 0;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var userDictionary = new Dictionary<int, GetUserWithRolesDto>();
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@UserId", userId);
+
+                    var users = await connection.QueryAsync<GetUserWithRolesDto, Role, GetUserWithRolesDto>(
+                        "UBFMW_sp_GetUserWithRolesById",
+                        (user, role) =>
+                        {
+                            GetUserWithRolesDto userEntry;
+
+                            if (!userDictionary.TryGetValue(user.UserId, out userEntry))
+                            {
+                                userEntry = user;
+                                userEntry.Roles = new List<Role>();
+                                userDictionary.Add(userEntry.UserId, userEntry);
+                            }
+
+                            userEntry.Roles.Add(role);
+                            return userEntry;
+                        },
+                        parameters,
+                        commandType: CommandType.StoredProcedure,
+                        splitOn: "RoleId"
+                    );
+
+                    return userDictionary.Values.FirstOrDefault();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
         }

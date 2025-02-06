@@ -49,8 +49,23 @@ namespace Unbiased.Identity.Application.Services
             }
 
         }
-        
-        public async Task<bool> InsertUserWithRoles(InsertUserWithRolesDto user)
+
+        public async Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetUserWithRolesQuery(userId));
+                return result;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<bool> InsertUserWithRolesAsync(InsertUserWithRolesDto user)
         {
             try
             {

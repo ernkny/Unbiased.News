@@ -77,12 +77,45 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+        [HttpGet("/GetUserWithRoles")]
+        public async Task<IActionResult> GetUserWithRoles(int userId)
+        {
+            try
+            {
+                var result = await _userManagementService.GetUserWithRolesAsync(userId);
+                if (result is not null)
+                {
+                    var response = new ResponseDto<GetUserWithRolesDto>
+                    {
+                        IsSuccessful = true,
+                        StatusCode = 200,
+                        Data = result
+                    };
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request: " + ex.Message
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
         [HttpPost("/InsertUserWithRoles")]
         public async Task<IActionResult> InsertUserWithRoles([FromBody] InsertUserWithRolesDto user)
         {
             try
             {
-                var result = await _userManagementService.InsertUserWithRoles(user);
+                var result = await _userManagementService.InsertUserWithRolesAsync(user);
                 if (result)
                 {
                     var response = new ResponseDto<bool>

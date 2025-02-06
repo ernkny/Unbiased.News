@@ -7,6 +7,7 @@ namespace Unbiased.Identity.Application.Interfaces
     {
         Task<IEnumerable<User>> GetAllUsersAsync(int pageNumber, int pageSize);
         Task<int> GetAllUsersCountAsync();
-        Task<bool> InsertUserWithRoles(InsertUserWithRolesDto user);
+        Task<bool> InsertUserWithRolesAsync(InsertUserWithRolesDto user);
+        Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId);
     }
 }

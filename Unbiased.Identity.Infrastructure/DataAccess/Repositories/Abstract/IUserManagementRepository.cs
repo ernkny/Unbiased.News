@@ -9,5 +9,6 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract
         Task<int> GetAllUsersCountAsync();
         Task<bool> InsertUserWithRolesAsync(InsertUserWithRolesDto user);
         Task<bool> ValidateUserWithRolesAsync(InsertUserWithRolesDto user);
+        Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId);
     }
 }
