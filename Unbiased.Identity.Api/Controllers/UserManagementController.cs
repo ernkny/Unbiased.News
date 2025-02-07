@@ -142,5 +142,38 @@ namespace Unbiased.Identity.Api.Controllers
                 return StatusCode(500, errorResponse);
             }
         }
+
+        [HttpPost("/UpdateUserWithRoles")]
+        public async Task<IActionResult> UpdateUserWithRoles([FromBody] UpdateUserWithRolesDto user)
+        {
+            try
+            {
+                var result = await _userManagementService.UpdateUserWithRolesAsync(user);
+                if (result)
+                {
+                    var response = new ResponseDto<bool>
+                    {
+                        IsSuccessful = true,
+                        StatusCode = 200,
+                        Data = result
+                    };
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request: " + ex.Message
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
     }
 }

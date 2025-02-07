@@ -79,7 +79,7 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("@IsActive", user.IsActive);
                     parameters.Add("@Roles", roles.AsTableValuedParameter("ListOfRoles"));
 
-                    return await connection.QueryFirstAsync<int>("UBFMW_InsertUsersWithRoles", parameters, commandType: CommandType.StoredProcedure) == 1;
+                    return await connection.QueryFirstAsync<int>("UBFMW_sp_InsertUsersWithRoles", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
             catch (Exception)
@@ -89,15 +89,47 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<bool> ValidateUserWithRolesAsync(InsertUserWithRolesDto user)
+        public async Task<bool> UpdateUserWithRolesAsync(UpdateUserWithRolesDto user)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var roles = new DataTable();
+                    roles.Columns.Add("RoleID", typeof(int));
+
+                    foreach (var id in user.Roles)
+                    {
+                        roles.Rows.Add(id);
+                    }
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@userid", user.UserId);
+                    parameters.Add("@FirstName", user.FirstName);
+                    parameters.Add("@Lastname", user.LastName);
+                    parameters.Add("@Bio", user.Biography);
+                    parameters.Add("@IsActive", user.IsActive);
+                    parameters.Add("@Roles", roles.AsTableValuedParameter("ListOfRoles"));
+
+                    return await connection.QueryFirstAsync<int>("UBFMW_sp_UpdateUserWithRoles", parameters, commandType: CommandType.StoredProcedure) == 1;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<bool> ValidateUsernameAndEmailWithRolesAsync(string username, string email)
         {
             try
             {
                 using (var connection = _connection.CreateConnection())
                 {
                     var parameters = new DynamicParameters();
-                    parameters.Add("@UserName", user.Username);
-                    parameters.Add("@Email", user.Email);
+                    parameters.Add("@UserName", username);
+                    parameters.Add("@Email", email);
 
                     return await connection.QueryFirstAsync<int>("UBFMW_sp_ValidateUserData", parameters, commandType: CommandType.StoredProcedure) == 0;
                 }

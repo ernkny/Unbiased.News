@@ -74,12 +74,31 @@ namespace Unbiased.Identity.Application.Services
                 {
                     throw new ValidationException(validationResult.Errors);
                 }
-                if (await new UserEmailAndUsernameValidation(_mediator).UserEmailAndUsernameValidationMethod(user))
+                if (await new UserEmailAndUsernameValidation(_mediator).UserEmailAndUsernameValidationMethod(user.Username, user.Email))
                 {
                     throw new ValidationException("Email or Username already exists");
                 }
                 user.Password = PasswordHashingExtension.ToPBKDF2Hash(user.Password);
                 var result = await _mediator.Send(new InsertUserWithRolesCommand(user));
+                return result;
+            }
+            catch (Exception exception)
+            {
+
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<bool> UpdateUserWithRolesAsync(UpdateUserWithRolesDto user)
+        {
+            try
+            {
+                var validationResult = new UpdateUserCustomValidation().Validate(user);
+                if (!validationResult.IsValid)
+                {
+                    throw new ValidationException(validationResult.Errors);
+                }
+                var result = await _mediator.Send(new UpdateUserWithRolesCommand(user));
                 return result;
             }
             catch (Exception exception)

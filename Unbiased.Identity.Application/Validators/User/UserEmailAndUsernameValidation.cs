@@ -13,9 +13,9 @@ namespace Unbiased.Identity.Application.Validators.User
             _mediator = mediator;
         }
 
-        public async Task<bool> UserEmailAndUsernameValidationMethod(InsertUserWithRolesDto user)
+        public async Task<bool> UserEmailAndUsernameValidationMethod(string username,string email)
         {
-            return await _mediator.Send(new ValidateUserWithRolesQuery(user));
+            return await _mediator.Send(new ValidateUsernameAndEmailWithRolesQuery(username,email));
         }
     }
 }

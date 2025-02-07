@@ -9,5 +9,6 @@ namespace Unbiased.Identity.Application.Interfaces
         Task<int> GetAllUsersCountAsync();
         Task<bool> InsertUserWithRolesAsync(InsertUserWithRolesDto user);
         Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId);
+        Task<bool> UpdateUserWithRolesAsync(UpdateUserWithRolesDto user);
     }
 }

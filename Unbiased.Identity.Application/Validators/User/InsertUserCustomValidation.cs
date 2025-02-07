@@ -40,6 +40,8 @@ namespace Unbiased.Identity.Application.Validators.User
             RuleFor(x => x.Biography)
                 .NotEmpty().WithMessage("Bio is required.")
                 .MaximumLength(50).WithMessage("Bio must not exceed 2500 characters.");
+
+            RuleFor(x => x.Roles).NotEmpty().WithMessage("At least one role is required.");
         }
     }
 }
