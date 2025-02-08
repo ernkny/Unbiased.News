@@ -183,5 +183,24 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
 
         }
+
+        public async Task<bool> DeleteUserWithRolesAsync(int userId)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@userid", userId);
+
+                    return await connection.QueryFirstAsync<int>("UBFMW_sp_DeleteUserWithRoles", parameters, commandType: CommandType.StoredProcedure) == 1;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

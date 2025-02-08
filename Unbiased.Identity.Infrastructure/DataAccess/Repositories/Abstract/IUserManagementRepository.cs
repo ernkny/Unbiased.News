@@ -11,5 +11,6 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract
         Task<bool> ValidateUsernameAndEmailWithRolesAsync(string username, string email);
         Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId);
         Task<bool> UpdateUserWithRolesAsync(UpdateUserWithRolesDto user);
+        Task<bool> DeleteUserWithRolesAsync(int userId);
     }
 }

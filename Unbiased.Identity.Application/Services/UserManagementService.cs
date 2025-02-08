@@ -20,6 +20,20 @@ namespace Unbiased.Identity.Application.Services
             _mediator = mediator;
         }
 
+        public async Task<bool> DeleteUserWithRolesAsync(int userId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new DeleteUserWithRolesCommand(userId));
+                return result;
+            }
+            catch (Exception exception)
+            {
+
+                throw new Exception(exception.Message);
+            }
+        }
+
         public async Task<IEnumerable<User>> GetAllUsersAsync(int pageNumber, int pageSize)
         {
             try

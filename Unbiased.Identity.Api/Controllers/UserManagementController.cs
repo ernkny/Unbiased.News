@@ -175,5 +175,38 @@ namespace Unbiased.Identity.Api.Controllers
                 return StatusCode(500, errorResponse);
             }
         }
+
+        [HttpDelete("/DeleteUserWithRoles")]
+        public async Task<IActionResult> DeleteUserWithRoles(int userId)
+        {
+            try
+            {
+                var result = await _userManagementService.DeleteUserWithRolesAsync(userId);
+                if (result)
+                {
+                    var response = new ResponseDto<bool>
+                    {
+                        IsSuccessful = true,
+                        StatusCode = 200,
+                        Data = result
+                    };
+                    return Ok(response);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request: " + ex.Message
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
     }
 }
