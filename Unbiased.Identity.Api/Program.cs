@@ -1,5 +1,10 @@
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Unbiased.Identity.Application;
+using Unbiased.Identity.Application.Dto.Models;
 using Unbiased.Identity.Application.Interfaces;
 using Unbiased.Identity.Application.Services;
 using Unbiased.Identity.Infrastructure;
@@ -27,6 +32,20 @@ builder.Services.AddMassTransit(x =>
         });
     });
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("UnbiasedBestApi2025")),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true, 
+        ClockSkew = TimeSpan.Zero 
+    };
+});
+
+builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
 
 builder.Services.AddScoped<IRoleManagementRepository, RoleManagementRepository>();

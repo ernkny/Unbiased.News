@@ -10,4 +10,8 @@
     <Folder Include="Abstract\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.1.2" />
+  </ItemGroup>
+
 </Project>
