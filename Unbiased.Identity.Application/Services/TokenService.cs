@@ -1,15 +1,12 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using Unbiased.Identity.Application.Dto.Models;
 using Unbiased.Identity.Application.Interfaces;
+using Unbiased.Identity.Common.Concrete.Helpers;
 using Unbiased.Identity.Domain.Dto_s.Authentication;
 using Unbiased.Identity.Domain.Dtos.Authentication;
 using Unbiased.Identity.Domain.Entities;
@@ -47,14 +44,56 @@ namespace Unbiased.Identity.Application.Services
             userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
             return userList;
         }
+
+        private IEnumerable<Claim> GetClaimsByClient(Client client)
+        {
+            var clientList = new List<Claim>();
+            clientList.AddRange(client.Audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString());
+            new Claim(JwtRegisteredClaimNames.Sub, client.Id.ToString());
+            return clientList;
+        }
         public ClientTokenDto CreateClientToken(Client client)
         {
-            throw new NotImplementedException();
-        }
+            var accessTokenExpiration = DateTime.Now.AddMinutes(_customTokenOption.AccessTokenExpiration);
+            var securityKey = SigningSecurityKey.GetSymmetricSecurityKey(_customTokenOption.SecurityKey);
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            var securityToken = new JwtSecurityToken(
+                issuer: _customTokenOption.Issuer,
+                expires: accessTokenExpiration,
+                claims: GetClaimsByClient(client),
+                signingCredentials: signingCredentials
+                );
+            return new ClientTokenDto()
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(securityToken),
+                AccessTokenExpiration = accessTokenExpiration
+            };
+         }
 
         public TokenDto CreateToken(User user)
         {
-            throw new NotImplementedException();
+            var accessTokenExpiration = DateTime.Now.AddMinutes(_customTokenOption.AccessTokenExpiration);
+            var securityKey = SigningSecurityKey.GetSymmetricSecurityKey(_customTokenOption.SecurityKey);
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            var securityToken = new JwtSecurityToken(
+                issuer: _customTokenOption.Issuer,
+                expires: accessTokenExpiration,
+                claims: GetClaims(user, _customTokenOption.Audience),
+                signingCredentials: signingCredentials
+                );
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.WriteToken(securityToken);
+            var tokenDto = new TokenDto()
+            {
+                AccessToken = token,
+                RefreshToken = CreateRefreshToken(),
+                AccessTokenExpiration = accessTokenExpiration,
+                RefreshTokenExpiration = DateTime.Now.AddMinutes(_customTokenOption.RefreshTokenExpiration)
+            };
+            return tokenDto;
+
         }
     }
 }
