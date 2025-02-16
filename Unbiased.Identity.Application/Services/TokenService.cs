@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using Unbiased.Identity.Application.Dto.Models;
 using Unbiased.Identity.Application.Interfaces;
 using Unbiased.Identity.Common.Concrete.Helpers;
+using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Dto_s.Authentication;
 using Unbiased.Identity.Domain.Dtos.Authentication;
 using Unbiased.Identity.Domain.Entities;
@@ -32,7 +33,7 @@ namespace Unbiased.Identity.Application.Services
             return Convert.ToBase64String(numberBytes);
         }
 
-        private IEnumerable<Claim> GetClaims(User user, List<string> audiences)
+        private IEnumerable<Claim> GetClaims(GetUserWithRolesDto user, List<string> audiences)
         {
             var userList = new List<Claim>()
             {
@@ -42,6 +43,7 @@ namespace Unbiased.Identity.Application.Services
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
             userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
+            userList.AddRange(user.Roles.Select(x => new Claim(ClaimTypes.Role, x)));
             return userList;
         }
 
@@ -53,7 +55,7 @@ namespace Unbiased.Identity.Application.Services
             new Claim(JwtRegisteredClaimNames.Sub, client.Id.ToString());
             return clientList;
         }
-        public ClientTokenDto CreateClientToken(Client client)
+        public async Task<ClientTokenDto> CreateClientToken(Client client)
         {
             var accessTokenExpiration = DateTime.Now.AddMinutes(_customTokenOption.AccessTokenExpiration);
             var securityKey = SigningSecurityKey.GetSymmetricSecurityKey(_customTokenOption.SecurityKey);
@@ -71,7 +73,7 @@ namespace Unbiased.Identity.Application.Services
             };
          }
 
-        public TokenDto CreateToken(User user)
+        public async Task<TokenDto> CreateToken(GetUserWithRolesDto user)
         {
             var accessTokenExpiration = DateTime.Now.AddMinutes(_customTokenOption.AccessTokenExpiration);
             var securityKey = SigningSecurityKey.GetSymmetricSecurityKey(_customTokenOption.SecurityKey);

@@ -12,5 +12,10 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract
         Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId);
         Task<bool> UpdateUserWithRolesAsync(UpdateUserWithRolesDto user);
         Task<bool> DeleteUserWithRolesAsync(int userId);
+        Task<int> CheckEmailOrUsernameAsync(string EmailOrUsername);
+        Task<string> GetHashedPasswordByIdAsync(int userId);
+        Task<bool> UpdateRefreshTokenByIdAsync(int userId, string refreshToken,DateTime? refreshTokenExpireDate);
+        Task<string> GetRefreshTokenByIdAsync(int userId);
+        Task<User> GetRefreshTokenWithTokenAsync(string refreshToken);
     }
 }

@@ -14,6 +14,19 @@ namespace Unbiased.Identity.Common.Concrete.Helpers
             return $"{Convert.ToBase64String(hash)}-{Convert.ToHexString(salt)}";
         }
 
+        public static bool Verify(string password, string passwordHash)
+        {
+            var parts = passwordHash.Split('-');
+            if (parts.Length != 2)
+            {
+                return false;
+            }
+            var hashBytes = Convert.FromBase64String(parts[0]);
+            var salt = Convert.FromHexString(parts[1]);
+            var hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA256, HashSize);
+            return CryptographicOperations.FixedTimeEquals(hashBytes, hash);
+        }
+
         private static byte[] GenerateSalt()
         {
             byte[] salt = new byte[SaltSize];
@@ -23,5 +36,7 @@ namespace Unbiased.Identity.Common.Concrete.Helpers
             }
             return salt;
         }
+
+
     }
 }

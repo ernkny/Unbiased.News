@@ -202,5 +202,102 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                 throw;
             }
         }
+
+        public async Task<int> CheckEmailOrUsernameAsync(string EmailOrUsername)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@EmailOrUserName", EmailOrUsername);
+
+                    return await connection.QueryFirstAsync<int>("UBFMW_sp_CheckEmailOrUserName", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<string> GetHashedPasswordByIdAsync(int userId)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@UserId", userId);
+
+                    return await connection.QueryFirstAsync<string>("UBFMW_sp_GetHashedPasswordById", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateRefreshTokenByIdAsync(int userId,string refreshToken,DateTime? refreshTokenExpireDate)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@UserId", userId);
+                    parameters.Add("@refreshToken", refreshToken);
+                    parameters.Add("@refreshTokenExpiration", refreshTokenExpireDate);
+
+                    return await connection.QueryFirstAsync<int>("UBFMW_sp_UpdateRefreshTokenById", parameters, commandType: CommandType.StoredProcedure)==1;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<string> GetRefreshTokenByIdAsync(int userId)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@UserId", userId);
+
+                    return await connection.QueryFirstAsync<string>("UBFMW_sp_GetRefreshTokenIfExists", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<User> GetRefreshTokenWithTokenAsync(string refreshToken)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@refreshToken", refreshToken);
+
+                    return await connection.QueryFirstAsync<User>("UBFMW_sp_GetRefreshTokenWithTokenIfExists", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

@@ -7,6 +7,8 @@ using Unbiased.Identity.Application;
 using Unbiased.Identity.Application.Dto.Models;
 using Unbiased.Identity.Application.Interfaces;
 using Unbiased.Identity.Application.Services;
+using Unbiased.Identity.Common.Concrete.Helpers;
+using Unbiased.Identity.Domain.Dto_s.Authentication;
 using Unbiased.Identity.Infrastructure;
 using Unbiased.Identity.Infrastructure.DataAccess.Connections;
 using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract;
@@ -14,8 +16,6 @@ using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -33,25 +33,40 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
-    options.TokenValidationParameters = new TokenValidationParameters
+builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
+builder.Services.Configure<Client>(builder.Configuration.GetSection("Clients:Unbiased"));
+builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+{
+    var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>();
+    opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
     {
+        ValidIssuer = tokenOptions.Issuer,
+        ValidAudience = tokenOptions.Audience[0],
+        IssuerSigningKey =  SigningSecurityKey.GetSymmetricSecurityKey(tokenOptions.SecurityKey),
+
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("UnbiasedBestApi2025")),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true, 
-        ClockSkew = TimeSpan.Zero 
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
     };
 });
 
-builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
-builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
 
-builder.Services.AddScoped<IRoleManagementRepository, RoleManagementRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IRoleManagementService, RoleManagementService>();
 builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
-builder.Services.AddScoped<IUserManagementService, UserManagementService>();
+
+builder.Services.AddScoped<IRoleManagementRepository, RoleManagementRepository>();
+builder.Services.AddScoped<IIdentityRepository, IdentityRepository>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
 var app = builder.Build();

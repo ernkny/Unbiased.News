@@ -1,4 +1,6 @@
 ﻿using Unbiased.Identity.Domain.Dto_s;
+using Unbiased.Identity.Domain.Dto_s.Login;
+using Unbiased.Identity.Domain.Dtos.Authentication;
 using Unbiased.Identity.Domain.Entities;
 
 namespace Unbiased.Identity.Application.Interfaces
@@ -11,5 +13,6 @@ namespace Unbiased.Identity.Application.Interfaces
         Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId);
         Task<bool> UpdateUserWithRolesAsync(UpdateUserWithRolesDto user);
         Task<bool> DeleteUserWithRolesAsync(int userId);
+        Task<TokenDto> LoginAsync(LoginDto loginDto);
     }
 }
