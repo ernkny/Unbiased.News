@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.Entities;
@@ -111,6 +112,7 @@ namespace Unbiased.News.Api.Controllers
         /// Initializes a new instance of the <see cref="ContentController"/> class.
         /// </summary>
         /// <param name="contentService">The content Service instance.</param>
+        [Authorize]
         [HttpGet("/GetDailyContent")]
         public async Task<IActionResult> GetDailyContent()
         {

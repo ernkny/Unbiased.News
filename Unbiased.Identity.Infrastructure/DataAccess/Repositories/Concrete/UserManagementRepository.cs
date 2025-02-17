@@ -152,9 +152,9 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     var parameters = new DynamicParameters();
                     parameters.Add("@UserId", userId);
 
-                    var users = await connection.QueryAsync<GetUserWithRolesDto, Role, GetUserWithRolesDto>(
+                    var users = await connection.QueryAsync<GetUserWithRolesDto, Role, Permission, GetUserWithRolesDto>(
                         "UBFMW_sp_GetUserWithRolesById",
-                        (user, role) =>
+                        (user, role, permission) =>
                         {
                             GetUserWithRolesDto userEntry;
 
@@ -164,13 +164,20 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                                 userEntry.Roles = new List<Role>();
                                 userDictionary.Add(userEntry.UserId, userEntry);
                             }
+                            Role roleEntry = userEntry.Roles.FirstOrDefault(r => r.RoleId == role.RoleId);
+                            if (roleEntry == null)
+                            {
+                                roleEntry = role;
+                                roleEntry.Permissions = new List<Permission>();
+                                userEntry.Roles.Add(roleEntry);
+                            }
 
-                            userEntry.Roles.Add(role);
+                            roleEntry.Permissions.Add(permission);
                             return userEntry;
                         },
                         parameters,
                         commandType: CommandType.StoredProcedure,
-                        splitOn: "RoleId"
+                        splitOn: "RoleId,PermissionId"
                     );
 
                     return userDictionary.Values.FirstOrDefault();

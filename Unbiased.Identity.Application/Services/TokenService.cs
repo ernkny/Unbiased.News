@@ -4,13 +4,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using Unbiased.Identity.Application.Dto.Models;
 using Unbiased.Identity.Application.Interfaces;
-using Unbiased.Identity.Common.Concrete.Helpers;
 using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Dto_s.Authentication;
 using Unbiased.Identity.Domain.Dtos.Authentication;
-using Unbiased.Identity.Domain.Entities;
+using Unbiased.Shared.Dtos.Concrete.Configurations;
+using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Helpers;
 
 namespace Unbiased.Identity.Application.Services
 {
@@ -43,7 +42,11 @@ namespace Unbiased.Identity.Application.Services
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
             userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
-            userList.AddRange(user.Roles.Select(x => new Claim(ClaimTypes.Role, x)));
+            foreach (var role in user.Roles)
+            {
+
+                userList.AddRange(role.Permissions.Select(x => new Claim("permissions", x.PermissionName)));
+            }
             return userList;
         }
 

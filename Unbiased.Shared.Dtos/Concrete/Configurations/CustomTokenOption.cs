@@ -1,4 +1,10 @@
-﻿namespace Unbiased.Identity.Application.Dto.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Unbiased.Shared.Dtos.Concrete.Configurations
 {
     public class CustomTokenOption
     {

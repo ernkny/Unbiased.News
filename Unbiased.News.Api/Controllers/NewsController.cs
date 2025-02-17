@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
@@ -59,6 +60,7 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="language">The language of the news. Default is 'TR'.</param>
         /// <param name="pageNumber">The page number for pagination. Default is 1.</param>
         /// <returns>A list of generated news with images.</returns>
+        [Authorize(Policy = "News Get")]
         [HttpGet("/GetAllGeneratedNewsWithImage")]
         public async Task<IActionResult> GetAllGeneratedNewsWithImage(int categoryId, string language = "TR", int pageNumber = 1)
         {

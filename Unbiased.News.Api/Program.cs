@@ -7,6 +7,8 @@ using Unbiased.News.Infrastructure;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.Dtos.Concrete.Configurations;
+using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Extensions;
 using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,13 +42,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
-
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<ICategoriesService,CategoriesService>();
 builder.Services.AddScoped<IContentRepository, ContentRepository>();
 builder.Services.AddScoped<IContentService, ContentService>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
+
+builder.Services.AddCustomTokenAuth(builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>()!);
 var app = builder.Build();
 
 app.UseCors("MyCorsPolicy");
@@ -60,6 +63,7 @@ app.UseHttpsRedirection();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<GlobalActivityLogMiddleware>();
 app.UseMiddleware<ApiKeyAuthorizeMiddleware>();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
