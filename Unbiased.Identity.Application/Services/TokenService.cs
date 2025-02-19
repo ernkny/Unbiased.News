@@ -9,7 +9,7 @@ using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Dto_s.Authentication;
 using Unbiased.Identity.Domain.Dtos.Authentication;
 using Unbiased.Shared.Dtos.Concrete.Configurations;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Helpers;
+using Unbiased.Shared.Extensions.Concrete.Helpers;
 
 namespace Unbiased.Identity.Application.Services
 {
@@ -74,7 +74,7 @@ namespace Unbiased.Identity.Application.Services
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(securityToken),
                 AccessTokenExpiration = accessTokenExpiration
             };
-         }
+        }
 
         public async Task<TokenDto> CreateToken(GetUserWithRolesDto user)
         {

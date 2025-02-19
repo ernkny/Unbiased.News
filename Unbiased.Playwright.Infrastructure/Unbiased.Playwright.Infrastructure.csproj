@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Unbiased.Playwright.Common\Unbiased.Playwright.Common.csproj" />
     <ProjectReference Include="..\Unbiased.Playwright.Domain\Unbiased.Playwright.Domain.csproj" />
     <ProjectReference Include="..\Unbiased.Shared.ExceptionHandler.Middleware\Unbiased.Shared.ExceptionHandler.Middleware.csproj" />
+    <ProjectReference Include="..\Unbiased.Shared.Extensions\Unbiased.Shared.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

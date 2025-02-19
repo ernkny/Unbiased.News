@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Helpers
+namespace Unbiased.Shared.Extensions.Concrete.Helpers
 {
     public static class SigningSecurityKey
     {

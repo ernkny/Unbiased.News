@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using MediatR;
 using Unbiased.Log.Infrastructure.Concrete.Cqrs.Commands;
-using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
+using Unbiased.Shared.Extensions.Concrete.Entities;
 
 namespace Unbiased.Log.Application.MessageQuery.Rabbitmq.Masstransit.Concrete
 {

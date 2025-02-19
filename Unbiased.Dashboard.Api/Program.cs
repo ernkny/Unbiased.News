@@ -1,5 +1,5 @@
 using Unbiased.ApiGateway.Infrastructure.DataAccess.Connections;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
+using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

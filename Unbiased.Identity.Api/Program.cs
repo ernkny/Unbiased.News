@@ -8,8 +8,8 @@ using Unbiased.Identity.Infrastructure.DataAccess.Connections;
 using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.Dtos.Concrete.Configurations;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Extensions;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
+using Unbiased.Shared.Extensions.Concrete.Extensions;
+using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

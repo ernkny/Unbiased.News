@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Unbiased.Identity.Application.Interfaces;
-using Unbiased.Identity.Application.Validators.User;
 using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Entities;
 using Unbiased.Shared.Dtos.Concrete;
@@ -17,6 +17,8 @@ namespace Unbiased.Identity.Api.Controllers
             _userManagementService = userManagementService;
         }
 
+
+        [Authorize(Policy = "Access Control Get")]
         [HttpGet("/GetAllUsers")]
         public async Task<IActionResult> GetAllUsers(int pageNumber, int pageSize)
         {
@@ -44,6 +46,8 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+
+        [Authorize(Policy = "Access Control Get")]
         [HttpGet("/GetAllUsersCount")]
         public async Task<IActionResult> GetAllUsersCount()
         {
@@ -77,6 +81,8 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+
+        [Authorize(Policy = "Access Control Get")]
         [HttpGet("/GetUserWithRoles")]
         public async Task<IActionResult> GetUserWithRoles(int userId)
         {
@@ -110,6 +116,7 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Access Control Add")]
         [HttpPost("/InsertUserWithRoles")]
         public async Task<IActionResult> InsertUserWithRoles([FromBody] InsertUserWithRolesDto user)
         {
@@ -143,6 +150,7 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Access Control Update")]
         [HttpPost("/UpdateUserWithRoles")]
         public async Task<IActionResult> UpdateUserWithRoles([FromBody] UpdateUserWithRolesDto user)
         {
@@ -176,6 +184,7 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Access Control Delete")]
         [HttpDelete("/DeleteUserWithRoles")]
         public async Task<IActionResult> DeleteUserWithRoles(int userId)
         {

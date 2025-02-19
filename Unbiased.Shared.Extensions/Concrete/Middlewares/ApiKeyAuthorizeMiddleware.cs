@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares
+namespace Unbiased.Shared.Extensions.Concrete.Middlewares
 {
     public class ApiKeyAuthorizeMiddleware
     {

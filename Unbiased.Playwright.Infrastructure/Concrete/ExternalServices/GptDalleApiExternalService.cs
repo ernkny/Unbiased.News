@@ -4,8 +4,8 @@ using System.Text;
 using System.Text.Json;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Logs;
-using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 {

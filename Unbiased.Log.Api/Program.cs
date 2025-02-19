@@ -7,14 +7,14 @@ using Unbiased.Log.Infrastructure;
 using Unbiased.Log.Infrastructure.DataAccess.Connections;
 using Unbiased.Log.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Log.Infrastructure.DataAccess.Repositories.Concrete;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
+using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(); 
+builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCorsPolicy", builder =>

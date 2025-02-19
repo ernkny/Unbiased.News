@@ -1,10 +1,9 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
+using Unbiased.Shared.Extensions.Concrete.Entities;
 
-namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Logs
+namespace Unbiased.Shared.Extensions.Concrete.Loggging
 {
     public abstract class AbstractEventAndActivityLog
     {
@@ -15,7 +14,7 @@ namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Logs
         /// <param name="context">The HTTP context.</param>
         /// <param name="logMessage">The log message to send.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public async Task<bool> SendEventLogToQueue(EventLog logMessage,IServiceProvider _serviceProvider)
+        public async Task<bool> SendEventLogToQueue(EventLog logMessage, IServiceProvider _serviceProvider)
         {
             try
             {

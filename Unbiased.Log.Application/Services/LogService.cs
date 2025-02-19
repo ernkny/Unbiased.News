@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Unbiased.Log.Application.Interfaces;
-using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
+using Unbiased.Shared.Extensions.Concrete.Entities;
 
 namespace Unbiased.Log.Application.Services
 {

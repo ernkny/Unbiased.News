@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Logs;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
-namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares
+namespace Unbiased.Shared.Extensions.Concrete.Middlewares
 {
     /// <summary>
     /// Middleware for logging global activities.
     /// </summary>
-    public class GlobalActivityLogMiddleware:AbstractEventAndActivityLog
+    public class GlobalActivityLogMiddleware : AbstractEventAndActivityLog
     {
         private readonly RequestDelegate _next;
         private readonly IServiceProvider _serviceProvider;

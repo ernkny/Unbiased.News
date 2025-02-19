@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Logs;
-using Unbiased.Shared.ExceptionHandler.Middleware.Entities;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
-namespace Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares
+namespace Unbiased.Shared.Extensions.Concrete.Middlewares
 {
     /// <summary>
     /// Global exception middleware to catch and handle exceptions in the application.

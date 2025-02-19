@@ -4,8 +4,8 @@ using Unbiased.ApiGateway.Application.Interfaces;
 using Unbiased.ApiGateway.Application.Services;
 using Unbiased.ApiGateway.Infrastructure.DataAccess.Connections;
 using Unbiased.ApiGateway.Infrastructure.DataAccess.Repositories.Abstract;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
 using Unbiased.ApiGateway.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

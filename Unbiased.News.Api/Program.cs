@@ -2,14 +2,13 @@ using MassTransit;
 using Unbiased.News.Application;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Application.Services;
-using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.Dtos.Concrete.Configurations;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Extensions;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
+using Unbiased.Shared.Extensions.Concrete.Extensions;
+using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

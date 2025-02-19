@@ -1,4 +1,4 @@
-﻿namespace Unbiased.Shared.ExceptionHandler.Middleware.Entities
+﻿namespace Unbiased.Shared.Extensions.Concrete.Entities
 {
     /// <summary>
     /// Represents an event log with relevant details.

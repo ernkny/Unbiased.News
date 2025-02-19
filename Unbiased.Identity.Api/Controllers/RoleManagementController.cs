@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Unbiased.Identity.Application.Interfaces;
 using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Entities;
@@ -17,6 +18,8 @@ namespace Unbiased.Identity.Api.Controllers
             _roleManagementService = roleManagementService;
         }
 
+
+        [Authorize(Policy = "Access Control Get")]
         [HttpGet("/GetAllPagesWithPermissions")]
         public async Task<IActionResult> GetAllPagesWithPermissions()
         {
@@ -44,6 +47,8 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+
+        [Authorize(Policy = "Access Control Get")]
         [HttpGet("/GetAllRoles")]
         public async Task<IActionResult> GetAllRoles(int pageNumber = 20, int pageSize = 1)
         {
@@ -71,6 +76,8 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+
+        [Authorize(Policy = "Access Control Get")]
         [HttpGet("/GetAllRolesWithoutPagination")]
         public async Task<IActionResult> GetAllRolesWithoutPagination()
         {
@@ -98,6 +105,8 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+
+        [Authorize(Policy = "Access Control Get")]
         [HttpGet("/GetAllRolesCount")]
         public async Task<IActionResult> GetAllRolesCount()
         {
@@ -131,6 +140,8 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+
+        [Authorize(Policy = "Access Control Get")]
         [HttpGet("/GetRoleById")]
         public async Task<IActionResult> GetRoleById(int id)
         {
@@ -164,6 +175,8 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+
+        [Authorize(Policy = "Access Control Add")]
         [HttpPost("/InsertRole")]
         public async Task<IActionResult> InsertRole(CreateRoleDto role)
         {
@@ -197,8 +210,9 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Access Control Update")]
         [HttpPut("/UpdateRole")]
-        public async Task<IActionResult> UpdateRole(UpdateRoleDto role)
+        public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleDto role)
         {
             try
             {
@@ -230,6 +244,7 @@ namespace Unbiased.Identity.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Access Control Delete")]
         [HttpDelete("/DeleteRole")]
         public async Task<IActionResult> DeleteRole(int id)
         {

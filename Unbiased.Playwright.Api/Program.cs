@@ -13,7 +13,7 @@ using Unbiased.Playwright.Infrastructure;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete;
-using Unbiased.Shared.ExceptionHandler.Middleware.Concrete.Middlewares;
+using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
