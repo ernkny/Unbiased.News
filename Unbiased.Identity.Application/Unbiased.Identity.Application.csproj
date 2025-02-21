@@ -21,7 +21,6 @@
     <ProjectReference Include="..\Unbiased.Identity.Common\Unbiased.Identity.Common.csproj" />
     <ProjectReference Include="..\Unbiased.Identity.Infrastructure\Unbiased.Identity.Infrastructure.csproj" />
     <ProjectReference Include="..\Unbiased.Shared.Dtos\Unbiased.Shared.Dtos.csproj" />
-    <ProjectReference Include="..\Unbiased.Shared.ExceptionHandler.Middleware\Unbiased.Shared.ExceptionHandler.Middleware.csproj" />
     <ProjectReference Include="..\Unbiased.Shared.Extensions\Unbiased.Shared.Extensions.csproj" />
   </ItemGroup>
 

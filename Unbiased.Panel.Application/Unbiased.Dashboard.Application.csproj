@@ -8,19 +8,19 @@
 
   <ItemGroup>
     <Folder Include="Dto\Enums\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Mappings\" />
-    <Folder Include="Services\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Unbiased.ApiGateway.Common\Unbiased.ApiGateway.Common.csproj" />
-    <ProjectReference Include="..\Unbiased.ApiGateway.Infrastructure\Unbiased.ApiGateway.Infrastructure.csproj" />
+    <ProjectReference Include="..\Unbiased.Dashboard.Infrastructure\Unbiased.Dashboard.Infrastructure.csproj" />
+    <ProjectReference Include="..\Unbiased.Panel.Common\Unbiased.Dashboard.Common.csproj" />
+    <ProjectReference Include="..\Unbiased.Panel.Domain\Unbiased.Dashboard.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,19 +8,18 @@
 
   <ItemGroup>
     <Folder Include="Abstract\" />
-    <Folder Include="Concrete\Cqrs\" />
+    <Folder Include="Concrete\Cqrs\Commands\" />
     <Folder Include="Concrete\ExternalServices\" />
-    <Folder Include="DataAccess\Repositories\Abstract\" />
-    <Folder Include="DataAccess\Repositories\Concrete\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Unbiased.ApiGateway.Common\Unbiased.ApiGateway.Common.csproj" />
-    <ProjectReference Include="..\Unbiased.ApiGateway.Domain\Unbiased.ApiGateway.Domain.csproj" />
+    <ProjectReference Include="..\Unbiased.Panel.Domain\Unbiased.Dashboard.Domain.csproj" />
   </ItemGroup>
 
 </Project>
