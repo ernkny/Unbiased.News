@@ -257,9 +257,13 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     var parameters = new DynamicParameters();
                     parameters.Add("@UserId", userId);
                     parameters.Add("@refreshToken", refreshToken);
-                    parameters.Add("@refreshTokenExpiration", refreshTokenExpireDate);
+                    parameters.Add("@refreshTokenExpiration", refreshTokenExpireDate, DbType.DateTime);
+                    var result = await connection.QueryFirstOrDefaultAsync<int>(
+                        "UBFMW_sp_UpdateRefreshTokenById",
+                        parameters,
+                        commandType: CommandType.StoredProcedure);
 
-                    return await connection.QueryFirstAsync<int>("UBFMW_sp_UpdateRefreshTokenById", parameters, commandType: CommandType.StoredProcedure)==1;
+                    return result == 1;
                 }
             }
             catch (Exception)

@@ -5,7 +5,7 @@ using Unbiased.Dashboard.Infrastructure.Concrete.Cqrs.Queries.News;
 
 namespace Unbiased.Dashboard.Application.Services
 {
-    public class NewsService : INewsService
+    public sealed class NewsService : INewsService
     {
         private readonly IMediator _mediator;
 
@@ -32,6 +32,19 @@ namespace Unbiased.Dashboard.Application.Services
             try
             {
                 return await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(requestDto));
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id)
+        {
+            try
+            {
+                return await _mediator.Send(new GetGeneratedNewsByIdWithImageQuery(id));
             }
             catch (Exception)
             {

@@ -66,5 +66,23 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 throw;
             }
         }
+
+        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", id);
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryFirstAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsById", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

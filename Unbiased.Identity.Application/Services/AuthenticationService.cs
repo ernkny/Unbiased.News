@@ -32,7 +32,8 @@ namespace Unbiased.Identity.Application.Services
             try
             {
                 if (getUserWithRolesDto == null) throw new ArgumentNullException(nameof(getUserWithRolesDto));
-                var token= await _tokenService.CreateToken(getUserWithRolesDto);
+                var token=  await _tokenService.CreateToken(getUserWithRolesDto);
+                await _mediator.Send(new UpdateRefreshTokenByIdCommand(getUserWithRolesDto.UserId, token.RefreshToken, token.RefreshTokenExpiration));
                 return token;
             }
             catch (Exception)

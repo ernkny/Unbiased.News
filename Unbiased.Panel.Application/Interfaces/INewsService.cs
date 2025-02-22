@@ -6,5 +6,6 @@ namespace Unbiased.Dashboard.Application.Interfaces
     {
         Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGenerateNewsWithImageAsync(GetGeneratedNewsWithImagePathRequestDto requestDto);
         Task<int> GetAllGenerateNewsWithImageCountAsync(GetGeneratedNewsWithImagePathRequestDto requestDto);
+        Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id);
     }
 }

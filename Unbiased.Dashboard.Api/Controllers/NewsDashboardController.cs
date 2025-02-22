@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Unbiased.Dashboard.Application.Interfaces;
 using Unbiased.Dashboard.Domain.Dto_s;
+using Unbiased.Dashboard.Domain.Entities;
 using Unbiased.Shared.Dtos.Concrete;
 
 namespace Unbiased.Dashboard.Api.Controllers
@@ -11,12 +12,42 @@ namespace Unbiased.Dashboard.Api.Controllers
     public class NewsDashboardController : ControllerBase
     {
         private readonly INewsService _newsService;
+        private readonly ICategoryService _categoryService;
 
-        public NewsDashboardController(INewsService newsService)
+        public NewsDashboardController(INewsService newsService, ICategoryService categoryService)
         {
             _newsService = newsService;
+            _categoryService = categoryService;
         }
 
+
+        [Authorize(Policy = "News Get")]
+        [HttpGet("/GetAllCategories")]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            try
+            {
+                var result = await _categoryService.GetAllCategoriesAsync();
+                var response = new ResponseDto<List<Category>>
+                {
+                    IsSuccessful = result.Any(),
+                    StatusCode = result.Any() ? 200 : 204,
+                    Data = result.ToList()
+                };
+
+                return result.Any() ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
         [Authorize(Policy ="News Get")]
         [HttpPost("/GetAllGeneratedNews")]
         public async Task<IActionResult> GetAllGeneratedNews(GetGeneratedNewsWithImagePathRequestDto request)
@@ -60,6 +91,34 @@ namespace Unbiased.Dashboard.Api.Controllers
                 };
 
                 return result > 0 ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        [Authorize(Policy = "News Update")]
+        [HttpGet("/GetAllGeneratedNewsForUpdate")]
+        public async Task<IActionResult> GetAllGeneratedNewsForUpdate([FromQuery]string id)
+        {
+            try
+            {
+                var result = await _newsService.GetGeneratedNewsByIdWithImageAsync(id);
+                var response = new ResponseDto<GenerateNewsWithImageDto>
+                {
+                    IsSuccessful = result is not null,
+                    StatusCode = result is not null ? 200 : 204,
+                    Data = result
+                };
+
+                return result is not null ? Ok(response) : NoContent();
             }
             catch (Exception ex)
             {

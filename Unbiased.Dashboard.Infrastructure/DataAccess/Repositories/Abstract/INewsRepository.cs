@@ -6,6 +6,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Abstract
     {
         Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(GetGeneratedNewsWithImagePathRequestDto requestDto);
         Task<int> GetAllGeneratedNewsWithImageCountAsync(GetGeneratedNewsWithImagePathRequestDto requestDto);
+        Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id);
 
     }
 }

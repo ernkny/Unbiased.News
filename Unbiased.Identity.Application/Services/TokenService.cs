@@ -15,12 +15,10 @@ namespace Unbiased.Identity.Application.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly IMediator _mediator;
         private readonly CustomTokenOption _customTokenOption;
 
-        public TokenService(IMediator mediator, IOptions<CustomTokenOption> customTokenOption)
+        public TokenService(IOptions<CustomTokenOption> customTokenOption)
         {
-            _mediator = mediator;
             _customTokenOption = customTokenOption.Value;
         }
 
