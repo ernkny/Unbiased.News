@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Unbiased.Dashboard.Application.Interfaces;
 using Unbiased.Dashboard.Domain.Dto_s;
 using Unbiased.Dashboard.Domain.Entities;
@@ -119,6 +120,70 @@ namespace Unbiased.Dashboard.Api.Controllers
                 };
 
                 return result is not null ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        [Authorize(Policy = "News Update")]
+        [HttpPost("/UpdateGeneratedNews")]
+        public async Task<IActionResult> UpdateGeneratedNews()
+        {
+            try
+            {
+                var formCollection = await Request.ReadFormAsync();
+                var image = formCollection.Files.FirstOrDefault();
+                var updateGeneratedNewsDto = JsonConvert.DeserializeObject<UpdateGeneratedNewsDto>(formCollection["updateGeneratedNewsDto"].FirstOrDefault());
+
+                var result = await _newsService.UpdateGeneratedNewsWithImageAsync(image, updateGeneratedNewsDto);
+                var response = new ResponseDto<bool>
+                {
+                    IsSuccessful = result,
+                    StatusCode = result ? 200 : 204,
+                    Data = result
+                };
+
+                return result ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        [Authorize(Policy = "News Add")]
+        [HttpPost("/InsertGeneratedNews")]
+        public async Task<IActionResult> InsertGeneratedNews()
+        {
+            try
+            {
+                var formCollection = await Request.ReadFormAsync();
+                var image = formCollection.Files.FirstOrDefault();
+                var insertNewsWithImageDto = JsonConvert.DeserializeObject<InsertNewsWithImageDto>(formCollection["InsertNewsWithImageDto"].FirstOrDefault());
+
+                var result = await _newsService.InsertNewsWithImageAsync(image, insertNewsWithImageDto);
+                var response = new ResponseDto<bool>
+                {
+                    IsSuccessful = result,
+                    StatusCode = result ? 200 : 204,
+                    Data = result
+                };
+
+                return result ? Ok(response) : NoContent();
             }
             catch (Exception ex)
             {

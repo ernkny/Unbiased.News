@@ -33,14 +33,11 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
                     var newGuid = Guid.NewGuid();
                     var jpgFilePath = Path.Combine(picturesPath, $"{newGuid}.jpg");
                     var jpegFilePath = Path.Combine(picturesPath, $"{newGuid}.jpeg");
-
-                    // Upload original image as .jpg
                     using (var originalStream = new MemoryStream(imageBytes))
                     {
                         await UploadToS3(originalStream, $"Pictures/{newGuid}.jpg", "image/jpeg", bucketName);
                     }
 
-                    // Convert and upload as .jpeg
                     using (var streamForConversion = new MemoryStream(imageBytes))
                     using (var image = Image.Load(streamForConversion))
                     {

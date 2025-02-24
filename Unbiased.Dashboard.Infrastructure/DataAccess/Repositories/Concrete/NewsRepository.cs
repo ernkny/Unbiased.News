@@ -84,5 +84,55 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 throw;
             }
         }
+
+        public async Task<bool> UpdateGeneratedNewsWithImageAsync(UpdateGeneratedNewsDto generatedNewsDto)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Id", generatedNewsDto.Id,DbType.String);
+                parameters.Add("@Title", generatedNewsDto.Title,DbType.String);
+                parameters.Add("@Detail", generatedNewsDto.Detail,DbType.String);
+                parameters.Add("@CategoryId", generatedNewsDto.CategoryId,DbType.Int32);
+                parameters.Add("@CreatedTime", generatedNewsDto.CreatedTime,DbType.DateTime);
+                parameters.Add("@IsApproved", generatedNewsDto.IsApproved,DbType.Boolean);
+                parameters.Add("@IsActive", generatedNewsDto.IsActive,DbType.Boolean);
+                parameters.Add("@ImagePath", generatedNewsDto.ImagePath,DbType.String);
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryFirstAsync<int>("UB_sp_UpdateGeneratedNews", parameters, commandType: CommandType.StoredProcedure)==1;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<bool> InsertGeneratedNewsWithImageAsync(InsertNewsWithImageDto insertNewsWithImageDto)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Title", insertNewsWithImageDto.Title, DbType.String);
+                parameters.Add("@Detail", insertNewsWithImageDto.Detail, DbType.String);
+                parameters.Add("@CategoryId", insertNewsWithImageDto.CategoryId, DbType.Int32);
+                parameters.Add("@Language", insertNewsWithImageDto.Language, DbType.String);
+                parameters.Add("@IsActive", insertNewsWithImageDto.IsActive, DbType.Boolean);
+                parameters.Add("@IsApproved", insertNewsWithImageDto.IsApproved, DbType.Boolean);
+                parameters.Add("@Path", insertNewsWithImageDto.ImagePath, DbType.String);
+
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.ExecuteAsync("UB_sp_InsertIndividualNewsWithImage", parameters, commandType: CommandType.StoredProcedure) == 1;
+                }
+            }
+            catch (Exception)
+            {
+                throw; 
+            }
+        }
+
     }
 }

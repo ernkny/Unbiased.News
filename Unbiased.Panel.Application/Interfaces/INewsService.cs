@@ -1,4 +1,5 @@
-﻿using Unbiased.Dashboard.Domain.Dto_s;
+﻿using Microsoft.AspNetCore.Http;
+using Unbiased.Dashboard.Domain.Dto_s;
 
 namespace Unbiased.Dashboard.Application.Interfaces
 {
@@ -7,5 +8,7 @@ namespace Unbiased.Dashboard.Application.Interfaces
         Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGenerateNewsWithImageAsync(GetGeneratedNewsWithImagePathRequestDto requestDto);
         Task<int> GetAllGenerateNewsWithImageCountAsync(GetGeneratedNewsWithImagePathRequestDto requestDto);
         Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id);
+        Task<bool> UpdateGeneratedNewsWithImageAsync(IFormFile file, UpdateGeneratedNewsDto generateNewsWithImageDto);
+        Task<bool> InsertNewsWithImageAsync(IFormFile file, InsertNewsWithImageDto insertNewsWithImageDto);
     }
 }

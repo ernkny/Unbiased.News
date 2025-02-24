@@ -11,6 +11,8 @@
         /// </summary>
         public string Detail { get; set; }
 
+        public int CategoryId { get; set; }
+
         /// <summary>
         /// Foreign key referencing the Category entity.
         /// </summary>

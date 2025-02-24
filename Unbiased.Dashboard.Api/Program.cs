@@ -1,7 +1,11 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MassTransit;
 using Unbiased.Dashboard.Application;
 using Unbiased.Dashboard.Application.Interfaces;
 using Unbiased.Dashboard.Application.Services;
+using Unbiased.Dashboard.Application.Validators;
+using Unbiased.Dashboard.Domain.Model.Aws;
 using Unbiased.Dashboard.Infrastructure;
 using Unbiased.Dashboard.Infrastructure.DataAccess.Connections;
 using Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Abstract;
@@ -30,8 +34,13 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfr
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>(); 
+builder.Services.AddScoped<AwsCredentials>();
 builder.Services.AddCustomTokenAuth(builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>()!);
+builder.Services.Configure<AwsCredentials>(builder.Configuration.GetSection("S3Settings"));
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateGeneratedNewsWithImageDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<InsertNewsWithImageDtoValidator>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
