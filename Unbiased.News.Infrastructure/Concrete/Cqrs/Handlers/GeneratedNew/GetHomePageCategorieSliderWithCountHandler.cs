@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Unbiased.News.Domain.DTOs;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.CategoriesQueris;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Category;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 
-namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 {
     public class GetHomePageCategorieSliderWithCountHandler : IRequestHandler<GetHomePageCategorieSliderWithCountQuery, IEnumerable<HomePageCategorieSliderWithCountDto>>
     {

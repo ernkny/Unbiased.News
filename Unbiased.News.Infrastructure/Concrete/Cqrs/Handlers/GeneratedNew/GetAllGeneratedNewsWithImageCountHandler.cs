@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQueries;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 
-namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 {
     public class GetAllGeneratedNewsWithImageCountHandler : IRequestHandler<GetAllGeneratedNewsWithImageCountQuery, int>
     {

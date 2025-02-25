@@ -95,6 +95,11 @@ namespace Unbiased.Dashboard.Application.Services
         {
             try
             {
+                if (file == null)
+                {
+                    return await _mediator.Send(new UpdateBlogCommand(blogRequestDto));
+                }
+
                 if (file != null && !new FormFileValidation().IsValidFile(file))
                 {
                     throw new Exception("File is not valid");

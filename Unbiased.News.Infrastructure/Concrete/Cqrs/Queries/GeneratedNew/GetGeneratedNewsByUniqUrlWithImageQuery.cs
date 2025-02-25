@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unbiased.News.Domain.DTOs;
 
-namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQueries
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew
 {
     public record GetGeneratedNewsByUniqUrlWithImageQuery(string uniqUrl): IRequest<GenerateNewsWithImageDto>;
 }

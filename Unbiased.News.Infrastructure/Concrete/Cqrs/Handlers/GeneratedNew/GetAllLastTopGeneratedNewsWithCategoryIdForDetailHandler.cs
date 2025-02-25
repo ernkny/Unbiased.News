@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Unbiased.News.Domain.DTOs;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQueries;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 
-namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 {
     public class GetAllLastTopGeneratedNewsWithCategoryIdForDetailHandler : IRequestHandler<GetAllLastTopGeneratedNewsWithCategoryIdForDetailQuery, IEnumerable<GenerateNewsWithImageDto>>
     {
@@ -16,7 +16,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
 
         public async Task<IEnumerable<GenerateNewsWithImageDto>> Handle(GetAllLastTopGeneratedNewsWithCategoryIdForDetailQuery request, CancellationToken cancellationToken)
         {
-            var result = await _newsRepository.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(request.categoryId,request.id);
+            var result = await _newsRepository.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(request.categoryId, request.id);
             return result;
         }
     }

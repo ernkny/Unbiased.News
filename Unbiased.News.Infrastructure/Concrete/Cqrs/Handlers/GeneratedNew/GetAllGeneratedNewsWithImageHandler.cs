@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Unbiased.News.Domain.DTOs;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNews;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 
-namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 {
     /// <summary>
     /// Handles the GetAllGeneratedNewsWithImageQuery to retrieve a list of generated news with images.

@@ -2,8 +2,8 @@
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.CategoriesQueris;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQueries;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Category;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew;
 using Unbiased.News.Infrastructure.Cqrs.Queries.Categories;
 
 namespace Unbiased.News.Application.Services

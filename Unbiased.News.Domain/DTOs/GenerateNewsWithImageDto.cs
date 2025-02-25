@@ -26,6 +26,11 @@ namespace Unbiased.News.Domain.DTOs
         public int CategoryId { get; set; }
 
         /// <summary>
+        /// Foreign key referencing the Category entity.
+        /// </summary>
+        public string CategoryName{ get; set; }
+
+        /// <summary>
         /// Match ID associated with the generated news.
         /// </summary>
         public string MatchId { get; set; }

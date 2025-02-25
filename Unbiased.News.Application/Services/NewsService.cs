@@ -2,8 +2,7 @@
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNews;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQueries;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew;
 
 namespace Unbiased.News.Application.Services
 {

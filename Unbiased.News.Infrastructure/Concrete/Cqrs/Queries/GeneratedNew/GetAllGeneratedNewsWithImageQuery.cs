@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Unbiased.News.Domain.DTOs;
 
-namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNews
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew
 {
     /// <summary>
     /// Query to retrieve all generated news with images.

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Entities = Unbiased.News.Domain.Entities;
 
-namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQueries
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew
 {
     /// <summary>
     /// Represents a query to retrieve all generated news.

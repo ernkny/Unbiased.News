@@ -1,14 +1,9 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unbiased.News.Domain.DTOs;
-using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNewsQueries;
+using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 
-namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNews
+namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 {
     public class GetHomePageTopCategoriesGeneratedNewsHandler : IRequestHandler<GetHomePageTopCategoriesGeneratedNewsQuery, IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>>
     {
