@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Abstract\" />
-    <Folder Include="Concrete\Cqrs\Commands\Engine\" />
     <Folder Include="Concrete\ExternalServices\" />
   </ItemGroup>
 

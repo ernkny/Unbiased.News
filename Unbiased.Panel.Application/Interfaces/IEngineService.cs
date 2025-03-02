@@ -6,6 +6,7 @@ namespace Unbiased.Dashboard.Application.Interfaces
     {
         Task<IEnumerable<EngineConfigurationDto>> GetAllEngineConfigurationsAsync();
         Task<string> GenerateContentAsync(string url);
-
+        Task<bool> DeActivateOrActivateSearchAsync(string id);
+        Task<bool> ActivateEngineImmediatlyAsync(string id);
     }
 }

@@ -46,6 +46,62 @@ namespace Unbiased.Dashboard.Api.Controllers
             }
         }
 
+        [Authorize(Policy = "Engine Management Get")]
+        [HttpGet("/DeActiveOrActive")]
+        public async Task<IActionResult> DeActiveOrActive([FromQuery]string id)
+        {
+            try
+            {
+                var result = await _engineService.DeActivateOrActivateSearchAsync(id);
+                var response = new ResponseDto<bool>
+                {
+                    IsSuccessful = true,
+                    StatusCode = 200,
+                    Data = result
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        [Authorize(Policy = "Engine Management Get")]
+        [HttpGet("/ActivateEngineImmediatly")]
+        public async Task<IActionResult> ActivateEngineImmediatlyAsync([FromQuery] string id)
+        {
+            try
+            {
+                var result = await _engineService.ActivateEngineImmediatlyAsync(id);
+                var response = new ResponseDto<bool>
+                {
+                    IsSuccessful = true,
+                    StatusCode = 200,
+                    Data = result
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
         [Authorize(Policy = "Engine Management Generate Content")]
         [HttpGet("/GenerateContent")]
         public async Task<IActionResult> GenerateContent([FromQuery]string url)
@@ -69,7 +125,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }

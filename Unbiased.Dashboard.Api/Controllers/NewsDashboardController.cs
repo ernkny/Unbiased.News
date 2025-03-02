@@ -44,7 +44,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -71,7 +71,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -99,7 +99,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -127,7 +127,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -159,7 +159,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -190,7 +190,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -217,7 +217,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }

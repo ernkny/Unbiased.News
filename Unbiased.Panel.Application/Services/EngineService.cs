@@ -1,8 +1,10 @@
-﻿using MediatR;
+﻿using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Unbiased.Dashboard.Application.Helpers.GptContentGenerator;
 using Unbiased.Dashboard.Application.Interfaces;
 using Unbiased.Dashboard.Domain.Dto_s;
+using Unbiased.Dashboard.Infrastructure.Concrete.Cqrs.Commands.Engine;
 using Unbiased.Dashboard.Infrastructure.Concrete.Cqrs.Queries.Engine;
 
 namespace Unbiased.Dashboard.Application.Services
@@ -16,6 +18,36 @@ namespace Unbiased.Dashboard.Application.Services
         {
             _mediator = mediator;
             _configuration = configuration;
+        }
+
+        public async Task<bool> DeActivateOrActivateSearchAsync(string id)
+        {
+            try
+            {
+
+                var result=  await _mediator.Send(new DeActivateOrActivateSearchCommand(id));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<bool> ActivateEngineImmediatlyAsync(string id)
+        {
+            try
+            {
+
+                var result = await _mediator.Send(new ActivateEngineImmediatlyCommand(id));
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<string> GenerateContentAsync(string url)
