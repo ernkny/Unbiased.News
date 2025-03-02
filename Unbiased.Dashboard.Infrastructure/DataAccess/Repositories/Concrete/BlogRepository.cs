@@ -88,6 +88,25 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        public async Task<bool> DeleteBlogByIdAsync(string id)
+        {
+            try
+            {
+                var paramaters = new DynamicParameters();
+                paramaters.Add("@Id", id);
+
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryFirstAsync<int>("UB_sp_DeleteBlog", paramaters, commandType: CommandType.StoredProcedure) == 1;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<bool> InsertBlogAsync(InsertBlogDtoRequest blogRequestDto,int UserId)
         {
             try

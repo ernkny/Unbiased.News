@@ -64,6 +64,19 @@ namespace Unbiased.Dashboard.Application.Services
             }
         }
 
+        public async Task<bool> DeleteNewsAsync(string id)
+        {
+            try
+            {
+                return await _mediator.Send(new DeleteGeneretedNewsCommand(id));
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<bool> UpdateGeneratedNewsWithImageAsync(IFormFile? file, UpdateGeneratedNewsDto generateNewsWithImageDto)
         {
             try

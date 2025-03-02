@@ -10,7 +10,7 @@ namespace Unbiased.Dashboard.Application.Validators
             long maxFileSize = 10 * 1024 * 1024; // 10 MB
             string[] permittedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
 
-            if (file.Length == 0 || file.Length > maxFileSize)
+            if (file == null ||  file.Length == 0 || file.Length > maxFileSize)
             {
                 return false;
             }

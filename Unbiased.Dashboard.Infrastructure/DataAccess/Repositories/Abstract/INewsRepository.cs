@@ -9,6 +9,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Abstract
         Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id);
         Task<bool> UpdateGeneratedNewsWithImageAsync(UpdateGeneratedNewsDto generatedNewsDto);
         Task<bool> InsertGeneratedNewsWithImageAsync(InsertNewsWithImageDto insertNewsWithImageDto);
+        Task<bool> DeleteNewsByIdAsync(string id);
 
     }
 }

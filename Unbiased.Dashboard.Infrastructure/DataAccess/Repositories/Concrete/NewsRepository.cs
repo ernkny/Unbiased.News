@@ -85,6 +85,25 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        public async Task<bool> DeleteNewsByIdAsync(string id)
+        {
+            try
+            {
+                var paramaters = new DynamicParameters();
+                paramaters.Add("@Id", id);
+
+                using (var connection = _connection.CreateConnection())
+                {
+                    return await connection.QueryFirstAsync<int>("UB_sp_DeleteNews", paramaters, commandType: CommandType.StoredProcedure)==1;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<bool> UpdateGeneratedNewsWithImageAsync(UpdateGeneratedNewsDto generatedNewsDto)
         {
             try
@@ -125,7 +144,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
 
                 using (var connection = _connection.CreateConnection())
                 {
-                    return await connection.ExecuteAsync("UB_sp_InsertIndividualNewsWithImage", parameters, commandType: CommandType.StoredProcedure) == 1;
+                    return await connection.QueryFirstAsync<int>("UB_sp_InsertIndividualNewsWithImage", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
             catch (Exception)

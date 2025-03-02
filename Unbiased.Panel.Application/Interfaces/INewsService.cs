@@ -10,5 +10,6 @@ namespace Unbiased.Dashboard.Application.Interfaces
         Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id);
         Task<bool> UpdateGeneratedNewsWithImageAsync(IFormFile file, UpdateGeneratedNewsDto generateNewsWithImageDto);
         Task<bool> InsertNewsWithImageAsync(IFormFile file, InsertNewsWithImageDto insertNewsWithImageDto);
+        Task<bool> DeleteNewsAsync(string id);
     }
 }

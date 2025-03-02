@@ -42,7 +42,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex is not null ? ex.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -70,7 +70,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex is not null ? ex.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -98,7 +98,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex is not null ? ex.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -130,7 +130,7 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex is not null ? ex.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }
@@ -167,7 +167,34 @@ namespace Unbiased.Dashboard.Api.Controllers
                 {
                     IsSuccessful = false,
                     StatusCode = 500,
-                    Data = "An error occurred while processing your request."
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        [Authorize(Policy = "Blog Posts Delete")]
+        [HttpDelete("/DeleteBlogs")]
+        public async Task<IActionResult> DeleteBlogs([FromQuery]string id)
+        {
+            try
+            {
+                var result= await _blogService.DeleteBlogAsync(id);
+                var response = new ResponseDto<bool>
+                {
+                    IsSuccessful = result,
+                    StatusCode = result ? 200 : 204,
+                    Data = result
+                };
+                return result ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = ex is not null ? ex.Message : "An error occurred while processing your request."
                 };
                 return StatusCode(500, errorResponse);
             }

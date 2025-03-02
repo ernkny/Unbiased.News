@@ -63,11 +63,24 @@ namespace Unbiased.Dashboard.Application.Services
             }
         }
 
+        public async Task<bool> DeleteBlogAsync(string id)
+        {
+            try
+            {
+                return await _mediator.Send(new DeleteBlogCommand(id));
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<bool> InsertBlogAsync(InsertBlogDtoRequest blogRequestDto, int UserId, IFormFile file)
         {
             try
             {
-                if (file != null && !new FormFileValidation().IsValidFile(file))
+                if (!new FormFileValidation().IsValidFile(file))
                 {
                     throw new Exception("File is not valid");
                 }

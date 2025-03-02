@@ -10,6 +10,7 @@ namespace Unbiased.Dashboard.Application.Interfaces
         Task<int> GetAllBlogsCountAsync(BlogRequestDto blogRequestDto);
         Task<bool> InsertBlogAsync(InsertBlogDtoRequest blogRequestDto, int UserId, IFormFile file);
         Task<bool> UpdateBlogAsync(UpdateBlogDtoRequest blogRequestDto, IFormFile file);
+        Task<bool> DeleteBlogAsync(string id);
 
     }
 }

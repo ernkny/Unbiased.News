@@ -9,5 +9,6 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Abstract
         Task<int> GetAllBlogsCountAsync(BlogRequestDto blogRequestDto);
         Task<bool> InsertBlogAsync(InsertBlogDtoRequest blogRequestDto, int UserId);
         Task<bool> UpdateBlogAsync(UpdateBlogDtoRequest blogRequestDto);
+        Task<bool> DeleteBlogByIdAsync(string id);
     }
 }

@@ -182,7 +182,33 @@ namespace Unbiased.Dashboard.Api.Controllers
                     StatusCode = result ? 200 : 204,
                     Data = result
                 };
+                return response is not null ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
 
+        [Authorize(Policy = "News Delete")]
+        [HttpDelete("/DeleteNews")]
+        public async Task<IActionResult> DeleteNews([FromQuery] string id)
+        {
+            try
+            {
+                var result = await _newsService.DeleteNewsAsync(id);
+                var response = new ResponseDto<bool>
+                {
+                    IsSuccessful = result,
+                    StatusCode = result ? 200 : 204,
+                    Data = result
+                };
                 return result ? Ok(response) : NoContent();
             }
             catch (Exception ex)

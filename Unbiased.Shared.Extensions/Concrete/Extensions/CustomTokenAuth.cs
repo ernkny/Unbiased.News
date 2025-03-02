@@ -46,6 +46,12 @@ namespace Unbiased.Shared.Extensions.Concrete.Extensions
                 options.AddPolicy("Settings Delete", policy => policy.RequireClaim("permissions", "Settings Delete"));
                 options.AddPolicy("Settings Update", policy => policy.RequireClaim("permissions", "Settings Update"));
                 options.AddPolicy("Settings Get", policy => policy.RequireClaim("permissions", "Settings Get"));
+
+                options.AddPolicy("Engine Management Add", policy => policy.RequireClaim("permissions", "Engine Management Add"));
+                options.AddPolicy("Engine Management Delete", policy => policy.RequireClaim("permissions", "Engine Management Delete"));
+                options.AddPolicy("Engine Management Update", policy => policy.RequireClaim("permissions", "Engine Management Update"));
+                options.AddPolicy("Engine Management Get", policy => policy.RequireClaim("permissions", "Engine Management Get"));
+                options.AddPolicy("Engine Management Generate Content", policy => policy.RequireClaim("permissions", "Engine Management Generate Content"));
             });
 
             services.AddAuthentication(options =>
