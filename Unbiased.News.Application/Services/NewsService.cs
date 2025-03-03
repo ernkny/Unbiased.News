@@ -74,12 +74,12 @@ namespace Unbiased.News.Application.Services
             }
         }
 
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync()
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync(int categoryId,string language)
         {
             try
             {
 
-                var result = await _mediator.Send(new GetBannerGeneratedNewsWithImageQuery());
+                var result = await _mediator.Send(new GetBannerGeneratedNewsWithImageQuery(categoryId, language));
                 return result;
             }
             catch (Exception)

@@ -27,7 +27,7 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <param name="newsService">The news service instance.</param>
         [HttpGet("/GetAllGeneratedNews")]
-        public async Task<IActionResult> GetAllGeneratedNews(string language = "tr")
+        public async Task<IActionResult> GetAllGeneratedNews([FromQuery]string language = "tr")
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="pageNumber">The page number for pagination. Default is 1.</param>
         /// <returns>A list of generated news with images.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImage")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImage(int categoryId, string language = "TR", int pageNumber = 1)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImage([FromQuery] int categoryId, string language = "TR", int pageNumber = 1)
         {
             try
             {
@@ -221,11 +221,11 @@ namespace Unbiased.News.Api.Controllers
         /// and server errors, providing clear and actionable HTTP responses for API consumers.
         /// </summary>
         [HttpGet("/GetBannerGeneratedNews")]
-        public async Task<IActionResult> GetBannerGeneratedNews()
+        public async Task<IActionResult> GetBannerGeneratedNews([FromQuery]int categoryId,string langauge)
         {
             try
             {
-                var result = await _newsService.GetBannerGeneratedNewsWithImageAsync();
+                var result = await _newsService.GetBannerGeneratedNewsWithImageAsync(categoryId,langauge);
                 if (result == null)
                 {
 

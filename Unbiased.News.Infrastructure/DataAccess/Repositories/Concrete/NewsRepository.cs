@@ -87,13 +87,16 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync()
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync(int categoryId,string language)
         {
             try
             {
                 using (var connection = _connection.CreateConnection())
                 {
-                    return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsForBannerWithImagePath", commandType: CommandType.StoredProcedure);
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@CategoryId", categoryId);
+                    parameters.Add("@Language", language);
+                    return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsForBannerWithImagePath",parameters, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception)
