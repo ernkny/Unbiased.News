@@ -142,13 +142,14 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(int categoryId,string uniqUrlPath)
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(int categoryId,string uniqUrlPath,string language)
         {
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@id", uniqUrlPath);
                 parameters.Add("@categoryid", categoryId);
+                parameters.Add("@language", language);
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetAllLastTopGeneratedNewsWithCategoryId", parameters, commandType: CommandType.StoredProcedure);

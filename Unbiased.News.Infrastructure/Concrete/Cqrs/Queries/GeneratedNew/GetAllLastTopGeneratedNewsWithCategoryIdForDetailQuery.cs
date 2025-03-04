@@ -8,5 +8,5 @@ using Unbiased.News.Domain.DTOs;
 
 namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew
 {
-    public record GetAllLastTopGeneratedNewsWithCategoryIdForDetailQuery(string id, int categoryId) : IRequest<IEnumerable<GenerateNewsWithImageDto>>;
+    public record GetAllLastTopGeneratedNewsWithCategoryIdForDetailQuery(string id, int categoryId,string language) : IRequest<IEnumerable<GenerateNewsWithImageDto>>;
 }

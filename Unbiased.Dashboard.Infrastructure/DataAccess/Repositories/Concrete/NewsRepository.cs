@@ -137,7 +137,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 parameters.Add("@Title", insertNewsWithImageDto.Title, DbType.String);
                 parameters.Add("@Detail", insertNewsWithImageDto.Detail, DbType.String);
                 parameters.Add("@CategoryId", insertNewsWithImageDto.CategoryId, DbType.Int32);
-                parameters.Add("@Language", insertNewsWithImageDto.Language, DbType.String);
+                parameters.Add("@Language", insertNewsWithImageDto.Language.ToUpper(), DbType.String);
                 parameters.Add("@IsActive", insertNewsWithImageDto.IsActive, DbType.Boolean);
                 parameters.Add("@IsApproved", insertNewsWithImageDto.IsApproved, DbType.Boolean);
                 parameters.Add("@Path", insertNewsWithImageDto.ImagePath, DbType.String);

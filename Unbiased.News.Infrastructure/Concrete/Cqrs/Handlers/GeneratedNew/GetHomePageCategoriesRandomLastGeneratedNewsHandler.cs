@@ -16,7 +16,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 
         public async Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> Handle(GetHomePageCategoriesRandomLastGeneratedNewsQuery request, CancellationToken cancellationToken)
         {
-            var result = await _categoriesRepository.GetHomePageCategoriesRandomLastGeneratedNewsAsync();
+            var result = await _categoriesRepository.GetHomePageCategoriesRandomLastGeneratedNewsAsync(request.language);
             return result;
         }
     }

@@ -42,11 +42,11 @@ namespace Unbiased.News.Application.Services
             }
         }
 
-        public async Task<List<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync()
+        public async Task<List<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync(string language)
         {
             try
             {
-                var result = await _mediator.Send(new GetHomePageCategorieSliderWithCountQuery());
+                var result = await _mediator.Send(new GetHomePageCategorieSliderWithCountQuery(language));
                 return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategorieSliderWithCountDto>().ToList();
             }
             catch (Exception)
@@ -56,11 +56,11 @@ namespace Unbiased.News.Application.Services
             }
         }
 
-        public async Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomGeneratedNewsAsync()
+        public async Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomGeneratedNewsAsync(string language)
         {
             try
             {
-                var result = await _mediator.Send(new GetHomePageCategoriesRandomLastGeneratedNewsQuery());
+                var result = await _mediator.Send(new GetHomePageCategoriesRandomLastGeneratedNewsQuery(language));
                 return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategoriesRandomLastGeneratedNewsDto>().ToList();
             }
             catch (Exception)
@@ -70,11 +70,11 @@ namespace Unbiased.News.Application.Services
             }
         }
 
-        public async Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync()
+        public async Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync(string language)
         {
             try
             {
-                var result = await _mediator.Send(new GetHomePageTopCategoriesGeneratedNewsQuery());
+                var result = await _mediator.Send(new GetHomePageTopCategoriesGeneratedNewsQuery(language));
                 return result is not null ? result.ToList() : Enumerable.Empty<HomePageCategoriesRandomLastGeneratedNewsDto>().ToList();
             }
             catch (Exception)

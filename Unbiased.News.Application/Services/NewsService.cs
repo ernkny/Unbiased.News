@@ -60,11 +60,11 @@ namespace Unbiased.News.Application.Services
             }
         }
 
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(int categoryId, string uniqUrlPath)
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(int categoryId, string uniqUrlPath,string language)
         {
             try
             {
-                var result = await _mediator.Send(new GetAllLastTopGeneratedNewsWithCategoryIdForDetailQuery(uniqUrlPath, categoryId));
+                var result = await _mediator.Send(new GetAllLastTopGeneratedNewsWithCategoryIdForDetailQuery(uniqUrlPath, categoryId, language));
                 return result;
             }
             catch (Exception)

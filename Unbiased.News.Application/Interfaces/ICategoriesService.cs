@@ -13,8 +13,8 @@ namespace Unbiased.News.Application.Interfaces
         /// </summary>
         /// <returns>A list of categories.</returns>
         Task<List<Category>> GetAllCategoriesAsync();
-        Task<List<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync();
-        Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomGeneratedNewsAsync();
-        Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync();
+        Task<List<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync(string language);
+        Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomGeneratedNewsAsync(string language);
+        Task<List<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync(string language);
     }
 }

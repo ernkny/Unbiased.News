@@ -27,11 +27,11 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <param name="newsService">The news service instance.</param>
         [HttpGet("/GetAllGeneratedNews")]
-        public async Task<IActionResult> GetAllGeneratedNews([FromQuery]string language = "tr")
+        public async Task<IActionResult> GetAllGeneratedNews([FromQuery]string language = "TR")
         {
             try
             {
-                var result = await _newsService.GetAllGeneratedNewsAsync(language.Trim().ToLower());
+                var result = await _newsService.GetAllGeneratedNewsAsync(language.Trim().ToUpper());
                 var response = new ResponseDto<List<GeneratedNew>>
                 {
                     IsSuccessful = result.Any(),
@@ -221,11 +221,11 @@ namespace Unbiased.News.Api.Controllers
         /// and server errors, providing clear and actionable HTTP responses for API consumers.
         /// </summary>
         [HttpGet("/GetBannerGeneratedNews")]
-        public async Task<IActionResult> GetBannerGeneratedNews([FromQuery]int categoryId,string langauge)
+        public async Task<IActionResult> GetBannerGeneratedNews([FromQuery]int categoryId,string language)
         {
             try
             {
-                var result = await _newsService.GetBannerGeneratedNewsWithImageAsync(categoryId,langauge);
+                var result = await _newsService.GetBannerGeneratedNewsWithImageAsync(categoryId, language);
                 if (result == null)
                 {
 
@@ -264,11 +264,11 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="UniqUrl">The UniqUrl ID.</param>
         /// <returns>A count of generated news items with images.</returns>
         [HttpGet("/GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage")]
-        public async Task<IActionResult> GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage(int categoryId, string id)
+        public async Task<IActionResult> GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage(int categoryId, string id,string languge)
         {
             try
             {
-                var result = await _newsService.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(categoryId, id);
+                var result = await _newsService.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(categoryId, id,languge);
                 var response = new ResponseDto<List<GenerateNewsWithImageDto>>
                 {
                     IsSuccessful = true,

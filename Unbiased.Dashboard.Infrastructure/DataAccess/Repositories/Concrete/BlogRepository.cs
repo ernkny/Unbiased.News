@@ -29,6 +29,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 paramaters.Add("@IsApproved", blogRequestDto.IsApproved);
                 paramaters.Add("@SearchData", blogRequestDto.SearchData);
                 paramaters.Add("@StartDate", blogRequestDto.StartDate);
+                paramaters.Add("@Language", blogRequestDto.Language.ToUpper());
                 paramaters.Add("@EndDate", blogRequestDto.EndDate);
 
                 using (var connection = _connection.CreateConnection())
@@ -53,6 +54,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 paramaters.Add("@IsApproved", blogRequestDto.IsApproved);
                 paramaters.Add("@SearchData", blogRequestDto.SearchData);
                 paramaters.Add("@StartDate", blogRequestDto.StartDate);
+                paramaters.Add("@Language", blogRequestDto.Language.ToUpper());
                 paramaters.Add("@EndDate", blogRequestDto.EndDate);
 
                 using (var connection = _connection.CreateConnection())
@@ -116,6 +118,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 paramaters.Add("@Detail", blogRequestDto.Detail);
                 paramaters.Add("@UserId", UserId);
                 paramaters.Add("@Path", blogRequestDto.Path);
+                paramaters.Add("@Language", blogRequestDto.Language.ToUpper());
                 paramaters.Add("@CreatedTime", DateTime.UtcNow);
                 paramaters.Add("@IsActive", blogRequestDto.IsActive);
                 paramaters.Add("@IsApproved", blogRequestDto.IsApproved);
@@ -141,6 +144,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 paramaters.Add("@Title", blogRequestDto.Title);
                 paramaters.Add("@Detail", blogRequestDto.Detail);
                 paramaters.Add("@Path", blogRequestDto.Path);
+                paramaters.Add("@Language", blogRequestDto.Language.ToUpper());
                 paramaters.Add("@CreatedTime", DateTime.UtcNow);
                 paramaters.Add("@IsActive", blogRequestDto.IsActive);
                 paramaters.Add("@IsApproved", blogRequestDto.IsApproved);

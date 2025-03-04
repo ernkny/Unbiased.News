@@ -3,5 +3,5 @@ using Unbiased.News.Domain.DTOs;
 
 namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Category
 {
-    public record GetHomePageCategorieSliderWithCountQuery() : IRequest<IEnumerable<HomePageCategorieSliderWithCountDto>>;
+    public record GetHomePageCategorieSliderWithCountQuery(string language) : IRequest<IEnumerable<HomePageCategorieSliderWithCountDto>>;
 }

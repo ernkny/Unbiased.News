@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System.Data;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
@@ -35,29 +36,35 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<IEnumerable<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync()
+        public async Task<IEnumerable<HomePageCategorieSliderWithCountDto>> GetHomePageCategorieSliderWithCountAsync(string language)
         {
             using (var connection = _connection.CreateConnection())
             {
-                var result = await connection.QueryAsync<HomePageCategorieSliderWithCountDto>($"Exec UB_sp_HomePageCategorieSliderWithCount");
+                var parameters = new DynamicParameters();
+                parameters.Add("@language", language);
+                var result = await connection.QueryAsync<HomePageCategorieSliderWithCountDto>($"UB_sp_HomePageCategorieSliderWithCount", parameters, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
 
-        public async Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomLastGeneratedNewsAsync()
+        public async Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageCategoriesRandomLastGeneratedNewsAsync(string language)
         {
             using (var connection = _connection.CreateConnection())
             {
-                var result = await connection.QueryAsync<HomePageCategoriesRandomLastGeneratedNewsDto>($"Exec UB_sp_GetRandomLastGeneratedNews");
+                var parameters = new DynamicParameters();
+                parameters.Add("@language", language);
+                var result = await connection.QueryAsync<HomePageCategoriesRandomLastGeneratedNewsDto>($"UB_sp_GetRandomLastGeneratedNews", parameters, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
 
-        public async Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync()
+        public async Task<IEnumerable<HomePageCategoriesRandomLastGeneratedNewsDto>> GetHomePageTopCategoriesGeneratedNewsAsync(string language)
         {
             using (var connection = _connection.CreateConnection())
             {
-                var result = await connection.QueryAsync<HomePageCategoriesRandomLastGeneratedNewsDto>($"Exec UB_sp_GetTopCategoriesGeneratedNews");
+                var parameters = new DynamicParameters();
+                parameters.Add("@language", language);
+                var result = await connection.QueryAsync<HomePageCategoriesRandomLastGeneratedNewsDto>($"UB_sp_GetTopCategoriesGeneratedNews", parameters, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }

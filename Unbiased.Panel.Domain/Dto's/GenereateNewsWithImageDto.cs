@@ -25,7 +25,7 @@
 
         public DateTime CreatedTime { get; set; }
 
-        public string Langauge { get; set; }
+        public string Language { get; set; }
 
         public string Path { get; set; }
 

@@ -66,11 +66,11 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <returns>A list of categories with details.</returns>
         [HttpGet("/CategoriesWithArticleCountAndMostVisitedNews")]
-        public async Task<IActionResult> CategoriesWithArticleCountAndMostVisitedNews()
+        public async Task<IActionResult> CategoriesWithArticleCountAndMostVisitedNews(string language)
         {
             try
             {
-                var result = await _categoriesService.GetHomePageCategorieSliderWithCountAsync();
+                var result = await _categoriesService.GetHomePageCategorieSliderWithCountAsync(language);
                 var response = new ResponseDto<List<HomePageCategorieSliderWithCountDto>>
                 {
                     IsSuccessful = true,
@@ -96,11 +96,11 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <returns>A list of categories with details.</returns>
         [HttpGet("/CategoriesWithRandomGeneratedNews")]
-        public async Task<IActionResult> CategoriesWithRandomGeneratedNews()
+        public async Task<IActionResult> CategoriesWithRandomGeneratedNews(string language)
         {
             try
             {
-                var result = await _categoriesService.GetHomePageCategoriesRandomGeneratedNewsAsync();
+                var result = await _categoriesService.GetHomePageCategoriesRandomGeneratedNewsAsync(language);
                 var response = new ResponseDto<List<HomePageCategoriesRandomLastGeneratedNewsDto>>
                 {
                     IsSuccessful = true,
@@ -126,11 +126,11 @@ namespace Unbiased.News.Api.Controllers
         /// </summary>
         /// <returns>A list of categories with details.</returns>
         [HttpGet("/TopCategoriesWithGeneratedNews")]
-        public async Task<IActionResult> TopCategoriesWithGeneratedNews()
+        public async Task<IActionResult> TopCategoriesWithGeneratedNews(string language)
         {
             try
             {
-                var result = await _categoriesService.GetHomePageTopCategoriesGeneratedNewsAsync();
+                var result = await _categoriesService.GetHomePageTopCategoriesGeneratedNewsAsync(language);
                 var response = new ResponseDto<List<HomePageCategoriesRandomLastGeneratedNewsDto>>
                 {
                     IsSuccessful = true,

@@ -16,7 +16,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 
         public async Task<IEnumerable<HomePageCategorieSliderWithCountDto>> Handle(GetHomePageCategorieSliderWithCountQuery request, CancellationToken cancellationToken)
         {
-            return await _categoriesRepository.GetHomePageCategorieSliderWithCountAsync();
+            return await _categoriesRepository.GetHomePageCategorieSliderWithCountAsync(request.language);
         }
     }
 }
