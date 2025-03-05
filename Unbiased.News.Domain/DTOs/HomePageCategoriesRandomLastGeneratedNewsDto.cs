@@ -3,6 +3,7 @@
     public class HomePageCategoriesRandomLastGeneratedNewsDto
     {
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public string Title { get; set; }
         public string Detail { get; set; }
         public Guid Id { get; set; }
