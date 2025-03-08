@@ -15,7 +15,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 
         public async Task<int> Handle(GetAllGeneratedNewsWithImageCountQuery request, CancellationToken cancellationToken)
         {
-            return await _newsRepository.GetAllGeneratedNewsWithImageCountAsync(request.categoryId);
+            return await _newsRepository.GetAllGeneratedNewsWithImageCountAsync(request.categoryId,request.title);
         }
     }
 }

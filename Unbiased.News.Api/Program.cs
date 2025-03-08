@@ -1,7 +1,10 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MassTransit;
 using Unbiased.News.Application;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Application.Services;
+using Unbiased.News.Application.Validators;
 using Unbiased.News.Infrastructure;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
@@ -49,8 +52,11 @@ builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 builder.Services.AddScoped<IBlogService, BlogService>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 builder.Services.AddCustomTokenAuth(builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>()!);
+builder.Services.AddValidatorsFromAssemblyContaining<ContactValidator>();
 var app = builder.Build();
 
 app.UseCors("MyCorsPolicy");

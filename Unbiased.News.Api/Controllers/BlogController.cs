@@ -18,12 +18,12 @@ namespace Unbiased.News.Api.Controllers
         }
 
         [HttpGet("/GetAllBlogsWithImage")]
-        public async Task<IActionResult> GetAllBlogsWithImage(string? searchData,int pageNumber = 1)
+        public async Task<IActionResult> GetAllBlogsWithImage(string language,string? searchData,int pageNumber = 1)
         {
             try
             {
 
-                var result = await _blogService.GetAllBlogsWithImageAsync(pageNumber,searchData);
+                var result = await _blogService.GetAllBlogsWithImageAsync(language, pageNumber,searchData);
                 if (!result.Any())
                 {
                     return NoContent();
@@ -50,12 +50,12 @@ namespace Unbiased.News.Api.Controllers
         }
 
         [HttpGet("/GetAllBlogsWithCount")]
-        public async Task<IActionResult> GetAllBlogsWithCount(string? searchData)
+        public async Task<IActionResult> GetAllBlogsWithCount(string language,string? searchData)
         {
             try
             {
 
-                var result = await _blogService.GetAllBlogsWithImageCountAsync(searchData);
+                var result = await _blogService.GetAllBlogsWithImageCountAsync(language,searchData);
                 if (result<=0)
                 {
                     return NoContent();

@@ -61,13 +61,13 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="pageNumber">The page number for pagination. Default is 1.</param>
         /// <returns>A list of generated news with images.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImage")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImage([FromQuery] int categoryId, string language = "TR", int pageNumber = 1)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImage([FromQuery] int categoryId, string? title,string language = "TR", int pageNumber = 1)
         {
             try
             {
                 language = string.IsNullOrEmpty(language) ? "TR" : language.ToUpper();
 
-                var result = await _newsService.GetAllGeneratedNewsWithImageAsync(categoryId, pageNumber, language);
+                var result = await _newsService.GetAllGeneratedNewsWithImageAsync(categoryId, pageNumber, language, title);
                 if (!result.Any())
                 {
                     return NoContent();  
@@ -100,11 +100,11 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="categoryId">The category ID to count news items from.</param>
         /// <returns>A count of generated news items with images.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImageCount")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(int categoryId, string? title)
         {
             try
             {
-                var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(categoryId);
+                var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(categoryId,title);
                 var response = new ResponseDto<int>
                 {
                     IsSuccessful = true,
@@ -264,11 +264,11 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="UniqUrl">The UniqUrl ID.</param>
         /// <returns>A count of generated news items with images.</returns>
         [HttpGet("/GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage")]
-        public async Task<IActionResult> GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage(int categoryId, string id,string languge)
+        public async Task<IActionResult> GetAllLastTopGeneratedNewsWithCategoryIdForDetailPage(int categoryId, string id,string language)
         {
             try
             {
-                var result = await _newsService.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(categoryId, id,languge);
+                var result = await _newsService.GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(categoryId, id, language);
                 var response = new ResponseDto<List<GenerateNewsWithImageDto>>
                 {
                     IsSuccessful = true,

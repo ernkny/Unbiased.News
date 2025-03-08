@@ -32,7 +32,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 //        await _mediator.Send(new AddRangeAllNewsCommand(result));
                 //    }
                 //}
-                await Task.CompletedTask;
+                //await Task.CompletedTask;
             }
             catch (Exception)
             {

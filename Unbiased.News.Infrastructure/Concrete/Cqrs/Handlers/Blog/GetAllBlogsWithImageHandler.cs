@@ -16,7 +16,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.Blog
 
         public async Task<IEnumerable<BlogWithImageDto>> Handle(GetAllBlogsWithImageQuery request, CancellationToken cancellationToken)
         {
-            return await _blogRepository.GetAllBlogsWithImageAsync(request.pageNumber, request.searchData);
+            return await _blogRepository.GetAllBlogsWithImageAsync(request.language, request.pageNumber, request.searchData);
         }
     }
 }

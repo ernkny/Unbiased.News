@@ -5,7 +5,7 @@ using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Content;
 
 namespace Unbiased.News.Application.Services
 {
-    public class ContentService : IContentService
+    public sealed class ContentService : IContentService
     {
         private readonly IMediator _mediator;
 

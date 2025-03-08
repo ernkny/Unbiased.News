@@ -49,7 +49,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// Retrieves all generated news with images asynchronously.
         /// </summary>
         /// <returns>A collection of <see cref="GenerateNewsWithImageDto"/> objects.</returns>
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber,string language)
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber,string language,string? title)
         {
             try
             {
@@ -57,6 +57,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                 parameters.Add("@PageNumber", pageNumber);
                 parameters.Add("@CategoryId", categoryId);
                 parameters.Add("@Language", language);
+                parameters.Add("@Title", title);
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetAllGeneratedNewsWithImagePath", parameters, commandType: CommandType.StoredProcedure);
@@ -69,12 +70,13 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
+        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId, string? title)
         {
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@CategoryId", categoryId);
+                parameters.Add("@CategoryId", categoryId); 
+                parameters.Add("@Title", title);
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryFirstAsync<int>("UB_sp_GetAllGeneratedNewsWithImagePathCount", parameters, commandType: CommandType.StoredProcedure);

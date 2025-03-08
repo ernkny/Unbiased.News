@@ -23,13 +23,14 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// Retrieves all generated news with images asynchronously.
         /// </summary>
         /// <returns>A collection of <see cref="BlogWithImageDto"/> objects.</returns>
-        public async Task<IEnumerable<BlogWithImageDto>> GetAllBlogsWithImageAsync(int pageNumber,string searchData)
+        public async Task<IEnumerable<BlogWithImageDto>> GetAllBlogsWithImageAsync(string language, int pageNumber,string searchData)
         {
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@PageNumber", pageNumber);
                 parameters.Add("@SearchData", searchData);
+                parameters.Add("@Language", language);
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryAsync<BlogWithImageDto>("UB_sp_GetAllBlogsWithImageForMainPage", parameters, commandType: CommandType.StoredProcedure);
@@ -42,12 +43,13 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
-        public async Task<int> GetAllBlogsWithImageCountAsync(string? searchData)
+        public async Task<int> GetAllBlogsWithImageCountAsync(string language, string? searchData)
         {
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@SearchData", searchData);
+                parameters.Add("@Language", language);
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryFirstAsync<int>("UB_sp_GetAllBlogsWithImageForMainPageCount", parameters, commandType: CommandType.StoredProcedure);

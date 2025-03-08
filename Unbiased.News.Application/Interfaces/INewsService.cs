@@ -18,8 +18,8 @@ namespace Unbiased.News.Application.Interfaces
         /// Retrieves all generated news with images asynchronously.
         /// </summary>
         /// <returns>A task containing a collection of generated news with images.</returns>
-        Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId,int pageNumber, string language);
-        Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId);
+        Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId,int pageNumber, string language, string? title);
+        Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId, string? title);
 
         Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdAsync(string id);
         Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlAsync(string UniqUrl);

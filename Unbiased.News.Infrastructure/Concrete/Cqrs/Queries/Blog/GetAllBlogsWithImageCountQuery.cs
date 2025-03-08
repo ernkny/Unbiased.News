@@ -2,5 +2,5 @@
 
 namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Blog
 {
-    public record GetAllBlogsWithImageCountQuery(string? searchData):IRequest<int>;
+    public record GetAllBlogsWithImageCountQuery(string language, string? searchData):IRequest<int>;
 }

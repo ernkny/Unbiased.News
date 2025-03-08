@@ -30,12 +30,12 @@ namespace Unbiased.News.Application.Services
             }
         }
 
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber, string language)
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber, string language, string? title)
         {
             try
             {
 
-                var result = await _mediator.Send(new GetAllGeneratedNewsWithImageQuery(categoryId, pageNumber, language));
+                var result = await _mediator.Send(new GetAllGeneratedNewsWithImageQuery(categoryId, pageNumber, language,title));
                 return result;
             }
             catch (Exception)
@@ -45,12 +45,12 @@ namespace Unbiased.News.Application.Services
             }
         }
 
-        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId)
+        public async Task<int> GetAllGeneratedNewsWithImageCountAsync(int categoryId, string? title)
         {
             try
             {
 
-                var result = await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(categoryId));
+                var result = await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(categoryId,title));
                 return result;
             }
             catch (Exception)

@@ -5,7 +5,7 @@ using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Blog;
 
 namespace Unbiased.News.Application.Services
 {
-    public class BlogService:IBlogService
+    public sealed class BlogService:IBlogService
     {
         private readonly IMediator _mediator;
 
@@ -14,11 +14,11 @@ namespace Unbiased.News.Application.Services
             _mediator = mediator;
         }
 
-        public async  Task<IEnumerable<BlogWithImageDto>> GetAllBlogsWithImageAsync(int pageNumber, string searchData)
+        public async  Task<IEnumerable<BlogWithImageDto>> GetAllBlogsWithImageAsync(string language, int pageNumber, string searchData)
         {
             try
             {
-                return await _mediator.Send(new GetAllBlogsWithImageQuery(pageNumber, searchData));
+                return await _mediator.Send(new GetAllBlogsWithImageQuery(language, pageNumber, searchData));
             }
             catch (Exception)
             {
@@ -27,11 +27,11 @@ namespace Unbiased.News.Application.Services
             }
         }
 
-        public async Task<int> GetAllBlogsWithImageCountAsync(string? searchData)
+        public async Task<int> GetAllBlogsWithImageCountAsync(string language, string? searchData)
         {
             try
             {
-                return await _mediator.Send(new GetAllBlogsWithImageCountQuery(searchData));
+                return await _mediator.Send(new GetAllBlogsWithImageCountQuery(language, searchData));
             }
             catch (Exception)
             {

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Concrete\Cqrs\Commands\" />
     <Folder Include="Concrete\ExternalServices\" />
     <Folder Include="Abstract\" />
   </ItemGroup>
