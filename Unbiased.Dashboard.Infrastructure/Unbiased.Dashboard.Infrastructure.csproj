@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Unbiased.Panel.Domain\Unbiased.Dashboard.Domain.csproj" />
+    <ProjectReference Include="..\Unbiased.Dashboard.Domain\Unbiased.Dashboard.Domain.csproj" />
   </ItemGroup>
 
 </Project>
