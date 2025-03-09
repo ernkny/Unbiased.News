@@ -17,13 +17,35 @@ builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSql
 builder.Services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
 builder.Services.AddScoped<IApiKeyService, ApiKeyService>();
 builder.Services.AddHostedService<ApiKeyRefresherService>();
+var corsUrl = builder.Configuration.GetSection("ConnectionStrings:CorsApi").Value;
+var corsOrigins = Environment.GetEnvironmentVariable("CORS_ORIGINS") ?? corsUrl;
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("UnbiasedCorsPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:5001")
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        if (!string.IsNullOrEmpty(corsOrigins))
+        {
+            var origins = corsOrigins.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            if (origins.Length > 0)
+            {
+                builder.WithOrigins(origins)
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }
+            else
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }
+        }
+        else
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        }
     });
 });
 builder.Services.AddMassTransit(x =>
