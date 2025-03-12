@@ -32,8 +32,10 @@ namespace Unbiased.Shared.Extensions.Concrete.Extensions
                 options.AddPolicy("Access Control Update", policy => policy.RequireClaim("permissions", "Access Control Update"));
                 options.AddPolicy("Access Control Get", policy => policy.RequireClaim("permissions", "Access Control Get"));
 
-                options.AddPolicy("Customer Delete", policy => policy.RequireClaim("permissions", "Customer Delete"));
-                options.AddPolicy("Customer Get", policy => policy.RequireClaim("permissions", "Customer Get"));
+                options.AddPolicy("Media Library Add", policy => policy.RequireClaim("permissions", "Media Library Add"));
+                options.AddPolicy("Media Library Delete", policy => policy.RequireClaim("permissions", "Media Library Delete"));
+                options.AddPolicy("Media Library Update", policy => policy.RequireClaim("permissions", "Media Library Update"));
+                options.AddPolicy("Media Library Get", policy => policy.RequireClaim("permissions", "Media Library Get"));
                  
                 options.AddPolicy("Profile Add", policy => policy.RequireClaim("permissions", "Profile Add"));
                 options.AddPolicy("Profile Delete", policy => policy.RequireClaim("permissions", "Profile Delete"));
