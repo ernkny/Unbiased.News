@@ -29,6 +29,17 @@ builder.Services.AddMassTransit(x =>
     });
 });
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
 builder.Services.AddScoped<INewsService, NewsService>();
@@ -39,6 +50,8 @@ builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 builder.Services.AddScoped<IEngineService, EngineService>();
 builder.Services.AddScoped<IEngineRepository, EngineRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
+builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<AwsCredentials>();
 builder.Services.AddCustomTokenAuth(builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>()!);
 builder.Services.Configure<AwsCredentials>(builder.Configuration.GetSection("S3Settings"));
@@ -50,6 +63,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors("MyCorsPolicy");
 
 if (app.Environment.IsDevelopment())
 {

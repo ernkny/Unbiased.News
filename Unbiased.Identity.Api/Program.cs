@@ -29,6 +29,16 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
 builder.Services.Configure<Client>(builder.Configuration.GetSection("Clients:Unbiased"));
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
@@ -45,6 +55,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfr
 
 builder.Services.AddCustomTokenAuth(builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>()!);
 var app = builder.Build();
+
+app.UseCors("MyCorsPolicy");
 
 if (app.Environment.IsDevelopment())
 {
