@@ -11,5 +11,6 @@
         public DateTime LastUpdatedTime { get; set; }
         public DateTime NextRunTime { get; set; } 
         public int DailyCount { get; set; } 
+        public bool IsManuelImage { get; set; } 
     }
 }

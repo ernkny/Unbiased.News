@@ -24,5 +24,8 @@
         /// Language of the generated news.
         /// </summary>
         public string Language { get; set; }
+
+        public bool IsManuelImage { get; set; }
+
     }
 }

@@ -81,7 +81,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                                 Console.WriteLine($"Failed to retrieve clipboard text for URL: {url}");
                             }
 
-                            var closeButton = await newPage.WaitForSelectorAsync($"[aria-label='{closeDialog}']", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
+                            var closeButton = await newPage.WaitForSelectorAsync($"[data-mdc-dialog-action='close']", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
                             await closeButton.ClickAsync();
                         }
                     }

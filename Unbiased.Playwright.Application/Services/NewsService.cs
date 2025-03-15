@@ -78,7 +78,16 @@ namespace Unbiased.Playwright.Application.Services
                 _ = images.Count() == 0 ? isDone = true : isDone = false;
                 foreach (var item in images)
                 {
-                    var imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.Title, cancellationToken);
+                    var imageFile=string.Empty;
+                    if (!item.IsManuelImage)
+                    {
+                        imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.Title, cancellationToken);
+
+                    }
+                    else
+                    {
+                        imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                    }
                     if (imageFile is not null)
                     {
                         await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
@@ -124,8 +133,16 @@ namespace Unbiased.Playwright.Application.Services
                         var imageMatchValidate = await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
                         if (imageMatchValidate && saveGeneratedNews)
                         {
+                            var imageFile=string.Empty;
+                            if (!item.IsManuelImage)
+                            {
 
-                            var imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(result.Title, cancellationToken);
+                                imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(result.Title, cancellationToken);
+                            }
+                            else
+                            {
+                                imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                            }
                             if (imageFile is not null)
                             {
                                 await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto

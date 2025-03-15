@@ -21,12 +21,12 @@ namespace Unbiased.Dashboard.Application.Helpers.GptContentGenerator
             {
                 var detail= await contentParser(contentUrl);
                 var responseContent=string.Empty;
-                var prompt = $"I am sending you the content of a website. Please create new content in the same language as the original, and perform an analysis of it. Present this content and interpret it as if you have researched and written it yourself. Just send your response. A critical point is that your response must be in the same language as the content I provided!.Only focus on main article of content:{detail}";
+                var prompt = $"I am sending you the content of a website. Please create new content in the same language as the original!!, and perform an analysis of it. Present this content and interpret it as if you have researched and written it yourself. Just send your response. A critical point is that your response must be in the same language as the content I provided!!!!.Only focus on main article of content:{detail}";
                 var url = _configuration.GetSection("Urls:GptApi").Value;
                 var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
                 var requestData = new
                 {
-                    model = "gpt-4o-mini",
+                    model = "gpt-4",
                     messages = new[]
                     {
                     new { role = "user", content = prompt }
