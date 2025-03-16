@@ -9,7 +9,7 @@ namespace Unbiased.Dashboard.Application.Validators
         {
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Title is required")
-                .MaximumLength(100).WithMessage("Title must be less than or equal to 100 characters");
+                .MaximumLength(255).WithMessage("Title must be less than or equal to 255 characters");
 
             RuleFor(x => x.Detail)
                 .NotEmpty().WithMessage("Content is required");
