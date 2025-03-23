@@ -88,6 +88,10 @@ namespace Unbiased.Playwright.Application.Services
                     if (!item.IsManuelImage)
                     {
                         imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.Title, ImageGenerationSource.Freepik,cancellationToken);
+                        if (imageFile is null)
+                        {
+                            imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                        }
 
                     }
                     else
@@ -157,6 +161,10 @@ namespace Unbiased.Playwright.Application.Services
                             {
 
                                 imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(result.Title, ImageGenerationSource.Freepik, cancellationToken);
+                                if (imageFile is null)
+                                {
+                                    imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                                }
                             }
                             else
                             {

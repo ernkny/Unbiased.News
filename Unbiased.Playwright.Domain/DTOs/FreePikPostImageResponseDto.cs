@@ -9,7 +9,7 @@
         /// <summary>
         /// Contains the detailed data of the response from the Freepik API.
         /// </summary>
-        public FreePikPostImageResponse Data { get; set; }
+        public FreePikPostImageResponse Data { get; set; } = new FreePikPostImageResponse();
 
         /// <summary>
         /// Nested class representing the detailed data structure of the Freepik API response.

@@ -37,7 +37,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// </summary>
         /// <param name="titleOfGeneration">The prompt text describing the image to generate.</param>
         /// <returns>A response DTO containing information about the image generation task.</returns>
-        private async Task<FreePikPostImageResponseDto> SendMessageToFreePikForGenerateImage(string titleOfGeneration)
+        private async Task<FreePikPostImageResponseDto> SendMessageToFreePikForGenerateImage(string titleOfGeneration, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -51,30 +51,89 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     seed = 2147483648
                 };
 
+                var json = JsonSerializer.Serialize(requestData);
                 var request = new HttpRequestMessage(HttpMethod.Post, url)
                 {
-                    Content = new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/json")
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
                 };
 
                 request.Headers.Add("x-freepik-api-key", apiKey);
 
-                var response = await _httpClient.SendAsync(request);
-
+                var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken);
                 response.EnsureSuccessStatusCode();
 
-                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
 
                 var result = JsonSerializer.Deserialize<FreePikPostImageResponseDto>(responseContent, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                return result;
+                if (result?.Data?.task_id == null)
+                {
+                    throw new Exception("Freepik API did not return a valid task_id. Response: " + responseContent);
+                }
+
+                var finalResult = await PollFreepikImageUntilReadyAsync(result.Data.task_id, cancellationToken);
+
+                if (finalResult?.Data?.generated?.Any() != true)
+                {
+                    throw new Exception("Freepik image generation did not complete in expected time.");
+                }
+
+                return finalResult;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine("ERROR: " + ex.Message);
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Polls the Freepik API to check if the image generation task with the specified taskId has been completed.
+        /// It sends repeated GET requests at defined intervals until the image is ready or the maximum number of retries is reached.
+        /// Returns the completed image response if available; otherwise, returns null after all retries.
+        /// </summary>
+        /// <param name="taskId">The task ID returned from the Freepik API when initiating image generation.</param>
+        /// <param name="cancellationToken">A cancellation token to cancel the operation if needed.</param>
+        /// <param name="maxRetries">The maximum number of polling attempts (default is 6).</param>
+        /// <param name="delayMs">The delay in milliseconds between each polling attempt (default is 2000ms).</param>
+        private async Task<FreePikPostImageResponseDto?> PollFreepikImageUntilReadyAsync(string taskId, CancellationToken cancellationToken, int maxRetries = 6, int delayMs = 2000)
+        {
+            var baseUrl = _configuration.GetSection("Urls:FreePikApi").Value;
+            var apiKey = _configuration.GetSection("Keys:FreepikApiKey").Value;
+            var fullUrl = $"{baseUrl}/{taskId}";
+
+            for (int attempt = 0; attempt < maxRetries; attempt++)
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, fullUrl);
+                request.Headers.Add("x-freepik-api-key", apiKey);
+
+                var response = await _httpClient.SendAsync(request, cancellationToken);
+                var content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                Console.WriteLine($"Polling Attempt {attempt + 1}:");
+                Console.WriteLine(content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = JsonSerializer.Deserialize<FreePikPostImageResponseDto>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    if (result?.Data?.status == "COMPLETED" && result.Data.generated?.Any() == true)
+                    {
+                        return result;
+                    }
+                }
+
+                await Task.Delay(delayMs, cancellationToken);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -119,7 +178,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <param name="prompt">The text prompt describing the image to generate.</param>
         /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
         /// <returns>The URL of the generated image, or null if generation was unsuccessful.</returns>
-        public async Task<string?> GenerateImageUrlAsync(string prompt, CancellationToken cancellationToken)
+        public async Task<string> GenerateImageUrlAsync(string prompt, CancellationToken cancellationToken)
         {
             var creationResponse = await SendMessageToFreePikForGenerateImage(prompt);
             if (creationResponse?.Data?.task_id == null)
@@ -128,7 +187,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             await Task.Delay(2000, cancellationToken); 
 
             var resultUrl = await GetFreePikForGenerateImage(creationResponse.Data.task_id);
-            return resultUrl.Data.generated.FirstOrDefault();
+            return resultUrl.Data.generated.FirstOrDefault()!;
         }
     }
 }
