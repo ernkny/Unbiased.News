@@ -3,8 +3,18 @@ using Unbiased.Playwright.Application.Jobs;
 
 namespace Unbiased.Playwright.Application.Configurations.Quartz
 {
+    /// <summary>
+    /// Static configuration class for Quartz job scheduler.
+    /// Provides centralized configuration for all scheduled jobs in the application.
+    /// </summary>
     public static class QuartzConfiguration
     {
+        /// <summary>
+        /// Configures all scheduled jobs with their respective triggers and schedules.
+        /// Sets up jobs for news generation with Playwright, news processing, image generation,
+        /// horoscope data collection, and daily content generation.
+        /// </summary>
+        /// <param name="quartz">The Quartz configurator for registering jobs and triggers</param>
         public static void ConfigureJobs(IServiceCollectionQuartzConfigurator quartz)
         {
             var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");;

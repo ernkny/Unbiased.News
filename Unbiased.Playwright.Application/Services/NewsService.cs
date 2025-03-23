@@ -10,6 +10,7 @@ using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
+using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices.Factory;
 
 
 namespace Unbiased.Playwright.Application.Services
@@ -69,6 +70,11 @@ namespace Unbiased.Playwright.Application.Services
             }
         }
 
+        /// <summary>
+        /// Generates images for all news items that have been generated but don't have images yet.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A task representing the asynchronous operation, containing a boolean indicating success.</returns>
         public async Task<bool> GenerateImagesWhenAllNewsHasGeneratedAsync(CancellationToken cancellationToken)
         {
             var isDone = false;
@@ -81,7 +87,7 @@ namespace Unbiased.Playwright.Application.Services
                     var imageFile=string.Empty;
                     if (!item.IsManuelImage)
                     {
-                        imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.Title, cancellationToken);
+                        imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.Title, ImageGenerationSource.Freepik,cancellationToken);
 
                     }
                     else
@@ -102,12 +108,24 @@ namespace Unbiased.Playwright.Application.Services
             return true;
         }
 
+        /// <summary>
+        /// Retrieves all generated news items that don't have associated images yet.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A task representing the asynchronous operation, containing a collection of news items without images.</returns>
         public async Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesAsyncWithNoneHasGenerated(CancellationToken cancellationToken)
         {
             var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
             return images;
         }
 
+        /// <summary>
+        /// Generates news content using an external API service for each combined news item.
+        /// </summary>
+        /// <param name="combinedNews">Collection of combined news DTOs to process.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="externalServiceSend">External service for sending news to GPT API.</param>
+        /// <returns>A task representing the asynchronous operation, containing a boolean indicating success.</returns>
         public async Task<bool> GenerateNewsWithApiAsync(IEnumerable<GeneratedNewsDto> combinedNews, CancellationToken cancellationToken, GptApiExternalService externalServiceSend)
         {
             try
@@ -124,8 +142,9 @@ namespace Unbiased.Playwright.Application.Services
                         Title = result.Title,
                         MatchId = item.MatchId,
                         CategoryId = item.CategoryId,
-                        Language = item.Language
-
+                        Language = item.Language,
+                        BiasScore = result.BiasScore,
+                        BiasScoreExplanation = result.BiasScoreExplanation,
                     };
                     if (!string.IsNullOrEmpty(result.Title) || !string.IsNullOrEmpty(result.Detail))
                     {
@@ -137,7 +156,7 @@ namespace Unbiased.Playwright.Application.Services
                             if (!item.IsManuelImage)
                             {
 
-                                imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(result.Title, cancellationToken);
+                                imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(result.Title, ImageGenerationSource.Freepik, cancellationToken);
                             }
                             else
                             {
@@ -165,6 +184,12 @@ namespace Unbiased.Playwright.Application.Services
 
         }
 
+        /// <summary>
+        /// Sends a news title to the DALL-E API to generate an image and saves it to file.
+        /// </summary>
+        /// <param name="Title">The title of the news to generate an image for.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A task representing the asynchronous operation, containing the path to the saved image.</returns>
         private async Task<string> SendNewsToApiForGenerateImageAsync(string Title, CancellationToken cancellationToken)
         {
             var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
@@ -172,11 +197,27 @@ namespace Unbiased.Playwright.Application.Services
             return generatedImage != null ? await new SaveGeneratedImage(_configuration).SaveGeneratedImageToFile(generatedImage.Data.First().Url, Title, cancellationToken) : null;
         }
 
-        private async Task<string> SendNewsToApiForGenerateImageAndSaveItAwsAsync(string Title, CancellationToken cancellationToken)
+        /// <summary>
+        /// Generates an image based on a news title using the specified image generation source and saves it to AWS.
+        /// </summary>
+        /// <param name="title">The title of the news to generate an image for.</param>
+        /// <param name="source">The image generation source to use.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A task representing the asynchronous operation, containing the URL of the saved image or null if unsuccessful.</returns>
+        private async Task<string?> SendNewsToApiForGenerateImageAndSaveItAwsAsync(string title, ImageGenerationSource source, CancellationToken cancellationToken)
         {
-            var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
-            var generatedImage = await externalServiceImageSend.GetImageDataFromGpt(Title, cancellationToken);
-            return generatedImage != null ? await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(_awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value, generatedImage.Data.First().Url,cancellationToken) : null;
+            var imageGeneratorService = ImageGeneratorServiceFactory.Create(source, _serviceProvider);
+            var imageUrl = await imageGeneratorService.GenerateImageUrlAsync(title, cancellationToken);
+
+            if (string.IsNullOrEmpty(imageUrl))
+                return null;
+
+            return await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
+                _awsCredentials.BucketName,
+                _configuration.GetSection("Paths:AwsFilePath").Value,
+                imageUrl,
+                cancellationToken
+            );
         }
     }
 }

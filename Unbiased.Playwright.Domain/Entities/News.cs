@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Unbiased.Playwright.Domain.Entities
 {
     /// <summary>
-    /// Represents a news entity.
+    /// Represents a news entity in the system.
+    /// This class models news articles with their content, metadata, and processing information.
+    /// It is mapped to the "News" table in the database.
     /// </summary>
     [Table("News")]
     public class News
@@ -94,12 +96,40 @@ namespace Unbiased.Playwright.Domain.Entities
         public bool IsProcessed { get; set; }
 
         /// <summary>
-        /// Language of the generated news.
+        /// Gets or sets the language of the news content.
+        /// Indicates which language the news article is written in.
         /// </summary>
         public string Language { get; set; }
 
+        /// <summary>
+        /// Gets or sets the date and time when the news was last processed.
+        /// Used to track when automated processes like content generation or analysis last operated on this news item.
+        /// </summary>
         public DateTime LastProcessTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the scheduled date and time for the next processing run.
+        /// Used by scheduling systems to determine when this news item should be processed again.
+        /// </summary>
         public DateTime NextRunTime { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the bias score of the news content.
+        /// Indicates the level of bias detected in the news, typically on a scale of 0-100.
+        /// </summary>
+        public string BiasScore {  get; set; }
+
+        /// <summary>
+        /// Gets or sets the explanation of how the bias score was determined.
+        /// Provides context and reasoning for the assigned bias score.
+        /// </summary>
+        public string BiasScoreExplanation {  get; set; }
+
+        /// <summary>
+        /// Gets or sets the count of scores or ratings received for this news article.
+        /// Used for tracking how many times the news has been evaluated or rated.
+        /// </summary>
+        public int ScoreCount {  get; set; }
     }
 }
 

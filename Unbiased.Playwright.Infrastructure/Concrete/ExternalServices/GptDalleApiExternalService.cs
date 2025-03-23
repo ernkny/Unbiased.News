@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Text.Json;
 using Unbiased.Playwright.Domain.DTOs;
+using Unbiased.Playwright.Infrastructure.Abstract.ExternalServices;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Shared.Extensions.Concrete.Entities;
 using Unbiased.Shared.Extensions.Concrete.Loggging;
@@ -12,7 +13,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
     /// <summary>
     /// External service for interacting with the GPT DALL-E API.
     /// </summary>
-    public class GptDalleApiExternalService : AbstractEventAndActivityLog
+    public class GptDalleApiExternalService : AbstractEventAndActivityLog, IImageGeneratorService
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
@@ -31,6 +32,18 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             _httpClient = httpClient;
             _configuration = configuration;
             _mediator = mediator;
+        }
+
+        /// <summary>
+        /// Generates an image URL based on the provided text prompt using the GPT DALL-E API.
+        /// </summary>
+        /// <param name="prompt">The text prompt describing the image to generate.</param>
+        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
+        /// <returns>The URL of the generated image, or null if generation was unsuccessful.</returns>
+        public async Task<string?> GenerateImageUrlAsync(string prompt, CancellationToken cancellationToken)
+        {
+            var result = await GetImageDataFromGpt(prompt, cancellationToken);
+            return result?.Data?.FirstOrDefault()?.Url;
         }
 
         /// <summary>

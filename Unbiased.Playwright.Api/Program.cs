@@ -10,6 +10,7 @@ using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Application.Services;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Infrastructure;
+using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete;
@@ -74,6 +75,10 @@ builder.Services.AddScoped<ISearchUrlRepository, SearchUrlRepository>();
 builder.Services.AddScoped<IContentRepository, ContentRepository>();
 builder.Services.AddScoped<IContentService, ContentService>();
 builder.Services.AddScoped<IPlaywrightScrappingService, PlaywrightScrappingService>();
+builder.Services.AddScoped<GptDalleApiExternalService>();
+builder.Services.AddScoped<FreepikApiExternalService>();
+builder.Services.AddHttpClient();
+
 builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>

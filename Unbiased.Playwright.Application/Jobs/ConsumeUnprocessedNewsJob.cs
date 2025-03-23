@@ -8,6 +8,10 @@ using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
+    /// <summary>
+    /// Quartz job responsible for processing unprocessed news items.
+    /// This job is configured to not allow concurrent executions.
+    /// </summary>
     [DisallowConcurrentExecution]
     public class ConsumeUnprocessedNewsJob : IJob
     {
@@ -15,6 +19,12 @@ namespace Unbiased.Playwright.Application.Jobs
         private readonly INewsService _newsService;
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the ConsumeUnprocessedNewsJob class.
+        /// </summary>
+        /// <param name="mediator">The mediator instance for handling commands and queries.</param>
+        /// <param name="newsService">The service responsible for news-related operations.</param>
+        /// <param name="configuration">The application configuration.</param>
         public ConsumeUnprocessedNewsJob(IMediator mediator, INewsService newsService, IConfiguration configuration)
         {
             _mediator = mediator;
@@ -22,6 +32,12 @@ namespace Unbiased.Playwright.Application.Jobs
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Executes the job to process unprocessed news items by generating content using an external API.
+        /// Handles rate limiting by implementing retry logic for too many requests errors.
+        /// </summary>
+        /// <param name="context">The context in which the job is being executed.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task Execute(IJobExecutionContext context)
         {
             try
@@ -48,7 +64,6 @@ namespace Unbiased.Playwright.Application.Jobs
             {
                 throw;
             }
-
         }
     }
 }

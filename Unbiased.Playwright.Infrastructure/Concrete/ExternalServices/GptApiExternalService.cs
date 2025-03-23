@@ -12,12 +12,18 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
     /// <summary>
     /// External service for interacting with the GPT API.
     /// </summary>
-
     public sealed class GptApiExternalService
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
+
+        /// <summary>
+        /// Initializes a new instance of the GptApiExternalService class.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client instance for making API requests.</param>
+        /// <param name="configuration">The configuration instance for API URLs and keys.</param>
+        /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         public GptApiExternalService(HttpClient httpClient, IConfiguration configuration, IMediator mediator)
         {
             _httpClient = httpClient;
@@ -26,11 +32,12 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// Sends combined news details to GPT API and extracts structured news content.
         /// </summary>
-        /// <param name="httpClient">The HTTP client instance.</param>
-        /// <param name="configuration">The configuration instance.</param>
-        /// <param name="mediator">The mediator instance.</param>
+        /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
+        /// <param name="language">The language enum specifying the output language.</param>
+        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
+        /// <returns>A NewsExtractDto containing the extracted and structured news content.</returns>
         public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews, LanguageEnums language, CancellationToken cancellationToken)
         {
             var result = new NewsExtractDto();
@@ -66,6 +73,12 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             }
         }
 
+        /// <summary>
+        /// Sends a horoscope prompt to GPT API and retrieves the generated horoscope content.
+        /// </summary>
+        /// <param name="horoscope">The name of the horoscope sign.</param>
+        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
+        /// <returns>A string containing the generated horoscope content.</returns>
         public async Task<string> SendHoroscopeToGptAndGetResponse(string horoscope, CancellationToken cancellationToken)
         {
             var prompt = await HoroscopePromptMessage(horoscope);
@@ -107,6 +120,11 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             }
         }
 
+        /// <summary>
+        /// Sends a request to GPT API to generate daily information content.
+        /// </summary>
+        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
+        /// <returns>A string containing the generated daily information content.</returns>
         public async Task<string> SendDailyInformationToGptAndGetResponse(CancellationToken cancellationToken)
         {
             var prompt = await DailyInformationPromptMessage();
@@ -149,11 +167,11 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// Sends the provided prompt to the GPT API and returns the response.
         /// </summary>
-        /// <param name="httpClient">The HTTP client instance.</param>
-        /// <param name="configuration">The configuration instance.</param>
-        /// <param name="mediator">The mediator instance.</param>
+        /// <param name="prompt">The text prompt to send to the API.</param>
+        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
+        /// <returns>The HTTP response message from the GPT API.</returns>
         private async Task<HttpResponseMessage> SendPromtToGptAndGetResponse(string prompt, CancellationToken cancellationToken)
         {
             try
@@ -162,7 +180,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
                 var requestData = new
                 {
-                    model = "gpt-4o-mini",
+                    model = "gpt-4o",
                     messages = new[]
                     {
                     new { role = "user", content = prompt }
@@ -190,12 +208,12 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// Sets the appropriate prompt message based on the specified language.
         /// </summary>
-        /// <param name="language"></param>
-        /// <param name="DetailIOfNews"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <param name="language">The language enum specifying the output language.</param>
+        /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
+        /// <returns>A formatted prompt string in the specified language.</returns>
+        /// <exception cref="Exception">Thrown when the specified language is not supported.</exception>
         private async Task<string> SetPromptMessageLanguageWithDetailOfNews(LanguageEnums language, string DetailIOfNews)
         {
             switch (language)
@@ -210,10 +228,10 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// Creates a Turkish language prompt for news analysis.
         /// </summary>
-        /// <param name="DetailIOfNews"></param>
-        /// <returns></returns>
+        /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
+        /// <returns>A formatted prompt string in Turkish.</returns>
         private async Task<string> TurkishPromptMessage(string DetailIOfNews)
         {
             var newsAnalysis = $@"Bir gazeteci gibi bu haber metnini oku ve yeni bir haber olarak analiz et. İlk cümle başlık olacak şekilde içerik oluştur ve bunu sanki kendi abonelerin okuyacakmış gibi hazırla. Aynı zamanda haberi analiz edip, kendi yorumunu da ekle. Yazının yapay zeka tarafından incelenip analiz edildiğini belirt. Api cevabının bana JSON format olarak ver çünkü Kendimin oluşturduğu API den senin cevabını okuyacağım.Yazı içeriğini olabildiğince uzun yaz. Analiz Edilecek Haber içeriği='{DetailIOfNews}'";
@@ -233,13 +251,13 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// Creates an English language prompt for news analysis.
         /// </summary>
-        /// <param name="DetailIOfNews"></param>
-        /// <returns></returns>
+        /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
+        /// <returns>A formatted prompt string in English.</returns>
         private async Task<string> EnglishPromptMessage(string DetailIOfNews)
         {
-            var newsAnalysis = $@"Read this news text like a journalist and analyze it as a new article. Create the content with the first sentence as the title, and prepare it as if it were for your own subscribers. Also, analyze the news and add your own commentary. Mention that the article has been analyzed and reviewed by artificial intelligence. Write the text content as long as possible. Start your response with 'Title:' and continue with 'Detail:', Your api response has to be JSON formatted because I will read your article from an API.  '{DetailIOfNews}'";
+            var newsAnalysis = $@"Read this news text like a journalist and analyze it as a new article. Create the content with the first sentence as the title, and prepare it as if it were for your own subscribers. Also, analyze the news and add your own commentary. Mention that the article has been analyzed and reviewed by artificial intelligence. Write the text content as long as possible. Also when you read finish give bias score. How biased and judgmental the news you read is on average. Bias Score is 0 to 100 Also give Reason of bias caused. Start your response with 'Title:' and continue with 'Detail:' And 'BiasScore:','BiasScoreExplanation:', Your api response has to be JSON formatted because I will read your article from an API.  '{DetailIOfNews}'";
 
             var prompt = $@"
             {newsAnalysis}
@@ -249,17 +267,19 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             {{ 
                 ""Title"": ""[News headline]"", 
                 ""Detail"": ""[News detail and analysis or your commantary]"",
+                ""BiasScore"": ""[Give your bias score to all readed news]"",
+                ""BiasScoreExplanation"": ""[Give your bias score Explanation]"",
             }} 
-            Dont put them '```json\n";
+           essipacially Dont put  '```json\n";
 
             return await Task.FromResult(prompt);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// Creates a prompt for generating horoscope content for a specific zodiac sign.
         /// </summary>
-        /// <param name="DetailIOfNews"></param>
-        /// <returns></returns>
+        /// <param name="horoscope">The name of the horoscope sign.</param>
+        /// <returns>A formatted prompt string for horoscope generation.</returns>
         private async Task<string> HoroscopePromptMessage(string horoscope)
         {
             var prompt = $@"Bir astroloji uzmanı gibi {DateTime.UtcNow.ToString("dd/MM/yyyy").ToString()} tarihi için günlük {horoscope} burcunun yorumunu yap. sadece cevabını yaz, açıklayıcı ve orta uzunlukta yaz.Profesyonel türkçe kullan." ;
@@ -270,10 +290,9 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GptApiExternalService"/> class.
+        /// Creates a prompt for generating daily historical information.
         /// </summary>
-        /// <param name="DetailIOfNews"></param>
-        /// <returns></returns>
+        /// <returns>A formatted prompt string for daily information generation.</returns>
         private async Task<string> DailyInformationPromptMessage()
         {
             var prompt = $@"Bir tarih uzmanı gibi '{DateTime.UtcNow.ToString("dd/MM").ToString()}' için günün hem türkiye hemde dünya tarihi açısından önemli gelişmelerini yaz. sadece cevabını yaz, açıklayıcı ve uzun yaz. Profesyonel türkçe kullan";

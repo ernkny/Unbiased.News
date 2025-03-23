@@ -6,18 +6,33 @@ using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
+    /// <summary>
+    /// Quartz job that handles scheduled web scraping operations using Playwright.
+    /// This job is configured to not allow concurrent executions.
+    /// </summary>
     [DisallowConcurrentExecution]
     public class GetNewsWithPlaywrightWithSearchUrlJob : IJob
     {
         private readonly IPlaywrightScrappingService _playwrightScrappingService;
         private readonly IMediator _mediator;
 
+        /// <summary>
+        /// Initializes a new instance of the GetNewsWithPlaywrightWithSearchUrlJob class.
+        /// </summary>
+        /// <param name="playwrightScrappingService">The service responsible for web scraping operations.</param>
+        /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         public GetNewsWithPlaywrightWithSearchUrlJob(IPlaywrightScrappingService playwrightScrappingService, IMediator mediator)
         {
             _playwrightScrappingService = playwrightScrappingService;
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Executes the job to scrape news from configured search URLs using Playwright.
+        /// Currently commented out to temporarily disable the functionality.
+        /// </summary>
+        /// <param name="context">The context in which the job is being executed.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task Execute(IJobExecutionContext context)
         {
             try

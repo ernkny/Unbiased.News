@@ -9,7 +9,9 @@ using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 {
     /// <summary>
-    /// Repository for news operations.
+    /// Repository implementation for news-related database operations.
+    /// Provides methods for adding, retrieving, and updating news entities in the database.
+    /// Uses stored procedures for efficient database interactions.
     /// </summary>
     public class NewsRepository : INewsRepository
     {
@@ -208,8 +210,8 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Adds a generated news item to the database.
         /// </summary>
-        /// <param name="generatedNews"></param>
-        /// <returns></returns>
+        /// <param name="generatedNews">The generated news entity to be added to the database.</param>
+        /// <returns>True if the news was added successfully, false otherwise.</returns>
         public async Task<bool> AddGeneratedNews(News generatedNews)
         {
             if (generatedNews == null)
@@ -225,6 +227,8 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("CategoryId", generatedNews.CategoryId, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("MatchId", generatedNews.MatchId, DbType.String, ParameterDirection.Input);
                     parameters.Add("Language", generatedNews.Language, DbType.String, ParameterDirection.Input);
+                    parameters.Add("BiasScore", generatedNews.BiasScore, DbType.String, ParameterDirection.Input);
+                    parameters.Add("BiasScoreExplanation", generatedNews.BiasScoreExplanation, DbType.String, ParameterDirection.Input);
 
                     return await connection.ExecuteAsync("UB_sp_InsertUBNewsGenerated", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
@@ -236,10 +240,10 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         }
 
         /// <summary>
-        /// Updates the process value of a news item to true in the database.
+        /// Updates the process status of a news item to indicate it has been processed.
         /// </summary>
-        /// <param name="matchId"></param>
-        /// <returns></returns>
+        /// <param name="matchId">The match identifier of the news item to update.</param>
+        /// <returns>True if the update was successful, false otherwise.</returns>
         public async Task<bool> UpdateNewsProcessValueAsTrueAsync(string matchId)
         {
             try
@@ -258,6 +262,11 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Retrieves all generated news items in the specified language.
+        /// </summary>
+        /// <param name="language">The language code of the news to retrieve (e.g., "EN" for English, "TR" for Turkish).</param>
+        /// <returns>A collection of generated news entities in the specified language.</returns>
         public async Task<IEnumerable<GeneratedNews>> GetGeneratedNewsAsync(string language)
         {
             try
