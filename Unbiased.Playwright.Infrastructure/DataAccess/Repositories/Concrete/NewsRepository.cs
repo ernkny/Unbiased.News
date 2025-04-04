@@ -263,7 +263,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         }
 
         /// <summary>
-        /// Retrieves all generated news items in the specified language.
+        /// Retrieves  generated news items in the specified language.
         /// </summary>
         /// <param name="language">The language code of the news to retrieve (e.g., "EN" for English, "TR" for Turkish).</param>
         /// <returns>A collection of generated news entities in the specified language.</returns>
@@ -285,6 +285,33 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Inserts a new question and its corresponding answer into the database.
+        /// </summary>
+        /// <param name="QuestionAndAnswer">The DTO containing the question, answer, and related metadata.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation. 
+        /// The task result contains a boolean value indicating whether the insert operation was successful.
+        /// </returns>
+        public async Task<bool> InsertQuestionAndAnswerAsync(QuestionAnswerDto QuestionAndAnswer)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Question", QuestionAndAnswer.Question, DbType.String);
+                    parameters.Add("@Answer", QuestionAndAnswer.Answer, DbType.String);
+                    parameters.Add("@CreatedDate", DateTime.UtcNow, DbType.String);
+                    parameters.Add("@MatchId", QuestionAndAnswer.MatchId, DbType.String);
+                    return await connection.ExecuteAsync("UB_sp_InsertQuestionsAndAnswers", parameters, commandType: CommandType.StoredProcedure) == 1;
+                }
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+        }
     }
 }

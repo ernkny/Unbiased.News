@@ -62,6 +62,21 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         /// <returns>A task containing a boolean indicating whether the operation was successful.</returns>
         Task<bool> UpdateNewsProcessValueAsTrueAsync(string matchId);
 
+        /// <summary>
+        /// Retrieves all generated news items in the specified language.
+        /// </summary>
+        /// <param name="language">The language code of the news to retrieve (e.g., "EN" for English, "TR" for Turkish).</param>
+        /// <returns>A collection of generated news entities in the specified language.</returns>
         Task<IEnumerable<GeneratedNews>> GetGeneratedNewsAsync(string language);
+
+        /// <summary>
+        /// Inserts a new question and its corresponding answer into the database.
+        /// </summary>
+        /// <param name="QuestionAndAnswer">The DTO containing the question, answer, and related metadata.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation. 
+        /// The task result contains a boolean value indicating whether the insert operation was successful.
+        /// </returns>
+        Task<bool> InsertQuestionAndAnswerAsync(QuestionAnswerDto QuestionAndAnswer);
     }
 }

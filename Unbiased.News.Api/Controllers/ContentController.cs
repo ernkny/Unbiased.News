@@ -8,6 +8,9 @@ using static MassTransit.ValidationResultExtensions;
 
 namespace Unbiased.News.Api.Controllers
 {
+    /// <summary>
+    /// Controller for managing content operations like horoscopes and daily content.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ContentController : ControllerBase
@@ -15,6 +18,11 @@ namespace Unbiased.News.Api.Controllers
         private readonly IContentService _contentService;
         private readonly IMemoryCache _memoryCache;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContentController"/> class.
+        /// </summary>
+        /// <param name="contentService">The content service instance for accessing content data.</param>
+        /// <param name="memoryCache">The memory cache instance for caching content data.</param>
         public ContentController(IContentService contentService, IMemoryCache memoryCache)
         {
             _contentService = contentService;
@@ -22,9 +30,9 @@ namespace Unbiased.News.Api.Controllers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContentController"/> class.
+        /// Retrieves all daily horoscope information.
         /// </summary>
-        /// <param name="contentService">The content Service instance.</param>
+        /// <returns>A list of daily horoscope details for all zodiac signs.</returns>
         [HttpGet("/GetAllDailyHoroscope")]
         public async Task<IActionResult> GetAllDailyHoroscope()
         {
@@ -53,9 +61,11 @@ namespace Unbiased.News.Api.Controllers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContentController"/> class.
+        /// Retrieves daily horoscope information for a specific zodiac sign by ID.
+        /// Uses caching to optimize performance for frequently accessed data.
         /// </summary>
-        /// <param name="contentService">The content Service instance.</param>
+        /// <param name="id">The ID of the horoscope (zodiac sign) to retrieve.</param>
+        /// <returns>Daily horoscope details for the specified zodiac sign.</returns>
         [HttpGet("/GetAllDailyHoroscopeWithId")]
         public async Task<IActionResult> GetAllDailyHoroscopeWithId(int id)
         {
@@ -109,9 +119,10 @@ namespace Unbiased.News.Api.Controllers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContentController"/> class.
+        /// Retrieves the latest daily content information.
+        /// Requires authentication to access this endpoint.
         /// </summary>
-        /// <param name="contentService">The content Service instance.</param>
+        /// <returns>The latest content information.</returns>
         [Authorize]
         [HttpGet("/GetDailyContent")]
         public async Task<IActionResult> GetDailyContent()

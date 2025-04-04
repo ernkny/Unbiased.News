@@ -167,11 +167,47 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
+        /// Sends news content to GPT API to generate questions and answers related to the news.
+        /// </summary>
+        /// <param name="detailOfNew">The detailed content of the news to generate questions and answers for.</param>
+        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
+        /// <returns>A QuestionsAndAnswersDto containing the generated questions and answers.</returns>
+        public async Task<QuestionsAndAnswersDto> SendNewsQuestionsAndAnswersPrompt(string detailOfNew, CancellationToken cancellationToken)
+        {
+            var prompt = await NewsQuestionsAndAnswersPrompt(detailOfNew);
+            var result = new QuestionsAndAnswersDto();
+            try
+            {
+                var response = await SendPromtToGptAndGetResponse(prompt, cancellationToken);
+                if (!response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    throw new Exception($"API returned error: {response.StatusCode}");
+                }
+                if (response.IsSuccessStatusCode)
+                {
+                    await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
+                    result = QuestionAndAnswerExtractExtensionMethod.ExtractQuestionAndAnswer(await response.Content.ReadAsStringAsync());
+
+                }
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Sends the provided prompt to the GPT API and returns the response.
         /// </summary>
-        /// <param name="prompt">The text prompt to send to the API.</param>
+        /// <param name="prompt">The prompt to send to the GPT API.</param>
         /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>The HTTP response message from the GPT API.</returns>
+        /// <returns>An HttpResponseMessage containing the API response.</returns>
         private async Task<HttpResponseMessage> SendPromtToGptAndGetResponse(string prompt, CancellationToken cancellationToken)
         {
             try
@@ -180,7 +216,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
                 var requestData = new
                 {
-                    model = "gpt-4o",
+                    model = "gpt-4o-mini",
                     messages = new[]
                     {
                     new { role = "user", content = prompt }
@@ -208,12 +244,11 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Sets the appropriate prompt message based on the specified language.
+        /// Sets the prompt message language based on the specified language enum and combines it with the news details.
         /// </summary>
         /// <param name="language">The language enum specifying the output language.</param>
         /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
-        /// <returns>A formatted prompt string in the specified language.</returns>
-        /// <exception cref="Exception">Thrown when the specified language is not supported.</exception>
+        /// <returns>A string containing the complete prompt message in the specified language.</returns>
         private async Task<string> SetPromptMessageLanguageWithDetailOfNews(LanguageEnums language, string DetailIOfNews)
         {
             switch (language)
@@ -228,10 +263,10 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Creates a Turkish language prompt for news analysis.
+        /// Creates a prompt message in Turkish for processing news content.
         /// </summary>
         /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
-        /// <returns>A formatted prompt string in Turkish.</returns>
+        /// <returns>A string containing the Turkish prompt message.</returns>
         private async Task<string> TurkishPromptMessage(string DetailIOfNews)
         {
             var newsAnalysis = $@"Bir gazeteci gibi bu haber metnini oku ve yeni bir haber olarak analiz et. İlk cümle başlık olacak şekilde içerik oluştur ve bunu sanki kendi abonelerin okuyacakmış gibi hazırla. Aynı zamanda haberi analiz edip, kendi yorumunu da ekle. Yazının yapay zeka tarafından incelenip analiz edildiğini belirt. Api cevabının bana JSON format olarak ver çünkü Kendimin oluşturduğu API den senin cevabını okuyacağım.Yazı içeriğini olabildiğince uzun yaz. Analiz Edilecek Haber içeriği='{DetailIOfNews}'";
@@ -251,10 +286,10 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Creates an English language prompt for news analysis.
+        /// Creates a prompt message in English for processing news content.
         /// </summary>
         /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
-        /// <returns>A formatted prompt string in English.</returns>
+        /// <returns>A string containing the English prompt message.</returns>
         private async Task<string> EnglishPromptMessage(string DetailIOfNews)
         {
             var newsAnalysis = $@"Read this news text like a journalist and analyze it as a new article. Create the content with the first sentence as the title, and prepare it as if it were for your own subscribers. Also, analyze the news and add your own commentary. Mention that the article has been analyzed and reviewed by artificial intelligence. Write the text content as long as possible. Also when you read finish give bias score. How biased and judgmental the news you read is on average. Bias Score is 0 to 100 Also give Reason of bias caused. Start your response with 'Title:' and continue with 'Detail:' And 'BiasScore:','BiasScoreExplanation:', Your api response has to be JSON formatted because I will read your article from an API.  '{DetailIOfNews}'";
@@ -276,10 +311,10 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Creates a prompt for generating horoscope content for a specific zodiac sign.
+        /// Creates a prompt message for generating horoscope content.
         /// </summary>
         /// <param name="horoscope">The name of the horoscope sign.</param>
-        /// <returns>A formatted prompt string for horoscope generation.</returns>
+        /// <returns>A string containing the horoscope prompt message.</returns>
         private async Task<string> HoroscopePromptMessage(string horoscope)
         {
             var prompt = $@"Bir astroloji uzmanı gibi {DateTime.UtcNow.ToString("dd/MM/yyyy").ToString()} tarihi için günlük {horoscope} burcunun yorumunu yap. sadece cevabını yaz, açıklayıcı ve orta uzunlukta yaz.Profesyonel türkçe kullan." ;
@@ -290,15 +325,26 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
 
         /// <summary>
-        /// Creates a prompt for generating daily historical information.
+        /// Creates a prompt message for generating daily information content.
         /// </summary>
-        /// <returns>A formatted prompt string for daily information generation.</returns>
+        /// <returns>A string containing the daily information prompt message.</returns>
         private async Task<string> DailyInformationPromptMessage()
         {
             var prompt = $@"Bir tarih uzmanı gibi '{DateTime.UtcNow.ToString("dd/MM").ToString()}' için günün hem türkiye hemde dünya tarihi açısından önemli gelişmelerini yaz. sadece cevabını yaz, açıklayıcı ve uzun yaz. Profesyonel türkçe kullan";
 
 
             return await Task.FromResult(prompt);
+        }
+
+        /// <summary>
+        /// Creates a prompt message for generating questions and answers related to news content.
+        /// </summary>
+        /// <param name="detailOfNew">The detailed content of the news to generate questions and answers for.</param>
+        /// <returns>A string containing the questions and answers prompt message.</returns>
+        private async Task<string> NewsQuestionsAndAnswersPrompt(string detailOfNew)
+        {
+            var prompt = $@"'{detailOfNew}'Can you read this news and come up with 3-5 questions that we need to question? Can you collect the questions under questions in json format? And give these question answer as json to me as [questions{{ [question:'',answer:''] }}] I will read them from the API. I will read them from the API. IMPORTANT:Just reply in a text format converted to json format";
+                 return await Task.FromResult(prompt);
         }
     }
 }

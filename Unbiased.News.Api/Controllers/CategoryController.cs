@@ -64,7 +64,8 @@ namespace Unbiased.News.Api.Controllers
         /// <summary>
         /// Gets all categories with article count and most visited news.
         /// </summary>
-        /// <returns>A list of categories with details.</returns>
+        /// <param name="language">The language code to filter categories by.</param>
+        /// <returns>A list of categories with details including article counts and most visited news.</returns>
         [HttpGet("/CategoriesWithArticleCountAndMostVisitedNews")]
         public async Task<IActionResult> CategoriesWithArticleCountAndMostVisitedNews(string language)
         {
@@ -92,9 +93,10 @@ namespace Unbiased.News.Api.Controllers
         }
 
         /// <summary>
-        /// Gets all categories with article count and most visited news.
+        /// Gets all categories with randomly selected generated news.
         /// </summary>
-        /// <returns>A list of categories with details.</returns>
+        /// <param name="language">The language code to filter categories by.</param>
+        /// <returns>A list of categories with randomly selected generated news.</returns>
         [HttpGet("/CategoriesWithRandomGeneratedNews")]
         public async Task<IActionResult> CategoriesWithRandomGeneratedNews(string language)
         {
@@ -122,9 +124,10 @@ namespace Unbiased.News.Api.Controllers
         }
 
         /// <summary>
-        /// Gets all top categories with article news.
+        /// Gets top categories with their associated generated news.
         /// </summary>
-        /// <returns>A list of categories with details.</returns>
+        /// <param name="language">The language code to filter categories by.</param>
+        /// <returns>A list of top categories with their generated news articles.</returns>
         [HttpGet("/TopCategoriesWithGeneratedNews")]
         public async Task<IActionResult> TopCategoriesWithGeneratedNews(string language)
         {

@@ -8,18 +8,34 @@ using Unbiased.Playwright.Domain.DTOs;
 
 namespace Unbiased.Playwright.Common.Concrete.Helper
 {
+    /// <summary>
+    /// A class responsible for downloading, processing, and uploading generated images to AWS S3.
+    /// Implements IDisposable to properly manage resources.
+    /// </summary>
     public class SaveGeneratedImageToAws : IDisposable
     {
         private readonly AmazonS3Client client;
         private readonly HttpClient _httpClient;
         private bool disposedValue;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SaveGeneratedImageToAws"/> class.
+        /// </summary>
+        /// <param name="awsCredentials">The AWS credentials for S3 access.</param>
         public SaveGeneratedImageToAws(AwsCredentials awsCredentials)
         {
             client = new AmazonS3Client(awsCredentials.AccessKey, awsCredentials.SecretKey, Amazon.RegionEndpoint.EUNorth1);
             _httpClient = new HttpClient();
         }
 
+        /// <summary>
+        /// Downloads an image from a specified URL, processes it, and uploads both original and resized versions to AWS S3.
+        /// </summary>
+        /// <param name="bucketName">The name of the S3 bucket to upload to.</param>
+        /// <param name="picturesPath">The local pictures path for temporary storage.</param>
+        /// <param name="url">The URL of the image to download.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>The file path of the uploaded JPEG image.</returns>
         public async Task<string> GetFileFromGptAndUploadFileAsync(string bucketName, string picturesPath, string url, CancellationToken cancellationToken)
         {
             try
@@ -66,7 +82,14 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
             }
         }
 
-
+        /// <summary>
+        /// Uploads a memory stream to a specified S3 bucket.
+        /// </summary>
+        /// <param name="stream">The memory stream containing the file data.</param>
+        /// <param name="key">The S3 object key (file path in S3).</param>
+        /// <param name="contentType">The MIME content type of the file.</param>
+        /// <param name="bucketName">The name of the S3 bucket to upload to.</param>
+        /// <returns>A task that represents the asynchronous upload operation.</returns>
         private async Task UploadToS3(MemoryStream stream, string key, string contentType, string bucketName)
         {
             stream.Position = 0;
@@ -81,6 +104,14 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
             await client.PutObjectAsync(putRequest);
         }
 
+        /// <summary>
+        /// Converts an image to JPEG format with compression and uploads it to S3.
+        /// </summary>
+        /// <param name="image">The image to convert and upload.</param>
+        /// <param name="key">The S3 object key (file path in S3).</param>
+        /// <param name="contentType">The MIME content type of the file.</param>
+        /// <param name="bucketName">The name of the S3 bucket to upload to.</param>
+        /// <returns>A task that represents the asynchronous convert and upload operation.</returns>
         private async Task ConvertAndUploadToS3(Image image, string key, string contentType, string bucketName)
         {
             using (var outputStream = new MemoryStream())
@@ -93,6 +124,10 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
             }
         }
 
+        /// <summary>
+        /// Releases unmanaged and optionally managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -106,11 +141,17 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
             }
         }
 
+        /// <summary>
+        /// Finalizer that ensures resources are released when the object is garbage collected.
+        /// </summary>
         ~SaveGeneratedImageToAws()
         {
             Dispose(disposing: false);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             Dispose(disposing: true);

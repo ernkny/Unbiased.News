@@ -1,12 +1,11 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unbiased.News.Domain.DTOs;
 
 namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew
 {
-    public record GetGeneratedNewsByUniqUrlWithImageQuery(string uniqUrl): IRequest<GenerateNewsWithImageDto>;
+    /// <summary>
+    /// Represents a query to retrieve a specific news item by its unique URL with associated image.
+    /// </summary>
+    /// <param name="UniqUrl">The unique URL of the news item to retrieve.</param>
+    public record GetGeneratedNewsByUniqUrlWithImageQuery(string UniqUrl):IRequest<GenerateNewsWithImageDto>;
 }

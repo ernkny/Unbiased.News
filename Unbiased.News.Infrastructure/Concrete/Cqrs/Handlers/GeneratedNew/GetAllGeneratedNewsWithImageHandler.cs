@@ -6,30 +6,31 @@ using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
 {
     /// <summary>
-    /// Handles the GetAllGeneratedNewsWithImageQuery to retrieve a list of generated news with images.
+    /// Handler for retrieving generated news items with associated images.
     /// </summary>
     public class GetAllGeneratedNewsWithImageHandler : IRequestHandler<GetAllGeneratedNewsWithImageQuery, IEnumerable<GenerateNewsWithImageDto>>
     {
         private readonly INewsRepository _newsRepository;
 
         /// <summary>
-        /// Initializes a new instance of the GetAllGeneratedNewsWithImageHandler class.
+        /// Initializes a new instance of the <see cref="GetAllGeneratedNewsWithImageHandler"/> class.
         /// </summary>
-        /// <param name="newsRepository">The news repository instance.</param>
+        /// <param name="newsRepository">The news repository for accessing data.</param>
         public GetAllGeneratedNewsWithImageHandler(INewsRepository newsRepository)
         {
             _newsRepository = newsRepository;
         }
 
         /// <summary>
-        /// Handles the GetAllGeneratedNewsWithImageQuery to retrieve a list of generated news with images.
+        /// Handles the request to retrieve generated news items with images for a specific category,
+        /// with pagination and language filtering support.
         /// </summary>
-        /// <param name="request">The GetAllGeneratedNewsWithImageQuery instance.</param>
+        /// <param name="request">The query request containing category ID, page number, language, and optional title filter.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A list of GenerateNewsWithImageDto instances.</returns>
+        /// <returns>A collection of news items with their associated images.</returns>
         public async Task<IEnumerable<GenerateNewsWithImageDto>> Handle(GetAllGeneratedNewsWithImageQuery request, CancellationToken cancellationToken)
         {
-            return await _newsRepository.GetAllGeneratedNewsWithImageAsync(request.categoryId,request.pageNumber, request.language,request.title);
+            return await _newsRepository.GetAllGeneratedNewsWithImageAsync(request.categoryId, request.pageNumber, request.language, request.title);
         }
     }
 }

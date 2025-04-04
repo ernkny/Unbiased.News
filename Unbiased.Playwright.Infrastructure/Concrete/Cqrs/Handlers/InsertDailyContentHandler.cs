@@ -15,7 +15,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Handlers
 
         public async Task<bool> Handle(InsertDailyContentCommand request, CancellationToken cancellationToken)
         {
-            var result= await _contentRepository.AddDailyContentInformationAsync(request.Content);
+            var result= await _contentRepository.AddDailyContentInformationAsync(request.DailyContentDto);
             return result;
         }
     }

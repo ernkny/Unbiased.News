@@ -36,6 +36,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// Sends a request to the Freepik API to initiate image generation.
         /// </summary>
         /// <param name="titleOfGeneration">The prompt text describing the image to generate.</param>
+        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
         /// <returns>A response DTO containing information about the image generation task.</returns>
         private async Task<FreePikPostImageResponseDto> SendMessageToFreePikForGenerateImage(string titleOfGeneration, CancellationToken cancellationToken = default)
         {

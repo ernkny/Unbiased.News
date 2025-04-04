@@ -178,10 +178,20 @@ namespace Unbiased.Playwright.Application.Services
                                     filePath = imageFile
                                 }), cancellationToken);
                             }
+
+                            var QuestionsAndAnswersOfGeneratedNews = await externalServiceSend.SendNewsQuestionsAndAnswersPrompt(result.Detail, cancellationToken);
+                            foreach (var question in QuestionsAndAnswersOfGeneratedNews.questions)
+                            {
+                                if (question is not null)
+                                {
+                                     await _mediator.Send(new InsertQuestionAndAnswerCommand(new QuestionAnswerDto()
+                                     { Question=question.question,Answer=question.answer, MatchId = item.MatchId }));
+                                }
+                            }
                         }
                     }
-
                 }
+
                 return true;
             }
             catch (Exception)

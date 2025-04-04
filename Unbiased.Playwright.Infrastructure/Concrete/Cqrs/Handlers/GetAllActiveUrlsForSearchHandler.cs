@@ -6,30 +6,30 @@ using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 namespace Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Handlers
 {
     /// <summary>
-    /// Handles the GetAllActiveKeywordsForSearchQuery by retrieving all active keywords for search from the repository.
+    /// Handles the GetAllActiveUrlsForSearchQuery by retrieving all active URLs for search from the repository.
     /// </summary>
     public class GetAllActiveUrlsForSearchHandler : IRequestHandler<GetAllActiveUrlsForSearchQuery, IEnumerable<ActiveUrlsForSearchDto>>
     {
         /// <summary>
-        /// The news repository instance used to perform the operation.
+        /// The search URL repository instance used to perform the operation.
         /// </summary>
         private readonly ISearchUrlRepository _searchUrlRepository;
 
         /// <summary>
-        /// Initializes a new instance of the GetAllActiveUrlsForSearchHandler class.
+        /// Initializes a new instance of the <see cref="GetAllActiveUrlsForSearchHandler"/> class.
         /// </summary>
-        /// <param name="newsRepository">The news repository to use for retrieving active keywords.</param>
+        /// <param name="searchUrlRepository">The search URL repository to use for retrieving active URLs.</param>
         public GetAllActiveUrlsForSearchHandler(ISearchUrlRepository searchUrlRepository)
         {
             _searchUrlRepository = searchUrlRepository;
         }
 
         /// <summary>
-        /// Handles the GetAllActiveKeywordsForSearchQuery by retrieving all active keywords for search from the repository.
+        /// Handles the GetAllActiveUrlsForSearchQuery by retrieving all active URLs for search from the repository.
         /// </summary>
-        /// <param name="request">The GetAllActiveKeywordsForSearchQuery to handle.</param>
+        /// <param name="request">The GetAllActiveUrlsForSearchQuery to handle.</param>
         /// <param name="cancellationToken">The cancellation token to use for the operation.</param>
-        /// <returns>A task representing the asynchronous operation, returning a collection of active keywords.</returns>
+        /// <returns>A task representing the asynchronous operation, returning a collection of active URLs for search.</returns>
         public async Task<IEnumerable<ActiveUrlsForSearchDto>> Handle(GetAllActiveUrlsForSearchQuery request, CancellationToken cancellationToken)
         {
             return await _searchUrlRepository.GetAllActiveUrlsForSearchAsync();
