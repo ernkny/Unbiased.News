@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Unbiased.News.Application.Dto.Enums;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
@@ -14,14 +15,16 @@ namespace Unbiased.News.Api.Controllers
     public class NewsController : ControllerBase
     {
         private readonly INewsService _newsService;
+        private readonly ICategoriesService _categoryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsController"/> class.
         /// </summary>
         /// <param name="newsService">The news service instance used for retrieving news data.</param>
-        public NewsController(INewsService newsService)
+        public NewsController(INewsService newsService, ICategoriesService categoryService)
         {
             _newsService = newsService;
+            _categoryService = categoryService;
         }
 
         /// <summary>
@@ -65,25 +68,32 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="pageNumber">The page number for pagination. Default is 1.</param>
         /// <returns>A list of generated news with images.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImage")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImage([FromQuery] int categoryId, string? title, string language = "TR", int pageNumber = 1)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImage([FromQuery] string categoryName, string? title,string language="TR", int pageNumber = 1)
         {
             try
             {
-                language = string.IsNullOrEmpty(language) ? "TR" : language.ToUpper();
 
-                var result = await _newsService.GetAllGeneratedNewsWithImageAsync(categoryId, pageNumber, language, title);
-                if (!result.Any())
+                var allCategories= await _categoryService.GetAllCategoriesAsync();
+                var category = allCategories.FirstOrDefault(x => x.CategoryName.Replace(" ",string.Empty).Equals(categoryName.Replace("-", string.Empty), StringComparison.OrdinalIgnoreCase));
+                if (category is not null)
                 {
-                    return NoContent();  
+                    
+                    language = string.IsNullOrEmpty(language) ? "TR" : language.ToUpper();
+                    var result = await _newsService.GetAllGeneratedNewsWithImageAsync(category.Id, pageNumber, language, title);
+                    if (!result.Any())
+                    {
+                        return NoContent();
+                    }
+
+                    var response = new ResponseDto<List<GenerateNewsWithImageDto>>
+                    {
+                        IsSuccessful = true,
+                        StatusCode = 200,
+                        Data = result.ToList()
+                    };
+                    return Ok(response);
                 }
-
-                var response = new ResponseDto<List<GenerateNewsWithImageDto>>
-                {
-                    IsSuccessful = true,
-                    StatusCode = 200,
-                    Data = result.ToList()
-                };
-                return Ok(response);
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -105,19 +115,25 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="title">Optional title filter for counting matching news.</param>
         /// <returns>A count of generated news items with images.</returns>
         [HttpGet("/GetAllGeneratedNewsWithImageCount")]
-        public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(int categoryId, string? title)
+        public async Task<IActionResult> GetAllGeneratedNewsWithImageCountAsync(string categoryName, string? title)
         {
             try
             {
-                var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(categoryId,title);
-                var response = new ResponseDto<int>
+                var allCategories = await _categoryService.GetAllCategoriesAsync();
+                var category = allCategories.FirstOrDefault(x => x.CategoryName.Replace(" ", string.Empty).Equals(categoryName.Replace("-", string.Empty), StringComparison.OrdinalIgnoreCase));
+                if (category is not null)
                 {
-                    IsSuccessful = true,
-                    StatusCode = result > 0 ? 200 : 204,
-                    Data = result
-                };
+                    var result = await _newsService.GetAllGeneratedNewsWithImageCountAsync(category.Id, title);
+                    var response = new ResponseDto<int>
+                    {
+                        IsSuccessful = true,
+                        StatusCode = result > 0 ? 200 : 204,
+                        Data = result
+                    };
 
-                return result > 0 ? Ok(response) : NoContent();
+                    return result > 0 ? Ok(response) : NoContent();
+                }
+                return NoContent() ;
             }
             catch (Exception ex) 
             {
