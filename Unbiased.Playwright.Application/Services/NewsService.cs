@@ -179,7 +179,7 @@ namespace Unbiased.Playwright.Application.Services
                                 }), cancellationToken);
                             }
 
-                            var QuestionsAndAnswersOfGeneratedNews = await externalServiceSend.SendNewsQuestionsAndAnswersPrompt(result.Detail, cancellationToken);
+                            var QuestionsAndAnswersOfGeneratedNews = await externalServiceSend.SendNewsQuestionsAndAnswersPrompt(result.Detail,language, cancellationToken);
                             foreach (var question in QuestionsAndAnswersOfGeneratedNews.questions)
                             {
                                 if (question is not null)

@@ -172,9 +172,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <param name="detailOfNew">The detailed content of the news to generate questions and answers for.</param>
         /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
         /// <returns>A QuestionsAndAnswersDto containing the generated questions and answers.</returns>
-        public async Task<QuestionsAndAnswersDto> SendNewsQuestionsAndAnswersPrompt(string detailOfNew, CancellationToken cancellationToken)
+        public async Task<QuestionsAndAnswersDto> SendNewsQuestionsAndAnswersPrompt(string detailOfNew,LanguageEnums language, CancellationToken cancellationToken)
         {
-            var prompt = await NewsQuestionsAndAnswersPrompt(detailOfNew);
+            var prompt = string.Empty;
+            switch (language)
+            {
+                case LanguageEnums.TR:
+                    prompt = await NewsQuestionsAndAnswersPromptAsTurskish(detailOfNew);
+                    break;
+                case LanguageEnums.EN:
+                    prompt=await NewsQuestionsAndAnswersPrompt(detailOfNew);
+                    break;
+                default:
+                    break;
+            }
             var result = new QuestionsAndAnswersDto();
             try
             {
@@ -269,18 +280,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <returns>A string containing the Turkish prompt message.</returns>
         private async Task<string> TurkishPromptMessage(string DetailIOfNews)
         {
-            var newsAnalysis = $@"Bir gazeteci gibi bu haber metnini oku ve yeni bir haber olarak analiz et. İlk cümle başlık olacak şekilde içerik oluştur ve bunu sanki kendi abonelerin okuyacakmış gibi hazırla. Aynı zamanda haberi analiz edip, kendi yorumunu da ekle. Yazının yapay zeka tarafından incelenip analiz edildiğini belirt. Api cevabının bana JSON format olarak ver çünkü Kendimin oluşturduğu API den senin cevabını okuyacağım.Yazı içeriğini olabildiğince uzun yaz. Analiz Edilecek Haber içeriği='{DetailIOfNews}'";
+            var newsAnalysis = $@"Bu haber metnini bir gazeteci gibi oku ve yeni bir makale olarak analiz et. İçeriği ilk cümleyi başlık olarak alacak şekilde oluştur ve kendi abonelerine sunacakmış gibi hazırla. Ayrıca haberi analiz et ve kendi yorumunu da ekle. Makalenin yapay zeka tarafından analiz edildiğini ve gözden geçirildiğini belirt. Metin içeriğini olabildiğince uzun yaz. Haberi okuduktan sonra, bir taraflılık (bias) puanı ver. Okunan haberin ne kadar taraflı ve yargılayıcı olduğunu 0 ile 100 arasında değerlendir. Taraflılık nedenini de açıkla. Yanıtın 'Title:' (Başlık) ile başlasın ve ardından 'Detail:', 'BiasScore:', 'BiasScoreExplanation:' şeklinde devam etsin. API'den bu makaleyi okuyacağım için yanıtın JSON formatında olması gerekiyor.";
 
             var prompt = $@"
             {newsAnalysis}
 
-            KESINLIKLE yanıtını aşağıdaki formatta ver:
+            Bu JSON formatındaki yanıt çok önemlidir!! Lütfen aşağıdaki formattan fazlasını içermesin. Sadece şu formatta yanıt ver:
 
-            {{
-                ""Title"": ""[Haber başlığı]"",
-                ""Detail"": ""[Haber detayı ve analizi]""
-            }} bu dönüş formatı çok önemli buna dikkat et!!
-            asla bunu kullanma '```json\n";
+            {{ 
+                ""Title"": ""[Haber başlığı]"", 
+                ""Detail"": ""[Haberin detayı, analizi ve yorumun]"",
+                ""BiasScore"": ""[Okunan haber için verilen taraflılık puanı]"",
+                ""BiasScoreExplanation"": ""[Taraflılık puanının açıklaması]""
+            }} 
+            Özellikle '```json\n' gibi ifadeler EKLEME.";
 
             return await Task.FromResult(prompt);
         }
@@ -346,6 +359,18 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             var prompt = $@"'{detailOfNew}'Can you read this news and come up with 3-5 questions that we need to question? Can you collect the questions under questions in json format? And give these question answer as json to me as [questions{{ [question:'',answer:''] }}] I will read them from the API. I will read them from the API. IMPORTANT:Just reply in a text format converted to json format";
                  return await Task.FromResult(prompt);
         }
+        /// <summary>
+        /// Creates a prompt message for generating questions and answers related to news content.
+        /// </summary>
+        /// <param name="detailOfNew">The detailed content of the news to generate questions and answers for.</param>
+        /// <returns>A string containing the questions and answers prompt message.</returns>
+        private async Task<string> NewsQuestionsAndAnswersPromptAsTurskish(string detailOfNew)
+        {
+            var prompt = $@"'{detailOfNew}' Bu haberi okuyup sorgulamamız gereken 3 ila 5 adet soru oluşturabilir misin? Soruları 'questions' başlığı altında JSON formatında toplayabilir misin? Ve bu soruların yanıtlarını da bana JSON olarak [questions{{ [question:'', answer:''] }}] formatında verebilir misin? Ben bu verileri API üzerinden okuyacağım. ÖNEMLİ: Yanıtı sadece metin olarak, JSON formatına dönüştürülmüş şekilde ver.";
+
+            return await Task.FromResult(prompt);
+        }
+
     }
 }
 
