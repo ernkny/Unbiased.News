@@ -67,7 +67,7 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="id">The ID of the horoscope (zodiac sign) to retrieve.</param>
         /// <returns>Daily horoscope details for the specified zodiac sign.</returns>
         [HttpGet("/GetAllDailyHoroscopeWithId")]
-        public async Task<IActionResult> GetAllDailyHoroscopeWithId(int id)
+        public async Task<IActionResult> GetAllDailyHoroscopeWithId([FromQuery]int id)
         {
             try
             {
@@ -123,7 +123,6 @@ namespace Unbiased.News.Api.Controllers
         /// Requires authentication to access this endpoint.
         /// </summary>
         /// <returns>The latest content information.</returns>
-        [Authorize]
         [HttpGet("/GetDailyContent")]
         public async Task<IActionResult> GetDailyContent()
         {
