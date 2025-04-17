@@ -28,7 +28,7 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
                 .ForJob(jobKeyPlaywrightNewsGenerate)
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(10)
+                    .WithIntervalInMinutes(8)
                     .RepeatForever())
                 .WithIdentity("PlaywrightNewsGenerateApiJob"));
 
@@ -41,7 +41,7 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
                 .ForJob(jobKeyNewsGenerate)
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(5)
+                    .WithIntervalInMinutes(4)
                     .RepeatForever())
                 .WithIdentity("NewsGenerateApiJob"));
 
