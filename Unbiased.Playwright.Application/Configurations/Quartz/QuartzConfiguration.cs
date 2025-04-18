@@ -55,7 +55,7 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
                 .ForJob(jobKeyNewsGenerateImage)
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(20)
+                    .WithIntervalInSeconds(45)
                     .RepeatForever())
                 .WithIdentity("NewsGenerateImageApiJob"));
 
@@ -68,7 +68,7 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
             quartz.AddTrigger(opts => opts
                 .ForJob(jobKeyHoroscopeGenerate)
                 .WithIdentity("HoroscopeGenerateJob")
-                .WithCronSchedule("0 20 10 * * ?", cron => cron
+                .WithCronSchedule("0 20 08 * * ?", cron => cron
                     .InTimeZone(turkeyTimeZone)
                 ));
 
@@ -81,7 +81,7 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
             quartz.AddTrigger(opts => opts
                 .ForJob(jobKeyDailyContentGenerate)
                 .WithIdentity("DailyContentGenerateJob")
-                .WithCronSchedule("0 10 10 * * ?", cron => cron
+                .WithCronSchedule("0 10 08 * * ?", cron => cron
                     .InTimeZone(turkeyTimeZone)
                 ));
         }

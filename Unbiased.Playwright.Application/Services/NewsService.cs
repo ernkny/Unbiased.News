@@ -185,7 +185,7 @@ namespace Unbiased.Playwright.Application.Services
                                 if (question is not null)
                                 {
                                      await _mediator.Send(new InsertQuestionAndAnswerCommand(new QuestionAnswerDto()
-                                     { Question=question.question,Answer=question.answer, MatchId = item.MatchId }));
+                                     { Question=question.question,Answer=question.answer, MatchId = item.MatchId,CreatedDate=DateTime.UtcNow }));
                                 }
                             }
                         }
