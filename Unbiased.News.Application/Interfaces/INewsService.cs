@@ -76,5 +76,13 @@ namespace Unbiased.News.Application.Interfaces
         /// </summary>
         /// <returns>A task containing statistical data about news items.</returns>
         Task<StatisticsDto> GetAllStatisticsAsync();
+
+        /// <summary>
+        /// Retrieves banner news items for a specific category and language.
+        /// </summary>
+        /// <param name="categoryId">The category ID to retrieve banner news from.</param>
+        /// <param name="language">The language of the news items to retrieve.</param>
+        /// <returns>A task containing a collection of banner news items with images.</returns>
+        Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsForSiteMapAsync(string language);
     }
 }

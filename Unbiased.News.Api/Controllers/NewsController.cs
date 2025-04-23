@@ -384,5 +384,42 @@ namespace Unbiased.News.Api.Controllers
                 return StatusCode(500, errorResponse);
             }
         }
+
+        /// <summary>
+        /// Retrieves the top latest news items from a specific category for the detail page,
+        /// excluding the news item with the provided ID.
+        /// </summary>
+        /// <param name="categoryId">The category ID to retrieve news from.</param>
+        /// <param name="id">The ID of the news item to exclude from results.</param>
+        /// <param name="language">The language of the news items to retrieve.</param>
+        /// <returns>A list of the latest top news items from the specified category.</returns>
+        [HttpGet("/GetAllGeneratedNewsForSiteMap")]
+        public async Task<IActionResult> GetAllGeneratedNewsForSiteMap(string language)
+        {
+            try
+            {
+                var result = await _newsService.GetAllGeneratedNewsForSiteMapAsync(language);
+                var response = new ResponseDto<List<GenerateNewsWithImageDto>>
+                {
+                    IsSuccessful = true,
+                    StatusCode = result.Count() > 0 ? 200 : 204,
+                    Data = result.ToList()
+                };
+
+                return result.Any() ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request"
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+        
     }
 }

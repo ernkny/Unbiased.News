@@ -46,6 +46,28 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// Retrieves all generated news asynchronously.
+        /// </summary>
+        /// <param name="language">The language code to filter news by.</param>
+        /// <returns>A collection of <see cref="GeneratedNew"/> objects.</returns>
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsForSiteMapAsync(string language)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Language", language);
+                    return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetRecentNewsForSiteMap", parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         /// <summary>
         /// Retrieves all generated news with images asynchronously.
         /// </summary>

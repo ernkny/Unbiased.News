@@ -15,6 +15,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         /// <returns>A collection of generated news.</returns>
         Task<IEnumerable<GeneratedNew>> GetAllGeneratedNewsAsync(string language);
 
+
+
+        /// <summary>
+        /// Retrieves all generated news asynchronously.
+        /// </summary>
+        /// <param name="language">The language code to filter news by.</param>
+        /// <returns>A collection of generated news.</returns>
+        Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsForSiteMapAsync(string language);
+
         /// <summary>
         /// Retrieves all generated news with images asynchronously.
         /// </summary>

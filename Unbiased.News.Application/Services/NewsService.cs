@@ -206,5 +206,25 @@ namespace Unbiased.News.Application.Services
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Retrieves banner news items for a specific category and language.
+        /// </summary>
+        /// <param name="categoryId">The category ID to retrieve banner news from.</param>
+        /// <param name="language">The language of the news items to retrieve.</param>
+        /// <returns>A collection of banner news items with images.</returns>
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsForSiteMapAsync(string language)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetAllGeneratedNewsForSiteMapQuery(language));
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
