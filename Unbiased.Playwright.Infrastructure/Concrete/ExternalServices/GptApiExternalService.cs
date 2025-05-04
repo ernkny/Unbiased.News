@@ -682,7 +682,6 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             return await Task.FromResult(prompt.Trim());
         }
 
-
         /// <summary>
         /// Creates an English prompt message formatted for OpenAI API call.
         /// </summary>
@@ -737,7 +736,6 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             return await Task.FromResult(prompt.Trim());
         }
 
-
         /// <summary>
         /// Creates a prompt message for generating horoscope content.
         /// </summary>
@@ -750,7 +748,6 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
             return await Task.FromResult(prompt);
         }
-
 
         /// <summary>
         /// Creates a prompt message for generating daily information content.
@@ -774,6 +771,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             var prompt = $@"'{detailOfNew}'Can you read this news and come up with 3-5 questions that we need to question? Can you collect the questions under questions in json format? And give these question answer as json to me as [questions{{ [question:'',answer:''] }}] I will read them from the API. I will read them from the API. IMPORTANT:Just reply in a text format converted to json format";
             return await Task.FromResult(prompt);
         }
+
         /// <summary>
         /// Creates a prompt message for generating questions and answers related to news content.
         /// </summary>
