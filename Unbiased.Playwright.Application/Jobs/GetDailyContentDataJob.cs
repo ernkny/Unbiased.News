@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Quartz;
-using System.Runtime.CompilerServices;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
@@ -39,7 +38,6 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-
                 if (context != null)
                 {
                     var dailyContentDataFromGpt = new GptApiExternalService(new HttpClient(), _configuration, _mediator);

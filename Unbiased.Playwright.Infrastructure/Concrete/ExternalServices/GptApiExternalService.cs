@@ -41,11 +41,104 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         public async Task<NewsExtractDto> SendCombinedNewsDetailToGpt(string DetailIOfNews, LanguageEnums language, CancellationToken cancellationToken)
         {
             var result = new NewsExtractDto();
-            var prompt = await SetPromptMessageLanguageWithDetailOfNews(language, DetailIOfNews);
 
             try
             {
-                var response = await SendPromtToGptAndGetResponse(prompt, cancellationToken);
+                var url = _configuration.GetSection("Urls:GptApi").Value;
+                var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
+
+                var prompt = language == LanguageEnums.TR
+                    ? await TurkishPromptMessage(DetailIOfNews)
+                    : await EnglishPromptMessage(DetailIOfNews);
+
+                var requestData = new
+                {
+                    model = "gpt-4o-mini",
+                    messages = new object[]
+                    {
+                new
+                {
+                    role = "developer",
+                    content = new object[]
+                    {
+                        new
+                        {
+                            type = "text",
+                            text = prompt
+                        }
+                    }
+                },
+                new
+                {
+                    role = "user",
+                    content = new object[]
+                    {
+                        new
+                        {
+                            type = "text",
+                            text = DetailIOfNews
+                        }
+                    }
+                }
+                    },
+                    response_format = new
+                    {
+                        type = "json_schema",
+                        json_schema = new
+                        {
+                            name = "generate_news_article",
+                            strict = false,
+                            schema = new
+                            {
+                                type = "object",
+                                properties = new
+                                {
+                                    Title = new
+                                    {
+                                        type = "string",
+                                        description = "A short, attractive title summarizing the news article."
+                                    },
+                                    Detail = new
+                                    {
+                                        type = "string",
+                                        description = "A detailed, formatted (using HTML tags) news article including commentary and original source analysis."
+                                    },
+                                    BiasScore = new
+                                    {
+                                        type = "integer",
+                                        description = "Bias evaluation score between 0 (unbiased) and 100 (very biased).",
+                                        minimum = 0,
+                                        maximum = 100
+                                    },
+                                    BiasScoreExplanation = new
+                                    {
+                                        type = "string",
+                                        description = "A short explanation (2-4 sentences) explaining the assigned bias score."
+                                    }
+                                },
+                                required = new[] { "Title", "Detail", "BiasScore", "BiasScoreExplanation" }
+                            }
+                        }
+                    },
+                    temperature= 1,
+                      max_completion_tokens= 10000,
+                      top_p= 1,
+                      frequency_penalty= 0,
+                      presence_penalty= 0,
+                      store= true
+                };
+                var request = new HttpRequestMessage(HttpMethod.Post, url)
+                {
+                    Content = new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/json")
+                };
+                request.Headers.Add("Authorization", $"Bearer {apiKey}");
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    throw new OperationCanceledException();
+                }
+
+                var response = await _httpClient.SendAsync(request, cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -96,7 +189,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 if (response.IsSuccessStatusCode)
                 {
                     await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
-                   
+
 
                 }
                 var jsonDoc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
@@ -105,7 +198,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 foreach (var choice in choices.EnumerateArray())
                 {
                     var message = choice.GetProperty("message");
-                   return message.GetProperty("content").GetString();
+                    return message.GetProperty("content").GetString();
                 }
                 var responseContent = await response.Content.ReadAsStringAsync();
                 return responseContent;
@@ -172,7 +265,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <param name="detailOfNew">The detailed content of the news to generate questions and answers for.</param>
         /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
         /// <returns>A QuestionsAndAnswersDto containing the generated questions and answers.</returns>
-        public async Task<QuestionsAndAnswersDto> SendNewsQuestionsAndAnswersPrompt(string detailOfNew,LanguageEnums language, CancellationToken cancellationToken)
+        public async Task<QuestionsAndAnswersDto> SendNewsQuestionsAndAnswersPrompt(string detailOfNew, LanguageEnums language, CancellationToken cancellationToken)
         {
             var prompt = string.Empty;
             switch (language)
@@ -181,7 +274,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     prompt = await NewsQuestionsAndAnswersPromptAsTurskish(detailOfNew);
                     break;
                 case LanguageEnums.EN:
-                    prompt=await NewsQuestionsAndAnswersPrompt(detailOfNew);
+                    prompt = await NewsQuestionsAndAnswersPrompt(detailOfNew);
                     break;
                 default:
                     break;
@@ -210,6 +303,287 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
             {
 
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Sends a prompt to the GPT API to generate content based on the provided prompt and language.
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <param name="language"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="OperationCanceledException"></exception>
+        public async Task<HttpResponseMessage> SendGeneratedContentPromptAndGetResponse(string prompt, LanguageEnums language, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var url = _configuration.GetSection("Urls:GptApi").Value;
+                var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
+
+                var requestData = new
+                {
+                    model = "o3-mini",
+                    messages = new object[]
+                    {
+                new
+                {
+                    role = "developer",
+                    content = new object[]
+                    {
+                        new
+                        {
+                            type = "text",
+                            text =await ContentGeneratePromptMessageHeading(language)
+                        }
+                    }
+                },
+                new
+                {
+                    role = "user",
+                    content = new object[]
+                    {
+                        new
+                        {
+                            type = "text",
+                            text = prompt
+                        }
+                    }
+                }
+                    },
+                    response_format = new
+                    {
+                        type = "json_object"
+                    },
+                    reasoning_effort = "medium",
+                    store = true
+                };
+
+                var request = new HttpRequestMessage(HttpMethod.Post, url)
+                {
+                    Content = new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/json")
+                };
+                request.Headers.Add("Authorization", $"Bearer {apiKey}");
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    throw new OperationCanceledException();
+                }
+
+                HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken);
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Sends a request to the GPT API to generate new content subheadings based on the provided base title.
+        /// </summary>
+        /// <param name="ContentBaseTitle"></param>
+        /// <param name="language"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="OperationCanceledException"></exception>
+        public async Task<HttpResponseMessage> SendForGetNewContentSubheadingsPromptAndGetResponse(string ContentBaseTitle, LanguageEnums language, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var url = _configuration.GetSection("Urls:GptApi").Value;
+                var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
+
+                var requestData = new
+                {
+                    model = "o3-mini",
+                    messages = new object[]
+                    {
+                new
+                {
+                    role = "developer",
+                    content = new object[]
+                    {
+                        new
+                        {
+                            type = "text",
+                            text = await GenerateSubheadingsForNewContents(ContentBaseTitle,language)
+                        }
+                    }
+                },
+                new
+                {
+                    role = "user",
+                    content = new object[]
+                    {
+                        new
+                        {
+                            type = "text",
+                            text = ContentBaseTitle
+                        }
+                    }
+                }
+                    },
+                    response_format = new
+                    {
+                        type = "json_schema",
+                        json_schema = new
+                        {
+                            name = "contentTitles",
+                            strict = false,
+                            schema = new
+                            {
+                                type = "object",
+                                properties = new
+                                {
+                                    titles = new
+                                    {
+                                        type = "array",
+                                        items = new
+                                        {
+                                            type = "string"
+                                        },
+                                        minItems = 30,
+                                        maxItems = 30
+                                    }
+                                },
+                                required = new[] { "Titles" }
+                            }
+                        }
+                    },
+                    reasoning_effort = "medium",
+                    store = true
+                };
+
+                var request = new HttpRequestMessage(HttpMethod.Post, url)
+                {
+                    Content = new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/json")
+                };
+                request.Headers.Add("Authorization", $"Bearer {apiKey}");
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    throw new OperationCanceledException();
+                }
+
+                HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken);
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Generates a prompt message for the GPT API to create content based on the provided language.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        private static async Task<string> ContentGeneratePromptMessageHeading(LanguageEnums language)
+        {
+            switch (language)
+            {
+                case LanguageEnums.TR:
+                    await Task.CompletedTask;
+                    return @"Lütfen bu başlığa uygun olarak:
+                                - 8000-1000 kelimelik açıklayıcı, sade ve öğretici bir içerik yaz, step step belirt (Türkçe).
+                                - Görsel üretimi için DALL·E’ye uygun yaratıcı bir görsel betimleme prompt’u oluştur.
+                                - 2 adet önemli soru ve cevap üret.
+                                - 3 adet sosyal medya etiketi üret (#etiket formatında).
+
+                                Sonucu şu JSON formatında döndür:
+                                {
+                                  ""SubTitle"": ""..."",
+                                  ""Steps"": [{""StepNumber"":""..."",""StepTitle"":""..."", ""StepDescription"":""...""}],
+                                  ""ImagePrompt"": ""..."",
+                                  ""Questions"": [
+                                    { ""Question"": ""..."", ""Answer"": ""..."" },
+                                    { ""Question"": ""..."", ""Answer"": ""..."" }
+                                  ],
+                                  ""Hashtags"": ""...""
+                                }";
+                case LanguageEnums.EN:
+
+                    await Task.CompletedTask;
+                    return @"Please write a detailed, simple, and educational content of 8000-10000 words suitable for this title, specifying step by step (in English).
+                                - Create a creative visual description prompt suitable for DALL·E for image production.
+                                - Generate 2 important questions and answers.
+                                - Generate 3 social media hashtags (#hashtag format).
+                                Return the result in the following JSON format:
+                                {
+                                  ""SubTitle"": ""..."",
+                                  ""Steps"": [{""StepNumber"":""..."",""StepTitle"":""..."", ""StepDescription"":""...""}],
+                                  ""ImagePrompt"": ""..."",
+                                  ""Questions"": [
+                                    { ""Question"": ""..."", ""Answer"": ""..."" },
+                                    { ""Question"": ""..."", ""Answer"": ""..."" }
+                                  ],
+                                  ""Hashtags"": ""...""
+                                }";
+                default:
+
+                    await Task.CompletedTask;
+                    return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Generates a prompt message for the GPT API to create a horoscope based on the provided horoscope sign.
+        /// </summary>
+        /// <param name="ContentBaseTitle"></param>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        private static async Task<string> GenerateSubheadingsForNewContents(string ContentBaseTitle, LanguageEnums language)
+        {
+            await Task.CompletedTask;
+            var random = new Random();
+            var seedValue = random.Next(1000, 9999);
+            switch (language)
+            {
+                case LanguageEnums.TR:
+                    return @$"
+                            Aşağıdaki kurallara uygun şekilde içerik başlıkları üret:
+
+                            - Sana 1 kategori veriyorum:
+                              {ContentBaseTitle}
+
+                            - Her çalıştırıldığında bu kategoriden 30 adet içerik başlığı üret.
+
+                            Kurallar:
+                            - Üretilen başlıklar farklı, özgün ve çeşitlendirilmiş olsun.
+                            - Başlıklar kısa, net ve araştırmaya uygun olsun (gereksiz açıklama yapma, sadece başlığı ver).
+                            - Başlıklar önceden üretilenlerle birebir aynı olmamalı (mümkün olduğunca yeni varyasyonlar bul).
+                            - Aynı konsepti tekrar etmekten kaçın.
+                            - Gerekirse yeni alanlardan esinlen (bilim, tarih, sağlık, teknoloji, doğaüstü vs.).
+                            - Üretim mantığı rastlantısal olsun: bazı başlıklar bilimsel, bazıları ilginç, bazıları günlük hayata yakın olabilir.
+                            - Sadece saf başlık listesi ver, açıklama veya ek bilgi ekleme.
+
+                            SeedValue = {seedValue}
+                            ";
+
+                case LanguageEnums.EN:
+                    return @$"
+                        Generate content titles according to the following rules:
+
+                        - You are given 1 category:
+                          {ContentBaseTitle}
+
+                        - Each time you run this, generate 30 content titles for the given category.
+
+                        Rules:
+                        - The generated titles must be different, original, and varied.
+                        - Titles should be short, clear, and research-friendly (do not add unnecessary explanations, only provide the title).
+                        - Titles must not be exactly the same as previously generated ones (generate new variations as much as possible).
+                        - Avoid repeating the same concepts.
+                        - Feel free to draw inspiration from new areas (science, history, health, technology, supernatural, etc.).
+                        - The generation should be random: some titles can be scientific, some interesting, and some related to everyday life.
+                        - Provide only a pure list of titles, without any explanations or additional information.
+
+                        SeedValue = {seedValue}
+                        ";
+                default:
+                    return string.Empty;
             }
         }
 
@@ -255,73 +629,114 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         }
 
         /// <summary>
-        /// Sets the prompt message language based on the specified language enum and combines it with the news details.
+        /// Creates a Turkish prompt message formatted for OpenAI API call.
         /// </summary>
-        /// <param name="language">The language enum specifying the output language.</param>
-        /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
-        /// <returns>A string containing the complete prompt message in the specified language.</returns>
-        private async Task<string> SetPromptMessageLanguageWithDetailOfNews(LanguageEnums language, string DetailIOfNews)
+        /// <param name="detailOfNews">The news content to process.</param>
+        /// <returns>A formatted prompt string in Turkish.</returns>
+        private async Task<string> TurkishPromptMessage(string detailOfNews)
         {
-            switch (language)
-            {
-                case LanguageEnums.EN:
-                    return await EnglishPromptMessage(DetailIOfNews);
-                case LanguageEnums.TR:
-                    return await TurkishPromptMessage(DetailIOfNews);
-                default: throw new Exception("Language not supported");
+            var prompt = $@"
+                        Sen profesyonel bir gazeteci yapay zekâsısın.
 
-            }
+                        Görevin:
+                        - Aşağıda verilen haber içeriğini oku ve derinlemesine analiz et: '{detailOfNews}'
+                        - Haberi kendi yorumun ve analizlerinle baştan yaz. Orijinal haberin ana fikrine sadık kalarak, içeriği yeniden düzenle ve geliştir.
+                        - Yazım kurallarına, dil bilgisine ve anlam bütünlüğüne dikkat ederek haberi akıcı, profesyonel ve etkileyici bir dille kaleme al.
+
+                        Haber Yazım Kuralları:
+                        - Kaynak adı veya bağlantısı (link) verme.
+                        - Sadece haberin ana içeriğini ve kendi yorumunu kullanarak haber üret.
+                        - Haber yazısında aşırı öznel yorumlardan kaçın. Tarafsızlık ve nesnellik çerçevesinde yorum yap.
+                        - Okuyucunun kolayca anlayabileceği, açık ve net bir dil kullan.
+
+                        Formatlama Kuralları:
+                        - Haber metninde okunabilirliği artırmak için HTML etiketleri kullan:
+                          - <h2> başlık için
+                          - <p> paragraflar için
+                          - <ul> ve <li> listeler için
+                          - <strong> veya <em> önemli ifadeler için
+
+                        Haber Uzunluğu:
+                        - Yazı mümkün olduğunca uzun, detaylı ve okuyucuyu bilgilendirici olmalıdır.
+
+                        Taraflılık Değerlendirmesi:
+                        - Yazının sonunda, haberin genel taraflılık düzeyini değerlendir.
+                        - BiasScore ver: 0 (tarafsız) ile 100 (aşırı taraflı) arasında bir değer.
+                        - BiasScoreExplanation: Bu puanı neden verdiğini açıklayan 2-4 cümlelik kısa bir yorum yaz.
+
+                        Yanıt Formatı:
+                        - Sadece aşağıdaki JSON formatında yanıt ver.
+                        - Kesinlikle kod bloğu (```json gibi) kullanma.
+
+                        Beklenen JSON Yapısı:
+
+                        {{
+                          ""Title"": ""[Kısa ve etkileyici haber başlığı]"",
+                          ""Detail"": ""[HTML etiketleri kullanılarak yazılmış detaylı haber metni]"",
+                          ""BiasScore"": [0-100 arasında tam sayı],
+                          ""BiasScoreExplanation"": ""[Taraflılık puanı açıklaması]"",
+                          ""ImagePrompt"": ""[Fotoğraf oluşturmak için prompt]""
+                        }}
+                        ";
+
+            return await Task.FromResult(prompt.Trim());
         }
+
 
         /// <summary>
-        /// Creates a prompt message in Turkish for processing news content.
+        /// Creates an English prompt message formatted for OpenAI API call.
         /// </summary>
-        /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
-        /// <returns>A string containing the Turkish prompt message.</returns>
-        private async Task<string> TurkishPromptMessage(string DetailIOfNews)
+        /// <param name="detailOfNews">The news content to process.</param>
+        /// <returns>A formatted prompt string in English.</returns>
+        private async Task<string> EnglishPromptMessage(string detailOfNews)
         {
-            var newsAnalysis = $@"Bu haber metnini bir gazeteci gibi oku ve yeni bir makale olarak analiz et ve yayınla. İçerik olabildiğince detaylı ve uzun olmalı İçeriği ilk cümleyi başlık olarak alacak şekilde oluştur ve kendi abonelerine sunacakmış gibi hazırla. Ayrıca haberi analiz et ve kendi yorumunu da ekle.Metin içeriğini olabildiğince uzun yaz. Haberi okuduktan sonra, bir taraflılık (bias) puanı ver. Okunan haberin ne kadar taraflı ve yargılayıcı olduğunu 0 ile 100 arasında değerlendir. Okumuş olduğun haberin taraflılık nedenini de açıkla. 'Title:' (Başlık) ile başlasın ve ardından 'Detail:', 'BiasScore:', 'BiasScoreExplanation:' şeklinde devam etsin. API'den bu makaleyi okuyacağım için yanıtın JSON formatında olması gerekiyor. bir kaç kaynaktan alınmış haber içerikleri= '{DetailIOfNews}'";
-
             var prompt = $@"
-            {newsAnalysis}
+                        You are a professional journalist AI.
 
-            Bu JSON formatındaki yanıt çok önemlidir!! Lütfen aşağıdaki formattan fazlasını içermesin. Sadece şu formatta yanıt ver:
+                        Your task:
+                        - Read and deeply analyze the following news content: '{detailOfNews}'
+                        - Rewrite the article using your own commentary and analysis. Preserve the main idea but enhance the clarity and depth.
+                        - Ensure grammatical accuracy, flow, and professional tone throughout the writing.
 
-            {{ 
-                ""Title"": ""[Haber başlığı]"", 
-                ""Detail"": ""[Haberin detayı, analizi ve yorumun]"",
-                ""BiasScore"": ""[Okunan haber için verilen taraflılık puanı]"",
-                ""BiasScoreExplanation"": ""[Taraflılık puanının açıklaması]""
-            }} 
-            Özellikle '```json\n' gibi ifadeler EKLEME.";
+                        Article Writing Rules:
+                        - Do not cite sources, links, or external references.
+                        - Only use the core news content and your own commentary.
+                        - Avoid overly subjective opinions. Maintain objectivity and journalistic neutrality.
+                        - Use a clear, easy-to-read style for general audiences.
 
-            return await Task.FromResult(prompt);
+                        Formatting Rules:
+                        - Use proper HTML tags for better readability:
+                          - <h2> for major headings
+                          - <p> for paragraphs
+                          - <ul> and <li> for listing important points
+                          - <strong> or <em> for emphasis when needed
+
+                        Article Length:
+                        - Write as long and detailed as possible, engaging the reader.
+
+                        Bias Evaluation:
+                        - After the article, evaluate the overall bias.
+                        - Provide a BiasScore between 0 (unbiased) and 100 (extremely biased).
+                        - Provide a short BiasScoreExplanation explaining the reason for the score in 2-4 sentences.
+
+                        Response Format:
+                        - Respond only in the following pure JSON structure.
+                        - Do not wrap with any markdown (such as ```json).
+
+                        Expected JSON Format:
+
+                        {{
+                          ""Title"": ""[Short and engaging news title]"",
+                          ""Detail"": ""[Formatted article with HTML tags]"",
+                          ""BiasScore"": [Bias score 0-100],
+                          ""BiasScoreExplanation"": ""[Brief explanation for the bias score]"",
+                          ""ImagePrompt"": ""[Prompt to create photo]""
+                        }}
+                        ";
+
+            return await Task.FromResult(prompt.Trim());
         }
 
-        /// <summary>
-        /// Creates a prompt message in English for processing news content.
-        /// </summary>
-        /// <param name="DetailIOfNews">The detailed content of the news to be processed.</param>
-        /// <returns>A string containing the English prompt message.</returns>
-        private async Task<string> EnglishPromptMessage(string DetailIOfNews)
-        {
-            var newsAnalysis = $@"Read this news text like a journalist and analyze it as a new article. Create the content with the first sentence as the title, and prepare it as if it were for your own subscribers. Also, analyze the news and add your own commentary. Write the text content as long as possible and give more detail of the sources that you read. Also when you read finish give bias score. How biased and judgmental the news you read is on average. Bias Score is 0 to 100 Also give Reason of bias caused. Start your response with 'Title:' and continue with 'Detail:' And 'BiasScore:','BiasScoreExplanation:', Your api response has to be JSON formatted because I will read your article from an API. Details of the news sources=  '{DetailIOfNews}'";
-
-            var prompt = $@"
-            {newsAnalysis}
-
-            This json format response type is very important!! not incluede any more than this. Please respond in the following format:
-
-            {{ 
-                ""Title"": ""[News headline]"", 
-                ""Detail"": ""[News detail and analysis or your commantary]"",
-                ""BiasScore"": ""[Give your bias score to all readed news]"",
-                ""BiasScoreExplanation"": ""[Give your bias score Explanation]"",
-            }} 
-           essipacially Dont put  '```json\n";
-
-            return await Task.FromResult(prompt);
-        }
 
         /// <summary>
         /// Creates a prompt message for generating horoscope content.
@@ -330,7 +745,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <returns>A string containing the horoscope prompt message.</returns>
         private async Task<string> HoroscopePromptMessage(string horoscope)
         {
-            var prompt = $@"Bir astroloji uzmanı gibi {DateTime.UtcNow.ToString("dd/MM/yyyy").ToString()} tarihi için günlük {horoscope} burcunun yorumunu yap. sadece cevabını yaz, açıklayıcı ve orta uzunlukta yaz.Profesyonel türkçe kullan." ;
+            var prompt = $@"Bir astroloji uzmanı gibi {DateTime.UtcNow.ToString("dd/MM/yyyy").ToString()} tarihi için günlük {horoscope} burcunun yorumunu yap. sadece cevabını yaz, açıklayıcı ve orta uzunlukta yaz.Profesyonel türkçe kullan.";
 
 
             return await Task.FromResult(prompt);
@@ -357,7 +772,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         private async Task<string> NewsQuestionsAndAnswersPrompt(string detailOfNew)
         {
             var prompt = $@"'{detailOfNew}'Can you read this news and come up with 3-5 questions that we need to question? Can you collect the questions under questions in json format? And give these question answer as json to me as [questions{{ [question:'',answer:''] }}] I will read them from the API. I will read them from the API. IMPORTANT:Just reply in a text format converted to json format";
-                 return await Task.FromResult(prompt);
+            return await Task.FromResult(prompt);
         }
         /// <summary>
         /// Creates a prompt message for generating questions and answers related to news content.
@@ -370,7 +785,6 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
             return await Task.FromResult(prompt);
         }
-
     }
 }
 

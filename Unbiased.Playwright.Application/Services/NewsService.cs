@@ -11,6 +11,7 @@ using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices.Factory;
+using Unbiased.Playwright.Application.Abstract;
 
 
 namespace Unbiased.Playwright.Application.Services
@@ -19,7 +20,7 @@ namespace Unbiased.Playwright.Application.Services
     /// NewsService is responsible for handling news-related operations.
     /// It implements the INewsService interface.
     /// </summary>
-    public sealed class NewsService : INewsService
+    public sealed class NewsService : AbstractImageProcess, INewsService
     {
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
@@ -31,7 +32,7 @@ namespace Unbiased.Playwright.Application.Services
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
         /// <param name="configuration">The configuration instance.</param>
-        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions)
+        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions) : base(awsOptions.Value, mediator, configuration, serviceProvider)
         {
             _mediator = mediator;
             _configuration = configuration;
@@ -160,7 +161,7 @@ namespace Unbiased.Playwright.Application.Services
                             if (!item.IsManuelImage)
                             {
 
-                                imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(result.Title, ImageGenerationSource.Freepik, cancellationToken);
+                                imageFile = await GenerateImageAndSaveAsync(result.ImagePrompt, cancellationToken);
                                 if (imageFile is null)
                                 {
                                     imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
@@ -203,39 +204,14 @@ namespace Unbiased.Playwright.Application.Services
         }
 
         /// <summary>
-        /// Sends a news title to the DALL-E API to generate an image and saves it to file.
+        /// This method must be implemented by subclasses.
         /// </summary>
-        /// <param name="Title">The title of the news to generate an image for.</param>
+        /// <param name="title">The title to generate an image for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A task representing the asynchronous operation, containing the path to the saved image.</returns>
-        private async Task<string> SendNewsToApiForGenerateImageAsync(string Title, CancellationToken cancellationToken)
+        /// <returns>The saved image URL or null if failed.</returns>
+        public override async Task<string?> GenerateImageAndSaveAsync(string title, CancellationToken cancellationToken)
         {
-            var externalServiceImageSend = new GptDalleApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
-            var generatedImage = await externalServiceImageSend.GetImageDataFromGpt(Title, cancellationToken);
-            return generatedImage != null ? await new SaveGeneratedImage(_configuration).SaveGeneratedImageToFile(generatedImage.Data.First().Url, Title, cancellationToken) : null;
-        }
-
-        /// <summary>
-        /// Generates an image based on a news title using the specified image generation source and saves it to AWS.
-        /// </summary>
-        /// <param name="title">The title of the news to generate an image for.</param>
-        /// <param name="source">The image generation source to use.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A task representing the asynchronous operation, containing the URL of the saved image or null if unsuccessful.</returns>
-        private async Task<string?> SendNewsToApiForGenerateImageAndSaveItAwsAsync(string title, ImageGenerationSource source, CancellationToken cancellationToken)
-        {
-            var imageGeneratorService = ImageGeneratorServiceFactory.Create(source, _serviceProvider);
-            var imageUrl = await imageGeneratorService.GenerateImageUrlAsync(title, cancellationToken);
-
-            if (string.IsNullOrEmpty(imageUrl))
-                return null;
-
-            return await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
-                _awsCredentials.BucketName,
-                _configuration.GetSection("Paths:AwsFilePath").Value,
-                imageUrl,
-                cancellationToken
-            );
+           return await SendNewsToApiForGenerateImageAndSaveItAwsAsync(title, ImageGenerationSource.Freepik, cancellationToken);
         }
     }
 }

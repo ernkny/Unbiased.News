@@ -27,5 +27,10 @@
         /// Indicates the level of bias detected in the news, typically on a scale of 0-100.
         /// </summary>
         public string BiasScore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the promt of the news source to create Image
+        /// </summary>
+        public string ImagePrompt { get; set; }
     }
 }

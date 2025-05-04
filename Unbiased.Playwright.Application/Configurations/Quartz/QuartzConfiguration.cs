@@ -84,6 +84,32 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
                 .WithCronSchedule("0 10 08 * * ?", cron => cron
                     .InTimeZone(turkeyTimeZone)
                 ));
+
+            var jobKeyContentGenerate = new JobKey("ContentGenerateJob");
+            quartz.AddJob<ConsumeUnprocessContentSubheadings>(opts => opts
+                .WithIdentity(jobKeyContentGenerate)
+                .StoreDurably());
+
+            quartz.AddTrigger(opts => opts
+                .ForJob(jobKeyContentGenerate)
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInMinutes(45)
+                    .RepeatForever())
+                .WithIdentity("ContentGenerateJob"));
+
+            var jobKeySubheadingsGenerate = new JobKey("SubheadingsGenerateJob");
+            quartz.AddJob<GetContentSubheadingsJob>(opts => opts
+                .WithIdentity(jobKeySubheadingsGenerate)
+                .StoreDurably());
+
+            quartz.AddTrigger(opts => opts
+                .ForJob(jobKeySubheadingsGenerate)
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInHours(10)
+                    .RepeatForever())
+                .WithIdentity("SubheadingsGenerateJob"));
         }
     }
 }
