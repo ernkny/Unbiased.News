@@ -88,7 +88,7 @@ namespace Unbiased.Playwright.Application.Services
                     var imageFile=string.Empty;
                     if (!item.IsManuelImage)
                     {
-                        imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.Title, ImageGenerationSource.Freepik,cancellationToken);
+                        imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.ImagePrompt, ImageGenerationSource.Freepik,cancellationToken);
                         if (imageFile is null)
                         {
                             imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";

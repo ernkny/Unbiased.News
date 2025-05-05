@@ -126,6 +126,11 @@ namespace Unbiased.Playwright.Domain.Entities
         public string BiasScoreExplanation {  get; set; }
 
         /// <summary>
+        /// Gets or sets the image prompt used for generating images related to the news.
+        /// </summary>
+        public string ImagePrompt { get; set; }
+
+        /// <summary>
         /// Gets or sets the count of scores or ratings received for this news article.
         /// Used for tracking how many times the news has been evaluated or rated.
         /// </summary>
