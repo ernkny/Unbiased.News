@@ -37,6 +37,11 @@
         public DateTime? CreatedTime { get; set; }
 
         /// <summary>
+        /// Gets or sets the ImagePath.
+        /// </summary>
+        public string ImagePath { get; set; }
+
+        /// <summary>
         /// Gets or sets the unique URL path used to access this subheading's content.
         /// </summary>
         public string? UniqUrlPath { get; set; }
