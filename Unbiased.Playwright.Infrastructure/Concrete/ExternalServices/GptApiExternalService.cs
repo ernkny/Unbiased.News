@@ -105,7 +105,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                                     },
                                     BiasScore = new
                                     {
-                                        type = "integer",
+                                        type = "string",
                                         description = "Bias evaluation score between 0 (unbiased) and 100 (very biased).",
                                         minimum = 0,
                                         maximum = 100
@@ -673,7 +673,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                         {{
                           ""Title"": ""[Kısa ve etkileyici haber başlığı]"",
                           ""Detail"": ""[HTML etiketleri kullanılarak yazılmış detaylı haber metni]"",
-                          ""BiasScore"": [0-100 arasında tam sayı],
+                          ""BiasScore"": ""[0-100 arasında tam sayı]"",
                           ""BiasScoreExplanation"": ""[Taraflılık puanı açıklaması]"",
                           ""ImagePrompt"": ""[Fotoğraf oluşturmak için prompt]""
                         }}
@@ -727,7 +727,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                         {{
                           ""Title"": ""[Short and engaging news title]"",
                           ""Detail"": ""[Formatted article with HTML tags]"",
-                          ""BiasScore"": [Bias score 0-100],
+                          ""BiasScore"": ""[Bias score 0-100]"",
                           ""BiasScoreExplanation"": ""[Brief explanation for the bias score]"",
                           ""ImagePrompt"": ""[Prompt to create photo]""
                         }}

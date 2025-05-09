@@ -117,7 +117,7 @@ namespace Unbiased.Playwright.Domain.Entities
         /// Gets or sets the bias score of the news content.
         /// Indicates the level of bias detected in the news, typically on a scale of 0-100.
         /// </summary>
-        public string BiasScore {  get; set; }
+        public int BiasScore {  get; set; }
 
         /// <summary>
         /// Gets or sets the explanation of how the bias score was determined.

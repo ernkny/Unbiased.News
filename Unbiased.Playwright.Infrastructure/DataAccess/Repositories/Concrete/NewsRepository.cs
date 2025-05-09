@@ -227,7 +227,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("CategoryId", generatedNews.CategoryId, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("MatchId", generatedNews.MatchId, DbType.String, ParameterDirection.Input);
                     parameters.Add("Language", generatedNews.Language, DbType.String, ParameterDirection.Input);
-                    parameters.Add("BiasScore", generatedNews.BiasScore, DbType.String, ParameterDirection.Input);
+                    parameters.Add("BiasScore", generatedNews.BiasScore, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("BiasScoreExplanation", generatedNews.BiasScoreExplanation, DbType.String, ParameterDirection.Input);
                     parameters.Add("ImagePrompt", generatedNews.ImagePrompt, DbType.String, ParameterDirection.Input);
 

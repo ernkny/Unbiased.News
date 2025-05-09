@@ -148,7 +148,7 @@ namespace Unbiased.Playwright.Application.Services
                         MatchId = item.MatchId,
                         CategoryId = item.CategoryId,
                         Language = item.Language,
-                        BiasScore = result.BiasScore,
+                        BiasScore = Convert.ToInt32(result.BiasScore),
                         BiasScoreExplanation = result.BiasScoreExplanation,
                     };
                     if (!string.IsNullOrEmpty(result.Title) || !string.IsNullOrEmpty(result.Detail))
