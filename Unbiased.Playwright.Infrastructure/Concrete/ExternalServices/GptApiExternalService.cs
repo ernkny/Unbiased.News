@@ -120,12 +120,12 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                             }
                         }
                     },
-                    temperature= 1,
-                      max_completion_tokens= 10000,
-                      top_p= 1,
-                      frequency_penalty= 0,
-                      presence_penalty= 0,
-                      store= true
+                    temperature = 1,
+                    max_completion_tokens = 10000,
+                    top_p = 1,
+                    frequency_penalty = 0,
+                    presence_penalty = 0,
+                    store = true
                 };
                 var request = new HttpRequestMessage(HttpMethod.Post, url)
                 {
@@ -323,12 +323,12 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
                 var requestData = new
                 {
-                    model = "o3-mini",
+                    model = "gpt-4o-mini",
                     messages = new object[]
                     {
                 new
                 {
-                    role = "developer",
+                    role = "system",
                     content = new object[]
                     {
                         new
@@ -355,8 +355,11 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     {
                         type = "json_object"
                     },
-                    reasoning_effort = "medium",
-                    store = true
+                    temperature = 1,
+                    max_completion_tokens = 10000,
+                    top_p = 1,
+                    frequency_penalty = 0,
+                    presence_penalty = 0
                 };
 
                 var request = new HttpRequestMessage(HttpMethod.Post, url)
@@ -396,7 +399,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
                 var requestData = new
                 {
-                    model = "o3-mini",
+                    model = "gpt-4o-mini",
                     messages = new object[]
                     {
                 new
@@ -591,7 +594,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// Sends the provided prompt to the GPT API and returns the response.
         /// </summary>
         /// <param name="prompt">The prompt to send to the GPT API.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
+        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>F
         /// <returns>An HttpResponseMessage containing the API response.</returns>
         private async Task<HttpResponseMessage> SendPromtToGptAndGetResponse(string prompt, CancellationToken cancellationToken)
         {
