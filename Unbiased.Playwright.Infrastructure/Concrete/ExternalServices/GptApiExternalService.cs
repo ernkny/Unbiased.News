@@ -1,11 +1,14 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Text;
 using System.Text.Json;
 using Unbiased.Playwright.Common.Concrete.Utils;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 {
@@ -17,18 +20,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
-
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
         /// <summary>
         /// Initializes a new instance of the GptApiExternalService class.
         /// </summary>
         /// <param name="httpClient">The HTTP client instance for making API requests.</param>
         /// <param name="configuration">The configuration instance for API URLs and keys.</param>
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
-        public GptApiExternalService(HttpClient httpClient, IConfiguration configuration, IMediator mediator)
+        public GptApiExternalService(HttpClient httpClient, IConfiguration configuration, IMediator mediator, IServiceProvider serviceProvider)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _mediator = mediator;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -149,19 +154,44 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 if (response.IsSuccessStatusCode)
                 {
                     await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
-                    result = NewsExtractExtensionMethod.ExtractNewsDetails(await response.Content.ReadAsStringAsync());
+                    result = NewsExtractExtensionMethod.ExtractNewsDetails(await response.Content.ReadAsStringAsync(), _serviceProvider,_eventAndActivityLog);
 
                 }
 
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return result;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -292,7 +322,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 if (response.IsSuccessStatusCode)
                 {
                     await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
-                    result = QuestionAndAnswerExtractExtensionMethod.ExtractQuestionAndAnswer(await response.Content.ReadAsStringAsync());
+                    result = QuestionAndAnswerExtractExtensionMethod.ExtractQuestionAndAnswer(await response.Content.ReadAsStringAsync(), _serviceProvider,_eventAndActivityLog);
 
                 }
 

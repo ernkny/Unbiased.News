@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using Unbiased.Playwright.Domain.DTOs;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Common.Concrete.Utils
 {
@@ -14,7 +16,8 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
         /// </summary>
         /// <param name="jsonResponse"></param>
         /// <returns></returns>
-        public static async Task<ContentCategoryTitleResponse> ContentCategoryExtract(string jsonResponse)
+        public static async Task<ContentCategoryTitleResponse> ContentCategoryExtract(string jsonResponse, IServiceProvider _serviceProvider,
+        EventAndActivityLog _eventAndActivityLog)
         {
             var contentCategoryTitleResponse = new ContentCategoryTitleResponse();
             try
@@ -29,9 +32,16 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                     return JsonSerializer.Deserialize<ContentCategoryTitleResponse>(content);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine("Error parsing JSON: " + ex.Message);
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = typeof(ContentCategoryExtractExtensionMethod).FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
             return contentCategoryTitleResponse;
         }

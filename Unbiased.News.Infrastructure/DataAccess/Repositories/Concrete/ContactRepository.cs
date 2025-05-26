@@ -3,12 +3,19 @@ using System.Data;
 using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
 {
+    /// <summary>
+    ///  Repository class for managing contact form submissions.
+    /// </summary>
     public class ContactRepository: IContactRepository
     {
         private readonly UnbiasedSqlConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContactRepository"/> class.
@@ -18,6 +25,12 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         {
             _connection = connection;
         }
+
+        /// <summary>
+        /// Saves a contact form submission to the database.
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns></returns>
         public async Task<bool> SaveContact(Contact contact)
         {
             try
@@ -37,8 +50,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }

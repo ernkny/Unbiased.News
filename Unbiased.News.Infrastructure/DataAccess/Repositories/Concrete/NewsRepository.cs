@@ -1,9 +1,12 @@
 ﻿using Dapper;
+using System;
 using System.Data;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
 {
@@ -13,14 +16,17 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
     public class NewsRepository : INewsRepository
     {
         private readonly UnbiasedSqlConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsRepository"/> class.
         /// </summary>
         /// <param name="connection">The Unbiased SQL connection.</param>
-        public NewsRepository(UnbiasedSqlConnection connection)
+        public NewsRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -39,9 +45,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<GeneratedNew>("UB_sp_GetAllGeneratedNews", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -61,9 +73,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetRecentNewsForSiteMap", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -76,7 +94,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// <param name="language">The language code to filter news by.</param>
         /// <param name="title">Optional title filter for searching news.</param>
         /// <returns>A collection of <see cref="GenerateNewsWithImageDto"/> objects.</returns>
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber,string language,string? title)
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(int categoryId, int pageNumber, string language, string? title)
         {
             try
             {
@@ -90,9 +108,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetAllGeneratedNewsWithImagePath", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -108,16 +132,22 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@CategoryId", categoryId); 
+                parameters.Add("@CategoryId", categoryId);
                 parameters.Add("@Title", title);
                 using (var connection = _connection.CreateConnection())
                 {
                     return await connection.QueryFirstAsync<int>("UB_sp_GetAllGeneratedNewsWithImagePathCount", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -128,7 +158,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// <param name="categoryId">The category ID to retrieve banner news from.</param>
         /// <param name="language">The language of the news items to retrieve.</param>
         /// <returns>A collection of banner news items with images.</returns>
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync(int categoryId,string language)
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetBannerGeneratedNewsWithImageAsync(int categoryId, string language)
         {
             try
             {
@@ -137,12 +167,18 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     var parameters = new DynamicParameters();
                     parameters.Add("@CategoryId", categoryId);
                     parameters.Add("@Language", language);
-                    return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsForBannerWithImagePath",parameters, commandType: CommandType.StoredProcedure);
+                    return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsForBannerWithImagePath", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -163,9 +199,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryFirstAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsById", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -186,9 +228,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryFirstAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsByUniqUrlPath", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -200,7 +248,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// <param name="uniqUrlPath">The unique URL path of the news item to exclude from results.</param>
         /// <param name="language">The language of the news items to retrieve.</param>
         /// <returns>A collection of the latest top news items from the specified category.</returns>
-        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(int categoryId,string uniqUrlPath,string language)
+        public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllLastTopGeneratedNewsWithCategoryIdForDetailAsync(int categoryId, string uniqUrlPath, string language)
         {
             try
             {
@@ -213,9 +261,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<GenerateNewsWithImageDto>("UB_sp_GetAllLastTopGeneratedNewsWithCategoryId", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -236,9 +290,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<QuestionAnswerDto>("UB_sp_GetAllQuestionsAndAnswersWithMatchId", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -256,11 +316,18 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryFirstAsync<StatisticsDto>("UB_sp_GetStaticsForHomePage", commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
+
     }
 }

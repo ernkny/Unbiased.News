@@ -9,6 +9,8 @@ using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Services
 {
@@ -19,14 +21,17 @@ namespace Unbiased.Playwright.Application.Services
     public sealed class PlaywrightScrappingService : IPlaywrightScrappingService
     {
         private readonly IMediator _mediator;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the PlaywrightScrappingService class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
-        public PlaywrightScrappingService(IMediator mediator)
+        public PlaywrightScrappingService(IMediator mediator, IServiceProvider serviceProvider)
         {
             _mediator = mediator;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -45,12 +50,18 @@ namespace Unbiased.Playwright.Application.Services
                 }
                 return Task.CompletedTask.IsCompleted;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
-           
+
         }
 
         /// <summary>
@@ -59,17 +70,31 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A list of scraped news.</returns>
         public async Task<List<News>> PlaywrightScrappingNewsAsync(ActiveUrlsForSearchDto url)
         {
-            
-            var listOfNews =  Enumerable.Empty<News>().ToList();
-            var languageEnum = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), url.Language);
-            var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url, languageEnum);
-            var titles = await searchWithKeywordControl.Handle();
-            var newsContents = new GetNewsWithGuidControl(titles);
-            var news = await newsContents.Handle();
-            news.ForEach(item => item.CategoryId = url.categoryId);
-            news.ForEach(item => item.Language = url.Language);
-            listOfNews.AddRange(news);
-            return listOfNews;
+            try
+            {
+                var listOfNews = Enumerable.Empty<News>().ToList();
+                var languageEnum = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), url.Language);
+                var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url, languageEnum, _serviceProvider);
+                var titles = await searchWithKeywordControl.Handle();
+                var newsContents = new GetNewsWithGuidControl(titles, _serviceProvider);
+                var news = await newsContents.Handle();
+                news.ForEach(item => item.CategoryId = url.categoryId);
+                news.ForEach(item => item.Language = url.Language);
+                listOfNews.AddRange(news);
+                return listOfNews;
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -79,8 +104,23 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A boolean indicating whether the operation was successful.</returns>
         public async Task<bool> SaveAllNewsWithRangeAsync(List<News> listOfNews)
         {
-            var result = await _mediator.Send(new AddRangeAllNewsCommand(listOfNews));
-            return await Task.FromResult(true);
+            try
+            {
+
+                var result = await _mediator.Send(new AddRangeAllNewsCommand(listOfNews));
+                return await Task.FromResult(true);
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
         }
 
         /// <summary>
@@ -89,22 +129,37 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A boolean indicating whether the operation was successful.</returns>
         public async Task<bool> GetImagesForCollectedNews()
         {
-            var newsWithoutImages = (await _mediator.Send(new GetNewsWithoutImagesQuery(DateTime.Now.AddDays(-100)))).ToList();
-
-            var titles = newsWithoutImages.Select(x => x.Title).ToList();
-
-            var imagesForTitles = await GetImageProcess.GetNewsImageForTitle(titles);
-
-            for (var i = 0; i < imagesForTitles.Count; i++)
+            try
             {
-                await _mediator.Send(new AddNewsImageCommand(new InsertNewsImageDto
+                var newsWithoutImages = (await _mediator.Send(new GetNewsWithoutImagesQuery(DateTime.Now.AddDays(-100)))).ToList();
+
+                var titles = newsWithoutImages.Select(x => x.Title).ToList();
+
+                var imagesForTitles = await GetImageProcess.GetNewsImageForTitle(titles);
+
+                for (var i = 0; i < imagesForTitles.Count; i++)
                 {
-                    MatchId = newsWithoutImages[i].MatchId,
-                    filePath = imagesForTitles[i]
-                }));
+                    await _mediator.Send(new AddNewsImageCommand(new InsertNewsImageDto
+                    {
+                        MatchId = newsWithoutImages[i].MatchId,
+                        filePath = imagesForTitles[i]
+                    }));
+                }
+
+                return await Task.FromResult(true);
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
 
-            return await Task.FromResult(true);
         }
     }
 }

@@ -24,8 +24,18 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract
         /// <returns>A Task that represents the asynchronous operation. The task result contains an IEnumerable of GetNewsWithoutImageDto.</returns>
         Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImagesAsync(DateTime startDate);
 
+        /// <summary>
+        /// Retrieves all generated news that do not have an image.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesWithNoneHasGeneratedAsync(CancellationToken cancellationToken);
 
+        /// <summary>
+        ///  Checks if a news image exists for a given match ID.
+        /// </summary>
+        /// <param name="matchId"></param>
+        /// <returns></returns>
         Task<bool> GetNewsImageWithMatchIdAsync(string matchId);
     }
 }

@@ -1,15 +1,16 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unbiased.News.Domain.Entities;
 
 namespace Unbiased.News.Application.Validators
 {
-    public class ContactValidator:AbstractValidator<Contact>
+    /// <summary>
+    ///  Validator for contact form submissions.
+    /// </summary>
+    public class ContactValidator : AbstractValidator<Contact>
     {
+        /// <summary>
+        ///  Initializes a new instance of the <see cref="ContactValidator"/> class.
+        /// </summary>
         public ContactValidator()
         {
             RuleFor(contact => contact.Subject)

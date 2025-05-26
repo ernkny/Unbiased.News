@@ -5,6 +5,7 @@ using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Category;
 using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew;
 using Unbiased.News.Infrastructure.Cqrs.Queries.Categories;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.News.Application.Services
 {
@@ -14,14 +15,17 @@ namespace Unbiased.News.Application.Services
     public sealed class CategoriesService : ICategoriesService
     {
         private readonly IMediator _mediator;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoriesService"/> class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
-        public CategoriesService(IMediator mediator)
+        public CategoriesService(IMediator mediator, IServiceProvider serviceProvider)
         {
             _mediator = mediator;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>

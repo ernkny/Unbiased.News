@@ -1,6 +1,8 @@
 ﻿using Microsoft.Playwright;
 using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 using Unbiased.Playwright.Domain.Enums;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScrapping
 {
@@ -11,6 +13,15 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
     {
         private IPlaywright _playwright;
         private IBrowser _browser;
+        private readonly IServiceProvider _serviceProvider;
+
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+
+        public GetAllNewsWithUrlAddressFromGoogleMethod(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
 
         /// <summary>
         /// Retrieves a list of news articles with URL addresses from Google.
@@ -85,8 +96,15 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                             await closeButton.ClickAsync();
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
+                        await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                        {
+                            EventType = this.GetType().FullName,
+                            EventSeverity = "Error",
+                            Message = $"{exception.Message}",
+                            EventDate = DateTime.UtcNow
+                        }, _serviceProvider);
                         throw;
                     }
                     finally
@@ -95,8 +113,15 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
             finally

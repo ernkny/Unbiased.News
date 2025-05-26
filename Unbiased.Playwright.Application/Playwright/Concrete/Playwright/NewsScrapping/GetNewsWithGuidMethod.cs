@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.Text;
 using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 using Unbiased.Playwright.Domain.Entities;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 /// <summary>
 /// Class responsible for retrieving news articles with GUIDs.
@@ -10,6 +12,13 @@ using Unbiased.Playwright.Domain.Entities;
 public class GetNewsWithGuidMethod
 {
     private IPlaywright _playwright;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+
+    public GetNewsWithGuidMethod(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
 
     /// <summary>
     /// Retrieves news articles with GUIDs from the provided URL and GUID pairs.
@@ -55,9 +64,16 @@ public class GetNewsWithGuidMethod
                 
                 await page.CloseAsync();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine($"Someting went wrong: {ex.Message}");
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
         });
 

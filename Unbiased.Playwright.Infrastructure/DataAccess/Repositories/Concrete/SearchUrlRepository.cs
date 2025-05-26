@@ -1,27 +1,27 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 {
-    public class SearchUrlRepository: ISearchUrlRepository
+    public class SearchUrlRepository : ISearchUrlRepository
     {
         private readonly UnbiasedSqlConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchUrlRepository"/> class.
         /// </summary>
         /// <param name="connection">The connection to the database.</param>
-        public SearchUrlRepository(UnbiasedSqlConnection connection)
+        public SearchUrlRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -36,9 +36,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 {
                     return await connection.QueryAsync<ActiveUrlsForSearchDto>("UB_sp_GetAllActiveUrls", commandType: CommandType.StoredProcedure);
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
-
+                    await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                    {
+                        EventType = this.GetType().FullName,
+                        EventSeverity = "Error",
+                        Message = $"{exception.Message}",
+                        EventDate = DateTime.UtcNow
+                    }, _serviceProvider);
                     throw;
                 }
             }
@@ -55,11 +61,17 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 try
                 {
 
-                    return await connection.ExecuteAsync("UB_sp_UpdateSearchUrlNextRun", commandType: CommandType.StoredProcedure)==1;
+                    return await connection.ExecuteAsync("UB_sp_UpdateSearchUrlNextRun", commandType: CommandType.StoredProcedure) == 1;
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
-
+                    await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                    {
+                        EventType = this.GetType().FullName,
+                        EventSeverity = "Error",
+                        Message = $"{exception.Message}",
+                        EventDate = DateTime.UtcNow
+                    }, _serviceProvider);
                     throw;
                 }
             }

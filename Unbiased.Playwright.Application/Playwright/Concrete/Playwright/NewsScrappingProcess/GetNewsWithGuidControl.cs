@@ -12,14 +12,16 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
     {
         private AbstractHandlerChain _abstractHandlerChain;
         private readonly List<SaveSearchUrlAndGuidDto> _saveSearchUrlAndGuids;
+        private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetNewsWithGuidControl"/> class.
         /// </summary>
         /// <param name="saveSearchUrlAndGuids">The list of SaveSearchUrlAndGuidDto objects to retrieve news articles for.</param>
-        public GetNewsWithGuidControl(List<SaveSearchUrlAndGuidDto> saveSearchUrlAndGuids)
+        public GetNewsWithGuidControl(List<SaveSearchUrlAndGuidDto> saveSearchUrlAndGuids, IServiceProvider serviceProvider)
         {
             _saveSearchUrlAndGuids = saveSearchUrlAndGuids;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         /// The Task result contains a list of News objects representing the retrieved news articles.</returns>
         public async override Task<List<News>> Handle()
         {
-            var getNewsContent = new GetNewsWithGuidMethod();
+            var getNewsContent = new GetNewsWithGuidMethod(_serviceProvider);
             var result=await getNewsContent.GetNewsWithGuid(_saveSearchUrlAndGuids);
             return result;
         }

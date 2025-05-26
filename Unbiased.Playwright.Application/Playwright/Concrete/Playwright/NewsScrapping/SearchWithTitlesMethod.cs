@@ -62,7 +62,6 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
 
                 throw ;
             }
-
         }
     }
 }

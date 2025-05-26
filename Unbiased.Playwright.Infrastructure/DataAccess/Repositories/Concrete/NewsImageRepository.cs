@@ -3,6 +3,8 @@ using System.Data;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 {
@@ -12,14 +14,17 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
     public class NewsImageRepository : INewsImageRepository
     {
         private readonly UnbiasedSqlConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsImageRepository"/> class.
         /// </summary>
         /// <param name="connection">The connection to the database.</param>
-        public NewsImageRepository(UnbiasedSqlConnection connection)
+        public NewsImageRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -29,27 +34,62 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// <returns>The ID of the newly added news image.</returns>
         public async Task<bool> AddNewsImageAsync(InsertNewsImageDto addNewsImageDto)
         {
-            using (var connection = _connection.CreateConnection())
+            try
             {
-                var guid = Guid.NewGuid();
-                var parameters = new DynamicParameters();
-                parameters.Add("id", Guid.NewGuid(), DbType.Guid);
-                parameters.Add("matchId", addNewsImageDto.MatchId, DbType.String);
-                parameters.Add("path", addNewsImageDto.filePath, DbType.String);
+                using (var connection = _connection.CreateConnection())
+                {
+                    var guid = Guid.NewGuid();
+                    var parameters = new DynamicParameters();
+                    parameters.Add("id", Guid.NewGuid(), DbType.Guid);
+                    parameters.Add("matchId", addNewsImageDto.MatchId, DbType.String);
+                    parameters.Add("path", addNewsImageDto.filePath, DbType.String);
 
-                var result = await connection.ExecuteAsync("UB_sp_InsertNewsImage", parameters, commandType: CommandType.StoredProcedure);
+                    var result = await connection.ExecuteAsync("UB_sp_InsertNewsImage", parameters, commandType: CommandType.StoredProcedure);
 
-                return result == 1;
+                    return result == 1;
+                }
             }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+
         }
 
+        /// <summary>
+        ///  Retrieves all generated news that do not have an image.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesWithNoneHasGeneratedAsync(CancellationToken cancellationToken)
         {
-            using (var connection = _connection.CreateConnection())
+            try
             {
+                using (var connection = _connection.CreateConnection())
+                {
 
-                return await connection.QueryAsync<GeneratedNewsWithNoneImageDto>("UB_sp_GetAllGeneratedNewsWithNoneImage", commandType: CommandType.StoredProcedure);
+                    return await connection.QueryAsync<GeneratedNewsWithNoneImageDto>("UB_sp_GetAllGeneratedNewsWithNoneImage", commandType: CommandType.StoredProcedure);
+                }
             }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+ 
         }
 
         /// <summary>
@@ -59,24 +99,59 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// <returns>A list of news images without images.</returns>
         public async Task<IEnumerable<GetNewsWithoutImageDto>> GetNewsWithoutImagesAsync(DateTime startDate)
         {
-            using (var connection = _connection.CreateConnection())
+            try
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("startDate", startDate, DbType.DateTime);
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("startDate", startDate, DbType.DateTime);
 
-                return await connection.QueryAsync<GetNewsWithoutImageDto>("UB_sp_GetNewsWithoutImages", parameters, commandType: CommandType.StoredProcedure);
+                    return await connection.QueryAsync<GetNewsWithoutImageDto>("UB_sp_GetNewsWithoutImages", parameters, commandType: CommandType.StoredProcedure);
+                }
             }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+
         }
 
+        /// <summary>
+        ///  Validates if a news image exists for a given match ID.
+        /// </summary>
+        /// <param name="matchId"></param>
+        /// <returns></returns>
         public async Task<bool> GetNewsImageWithMatchIdAsync(string matchId)
         {
-            using (var connection = _connection.CreateConnection())
+            try
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("matchId", matchId, DbType.String);
-                return await connection.QueryFirstAsync<int>("UB_sp_ValidateNewsImage", parameters, commandType: CommandType.StoredProcedure)==1;
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("matchId", matchId, DbType.String);
+                    return await connection.QueryFirstAsync<int>("UB_sp_ValidateNewsImage", parameters, commandType: CommandType.StoredProcedure) == 1;
 
+                }
             }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+
         }
     }
 }

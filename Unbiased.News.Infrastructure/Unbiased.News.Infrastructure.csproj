@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Unbiased.News.Domain\Unbiased.News.Domain.csproj" />
+    <ProjectReference Include="..\Unbiased.Shared.Extensions\Unbiased.Shared.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

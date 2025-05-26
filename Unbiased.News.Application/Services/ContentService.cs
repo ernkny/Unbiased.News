@@ -3,6 +3,8 @@ using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Content;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.News.Application.Services
 {
@@ -13,14 +15,17 @@ namespace Unbiased.News.Application.Services
     public sealed class ContentService : IContentService
     {
         private readonly IMediator _mediator;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the ContentService class.
         /// </summary>
         /// <param name="mediator">The mediator instance for sending CQRS queries</param>
-        public ContentService(IMediator mediator)
+        public ContentService(IMediator mediator, IServiceProvider serviceProvider)
         {
             _mediator = mediator;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -41,9 +46,15 @@ namespace Unbiased.News.Application.Services
                 }
                 return Enumerable.Empty<ContentSubHeading>();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -65,9 +76,15 @@ namespace Unbiased.News.Application.Services
                 }
                 return 0;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -89,9 +106,15 @@ namespace Unbiased.News.Application.Services
                 }
                 return Enumerable.Empty<HoroscopeDailyDetail>();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -105,16 +128,22 @@ namespace Unbiased.News.Application.Services
         {
             try
             {
-                var result=await _mediator.Send(new GetContentDetailQuery(uniqUrl));
+                var result = await _mediator.Send(new GetContentDetailQuery(uniqUrl));
                 if (result is not null)
                 {
                     return result;
                 }
                 return null;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -137,9 +166,15 @@ namespace Unbiased.News.Application.Services
                 }
                 throw new Exception("No content found");
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }

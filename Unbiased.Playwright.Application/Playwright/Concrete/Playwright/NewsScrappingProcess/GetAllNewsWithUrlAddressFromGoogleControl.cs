@@ -14,16 +14,18 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         private AbstractHandlerChain _abstractHandlerChain;
         private readonly string _url;
         private readonly LanguageEnums _language;
+        private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetAllNewsWithUrlAddressFromGoogleControl"/> class.
         /// </summary>
         /// <param name="url">The URL to search for news articles.</param>
 
-        public GetAllNewsWithUrlAddressFromGoogleControl(string url,LanguageEnums language)
+        public GetAllNewsWithUrlAddressFromGoogleControl(string url, LanguageEnums language, IServiceProvider serviceProvider)
         {
             _url = url;
             _language = language;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         {
             if (!String.IsNullOrEmpty(_url))
             {
-                var result = await new GetAllNewsWithUrlAddressFromGoogleMethod().GetAllNewsWithUrlAddressFromGoogle(_url, _language);
+                var result = await new GetAllNewsWithUrlAddressFromGoogleMethod(_serviceProvider).GetAllNewsWithUrlAddressFromGoogle(_url, _language);
                 return result;
             }
 

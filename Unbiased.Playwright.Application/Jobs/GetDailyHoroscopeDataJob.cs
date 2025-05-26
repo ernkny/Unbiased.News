@@ -5,6 +5,8 @@ using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
@@ -17,16 +19,19 @@ namespace Unbiased.Playwright.Application.Jobs
     {
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the GetDailyHoroscopeDataJob class.
         /// </summary>
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         /// <param name="configuration">The application configuration.</param>
-        public GetDailyHoroscopeDataJob(IMediator mediator, IConfiguration configuration)
+        public GetDailyHoroscopeDataJob(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _mediator = mediator;
             _configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -42,7 +47,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 foreach (HoroscopeEnums horoscope in Enum.GetValues(typeof(HoroscopeEnums)))
                 {
                     
-                    var GptApi = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
+                    var GptApi = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
                     var horoscopedetail = await GptApi.SendHoroscopeToGptAndGetResponse(horoscope.ToString(), context.CancellationToken);
                     if (horoscopedetail != null)
                     {
@@ -59,13 +64,17 @@ namespace Unbiased.Playwright.Application.Jobs
                 }
                 await Task.CompletedTask;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
-
-            
         }
     }
 }

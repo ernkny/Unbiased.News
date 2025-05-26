@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Polly;
 using System.Diagnostics;
-using System.Threading;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Domain.DTOs;

@@ -3,6 +3,8 @@ using Quartz;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
@@ -15,16 +17,18 @@ namespace Unbiased.Playwright.Application.Jobs
     {
         private readonly IPlaywrightScrappingService _playwrightScrappingService;
         private readonly IMediator _mediator;
-
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
         /// <summary>
         /// Initializes a new instance of the GetNewsWithPlaywrightWithSearchUrlJob class.
         /// </summary>
         /// <param name="playwrightScrappingService">The service responsible for web scraping operations.</param>
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
-        public GetNewsWithPlaywrightWithSearchUrlJob(IPlaywrightScrappingService playwrightScrappingService, IMediator mediator)
+        public GetNewsWithPlaywrightWithSearchUrlJob(IPlaywrightScrappingService playwrightScrappingService, IMediator mediator, IServiceProvider serviceProvider)
         {
             _playwrightScrappingService = playwrightScrappingService;
             _mediator = mediator;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -49,9 +53,15 @@ namespace Unbiased.Playwright.Application.Jobs
                 }
                 await Task.CompletedTask;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                Console.WriteLine("Error in GetNewsWithPlaywrightWithSearchUrlJob");
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
 

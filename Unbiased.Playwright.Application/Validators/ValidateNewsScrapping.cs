@@ -10,17 +10,15 @@ namespace Unbiased.Playwright.Application.Validators
     public class ValidateNewsScrapping : IValidateNewsScrapping
     {
         private readonly INewsRepository _newsRepository;
-        private readonly IMediator _mediator;
 
         /// <summary>
         /// Initializes a new instance of the ValidateNewsScrapping class.
         /// </summary>
         /// <param name="newsRepository">The news repository instance.</param>
         /// <param name="mediator">The mediator instance.</param>
-        public ValidateNewsScrapping(INewsRepository newsRepository, IMediator mediator)
+        public ValidateNewsScrapping(INewsRepository newsRepository)
         {
             _newsRepository = newsRepository;
-            _mediator = mediator;
         }
 
         /// <summary>

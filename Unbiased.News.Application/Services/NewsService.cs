@@ -3,6 +3,8 @@ using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
 using Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.GeneratedNew;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.News.Application.Services
 {
@@ -12,14 +14,17 @@ namespace Unbiased.News.Application.Services
     public sealed class NewsService : INewsService
     {
         private readonly IMediator _mediator;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsService"/> class.
         /// </summary>
         /// <param name="mediator">The mediator instance for handling CQRS operations.</param>
-        public NewsService(IMediator mediator)
+        public NewsService(IMediator mediator, IServiceProvider serviceProvider)
         {
             _mediator = mediator;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -35,9 +40,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetAllGeneratedNewsQuery(language));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -58,9 +69,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetAllGeneratedNewsWithImageQuery(categoryId, pageNumber, language, title));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -79,9 +96,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetAllGeneratedNewsWithImageCountQuery(categoryId, title));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -100,9 +123,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetAllLastTopGeneratedNewsWithCategoryIdForDetailQuery(categoryId, uniqUrlPath, language));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -120,9 +149,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetAllQuestionsAndAnswerWithMatchIdForGeneratedNewQuery(MatchId));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -139,9 +174,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetNewsStatisticsQuery());
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -160,9 +201,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetBannerGeneratedNewsWithImageQuery(categoryId, language));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -180,9 +227,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetGeneratedNewsByIdWithImagePathQuery(id));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -200,9 +253,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetGeneratedNewsByUniqUrlWithImageQuery(UniqUrl));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -221,8 +280,15 @@ namespace Unbiased.News.Application.Services
                 var result = await _mediator.Send(new GetAllGeneratedNewsForSiteMapQuery(language));
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }

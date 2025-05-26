@@ -5,6 +5,8 @@ using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 {
@@ -15,15 +17,19 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
     /// </summary>
     public class NewsRepository : INewsRepository
     {
-        private readonly UnbiasedSqlConnection _connection;
+        private readonly UnbiasedSqlConnection _connection; 
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsRepository"/> class.
         /// </summary>
         /// <param name="connection">The connection to the database.</param>
-        public NewsRepository(UnbiasedSqlConnection connection)
+        public NewsRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -56,7 +62,13 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
             catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
 
@@ -76,7 +88,13 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 }
                 catch (Exception exception)
                 {
-
+                    await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                    {
+                        EventType = this.GetType().FullName,
+                        EventSeverity = "Error",
+                        Message = $"{exception.Message}",
+                        EventDate = DateTime.UtcNow
+                    }, _serviceProvider);
                     throw;
                 }
             }
@@ -134,8 +152,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -156,10 +181,16 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryFirstAsync<int>("UB_sp_UrlValidateForSearchWithTitle", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
-                throw new Exception("Failed to search title: " + title);
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
         }
 
@@ -177,9 +208,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<GeneratedNewsDto>("UB_sp_CombinedDetails", commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -202,6 +239,13 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
             catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
 
@@ -234,8 +278,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.ExecuteAsync("UB_sp_InsertUBNewsGenerated", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -256,9 +307,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.ExecuteAsync("UB_sp_UpdateNewsProcessValueAsTrue", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -279,9 +336,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<GeneratedNews>("UB_sp_GetAllGeneratedNews", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -308,9 +371,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.ExecuteAsync("UB_sp_InsertQuestionsAndAnswers", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }

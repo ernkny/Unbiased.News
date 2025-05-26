@@ -1,5 +1,7 @@
 ﻿using Quartz;
 using Unbiased.Playwright.Application.Interfaces;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
@@ -8,18 +10,22 @@ namespace Unbiased.Playwright.Application.Jobs
     /// This job generates subheadings for content categories using AI services
     /// and saves them to the database for later content generation.
     /// </summary>
+    [DisallowConcurrentExecution]
     public class GetContentSubheadingsJob : IJob
     {
 
         private readonly IContentService _contentService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the GetContentSubheadingsJob class.
         /// </summary>
         /// <param name="contentService"></param>
-        public GetContentSubheadingsJob(IContentService contentService)
+        public GetContentSubheadingsJob(IContentService contentService, IServiceProvider serviceProvider)
         {
             _contentService = contentService;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -33,8 +39,15 @@ namespace Unbiased.Playwright.Application.Jobs
             {
                 await _contentService.GenerateSubheadingsAndSaveAsync(context.CancellationToken);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }

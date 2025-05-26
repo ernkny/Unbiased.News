@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using Unbiased.Playwright.Domain.DTOs;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Common.Concrete.Utils
 {
@@ -18,7 +15,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
         /// </summary>
         /// <param name="jsonResponse">The JSON response to extract question and answer data from.</param>
         /// <returns>A <see cref="QuestionsAndAnswersDto"/> containing the extracted question and answer data.</returns>
-        public static QuestionsAndAnswersDto ExtractQuestionAndAnswer(string jsonResponse)
+        public static QuestionsAndAnswersDto ExtractQuestionAndAnswer(string jsonResponse, IServiceProvider _serviceProvider, EventAndActivityLog _eventAndActivityLog)
         {
             var questionsAndAnswersDto = new QuestionsAndAnswersDto();
             try
@@ -35,9 +32,16 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                     return JsonSerializer.Deserialize<QuestionsAndAnswersDto>(content);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine("Error parsing JSON: " + ex.Message);
+                 _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = typeof(QuestionAndAnswerExtractExtensionMethod).FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider).Wait();
+                throw;
             }
             return questionsAndAnswersDto;
         }

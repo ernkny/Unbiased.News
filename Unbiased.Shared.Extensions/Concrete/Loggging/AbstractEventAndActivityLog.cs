@@ -14,7 +14,7 @@ namespace Unbiased.Shared.Extensions.Concrete.Loggging
         /// <param name="context">The HTTP context.</param>
         /// <param name="logMessage">The log message to send.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public async Task<bool> SendEventLogToQueue(EventLog logMessage, IServiceProvider _serviceProvider)
+        public virtual async Task<bool> SendEventLogToQueue(EventLog logMessage, IServiceProvider _serviceProvider)
         {
             try
             {

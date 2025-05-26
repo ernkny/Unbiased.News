@@ -3,12 +3,19 @@ using System.Data;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Infrastructure.DataAccess.Connections;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
 {
-    public class BlogRepository:IBlogRepository
+    /// <summary>
+    ///  Repository class for managing blog-related data access operations.
+    /// </summary>
+    public class BlogRepository : IBlogRepository
     {
         private readonly UnbiasedSqlConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsRepository"/> class.
@@ -23,7 +30,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// Retrieves all generated news with images asynchronously.
         /// </summary>
         /// <returns>A collection of <see cref="BlogWithImageDto"/> objects.</returns>
-        public async Task<IEnumerable<BlogWithImageDto>> GetAllBlogsWithImageAsync(string language, int pageNumber,string searchData)
+        public async Task<IEnumerable<BlogWithImageDto>> GetAllBlogsWithImageAsync(string language, int pageNumber, string searchData)
         {
             try
             {
@@ -36,9 +43,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<BlogWithImageDto>("UB_sp_GetAllBlogsWithImageForMainPage", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -55,9 +68,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryFirstAsync<int>("UB_sp_GetAllBlogsWithImageForMainPageCount", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -77,9 +96,15 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryFirstAsync<BlogWithImageDto>("UB_sp_GetBlogByUniqUrl", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }

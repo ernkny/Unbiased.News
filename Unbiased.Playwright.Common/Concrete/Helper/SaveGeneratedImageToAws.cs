@@ -3,8 +3,11 @@ using Amazon.S3.Model;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
+using System;
 using System.IO;
 using Unbiased.Playwright.Domain.DTOs;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Common.Concrete.Helper
 {
@@ -17,6 +20,8 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
         private readonly AmazonS3Client client;
         private readonly HttpClient _httpClient;
         private bool disposedValue;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveGeneratedImageToAws"/> class.
@@ -70,14 +75,26 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
                     return jpegFilePath;
                 }
             }
-            catch (AmazonS3Exception ex)
+            catch (AmazonS3Exception exception)
             {
-                Console.WriteLine($"Error encountered on server. Message:'{ex.Message}' when writing an object to S3.");
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }

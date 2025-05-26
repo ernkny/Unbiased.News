@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Quartz;
+using System;
 using Unbiased.Playwright.Application.Exceptions.Custom;
 using Unbiased.Playwright.Application.Interfaces;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
@@ -11,23 +14,21 @@ namespace Unbiased.Playwright.Application.Jobs
     /// This job identifies subheadings that haven't been processed yet and 
     /// generates content for them using the content service.
     /// </summary>
+    [DisallowConcurrentExecution]
     public class ConsumeUnprocessContentSubheadings : IJob
     {
-        private readonly IMediator _mediator;
         private readonly IContentService _contentService;
-        private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the ConsumeUnprocessContentSubheadings class.
         /// </summary>
-        /// <param name="mediator">The mediator instance for sending requests.</param>
         /// <param name="contentService">The content service for generating content.</param>
-        /// <param name="configuration">The application configuration.</param>
-        public ConsumeUnprocessContentSubheadings(IMediator mediator, IContentService contentService, IConfiguration configuration)
+        public ConsumeUnprocessContentSubheadings( IContentService contentService, IServiceProvider serviceProvider)
         {
-            _mediator = mediator;
             _contentService = contentService;
-            _configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -42,18 +43,38 @@ namespace Unbiased.Playwright.Application.Jobs
             {
                 await _contentService.GenerateContentAsync(context.CancellationToken);
             }
-            catch (Exception ex) when (ex.Message.Contains("TooManyRequests"))
+            catch (Exception exception) when (exception.Message.Contains("TooManyRequests"))
             {
-                throw new TooManyRequestsException("API returned error: TooManyRequests", ex);
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
             catch (TooManyRequestsException exception)
             {
-                Console.WriteLine(exception.Message);
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 await Task.Delay(TimeSpan.FromMinutes(1));
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
         }
     }

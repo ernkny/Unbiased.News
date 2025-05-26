@@ -1,5 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Unbiased.Playwright.Application.Abstract;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Common.Concrete.Helper;
 using Unbiased.Playwright.Domain.DTOs;
@@ -8,10 +11,9 @@ using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Options;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices.Factory;
-using Unbiased.Playwright.Application.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 
 namespace Unbiased.Playwright.Application.Services
@@ -26,6 +28,7 @@ namespace Unbiased.Playwright.Application.Services
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
         private readonly AwsCredentials _awsCredentials;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the NewsService class.
@@ -47,8 +50,22 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A task representing the asynchronous operation, containing the GUID of the added news item.</returns>
         public async Task<Guid> AddNewsAsync(InsertNewsDto addNewsDto)
         {
-            var result = await _mediator.Send(new AddNewsCommand(addNewsDto));
-            return result;
+            try
+            {
+                var result = await _mediator.Send(new AddNewsCommand(addNewsDto));
+                return result;
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
         }
 
         /// <summary>
@@ -61,12 +78,19 @@ namespace Unbiased.Playwright.Application.Services
             try
             {
                 var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), cancellationToken);
-                var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
+                var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
                 var result = await GenerateNewsWithApiAsync(combinedNews, cancellationToken, externalServiceSend);
                 return result;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -78,39 +102,54 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A task representing the asynchronous operation, containing a boolean indicating success.</returns>
         public async Task<bool> GenerateImagesWhenAllNewsHasGeneratedAsync(CancellationToken cancellationToken)
         {
-            var isDone = false;
-            while (!isDone)
+            try
             {
-                var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
-                _ = images.Count() == 0 ? isDone = true : isDone = false;
-                foreach (var item in images)
+                var isDone = false;
+                while (!isDone)
                 {
-                    var imageFile=string.Empty;
-                    if (!item.IsManuelImage)
+                    var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
+                    _ = images.Count() == 0 ? isDone = true : isDone = false;
+                    foreach (var item in images)
                     {
-                        imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.ImagePrompt, ImageGenerationSource.Freepik,cancellationToken);
-                        if (imageFile is null)
+                        var imageFile = string.Empty;
+                        if (!item.IsManuelImage)
+                        {
+                            imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.ImagePrompt, ImageGenerationSource.Freepik, cancellationToken);
+                            if (imageFile is null)
+                            {
+                                imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                            }
+
+                        }
+                        else
                         {
                             imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
                         }
-
-                    }
-                    else
-                    {
-                        imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
-                    }
-                    if (imageFile is not null)
-                    {
-                        await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+                        if (imageFile is not null)
                         {
-                            MatchId = item.Id,
-                            filePath = imageFile
-                        }), cancellationToken);
+                            await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+                            {
+                                MatchId = item.Id,
+                                filePath = imageFile
+                            }), cancellationToken);
+                        }
                     }
                 }
-            }
 
-            return true;
+                return true;
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+          
         }
 
         /// <summary>
@@ -120,8 +159,22 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>A task representing the asynchronous operation, containing a collection of news items without images.</returns>
         public async Task<IEnumerable<GeneratedNewsWithNoneImageDto>> GenerateImagesAsyncWithNoneHasGenerated(CancellationToken cancellationToken)
         {
-            var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
-            return images;
+            try
+            {
+                var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
+                return images;
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
         }
 
         /// <summary>
@@ -195,9 +248,15 @@ namespace Unbiased.Playwright.Application.Services
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
 
@@ -211,7 +270,21 @@ namespace Unbiased.Playwright.Application.Services
         /// <returns>The saved image URL or null if failed.</returns>
         public override async Task<string?> GenerateImageAndSaveAsync(string title, CancellationToken cancellationToken)
         {
-           return await SendNewsToApiForGenerateImageAndSaveItAwsAsync(title, ImageGenerationSource.Freepik, cancellationToken);
+            try
+            {
+                return await SendNewsToApiForGenerateImageAndSaveItAwsAsync(title, ImageGenerationSource.Freepik, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
         }
     }
 }

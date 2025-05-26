@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Unbiased.News.Application.Dto.Enums
+﻿namespace Unbiased.News.Application.Dto.Enums
 {
+    /// <summary>
+    ///  Enumeration for supported languages.
+    /// </summary>
     public enum LanguageEnums
     {
-        tr=1,
-        en=2
+        tr = 1,
+        en = 2
     }
 }

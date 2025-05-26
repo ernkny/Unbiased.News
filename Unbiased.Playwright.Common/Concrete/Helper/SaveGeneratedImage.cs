@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Common.Concrete.Helper
 {
@@ -9,15 +12,18 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveGeneratedImage"/> class.
         /// </summary>
         /// <param name="configuration">The configuration instance.</param>
-        public SaveGeneratedImage(IConfiguration configuration)
+        public SaveGeneratedImage(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _httpClient = new HttpClient(new HttpClientHandler());
             _configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
 
 
@@ -38,14 +44,23 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
                 }
                 return filePath;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
 
         }
 
+        /// <summary>
+        /// Releases the resources used by the <see cref="SaveGeneratedImage"/> class.
+        /// </summary>
         public void Dispose()
         {
             _httpClient?.Dispose();

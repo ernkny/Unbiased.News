@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using Unbiased.Playwright.Domain.DTOs;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Common.Concrete.Utils
 {
@@ -13,7 +15,8 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
         /// </summary>
         /// <param name="jsonResponse">The JSON response to extract news details from.</param>
         /// <returns>A <see cref="NewsExtractDto"/> containing the extracted news details.</returns>
-        public static NewsExtractDto ExtractNewsDetails(string jsonResponse)
+        public static NewsExtractDto ExtractNewsDetails(string jsonResponse, IServiceProvider _serviceProvider,
+        EventAndActivityLog _eventAndActivityLog)
         {
             var detailsList = new NewsExtractDto();
             try
@@ -28,9 +31,16 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                     return JsonSerializer.Deserialize<NewsExtractDto>(content);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine("Error parsing JSON: " + ex.Message);
+                _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = typeof(NewsExtractExtensionMethod).FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider).Wait();
+                throw;
             }
             return detailsList;
         }

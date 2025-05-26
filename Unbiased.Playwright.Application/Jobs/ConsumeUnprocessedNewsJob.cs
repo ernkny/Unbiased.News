@@ -1,10 +1,13 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Quartz;
+using System;
 using Unbiased.Playwright.Application.Exceptions.Custom;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
@@ -18,6 +21,8 @@ namespace Unbiased.Playwright.Application.Jobs
         private readonly IMediator _mediator;
         private readonly INewsService _newsService;
         private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the ConsumeUnprocessedNewsJob class.
@@ -25,11 +30,12 @@ namespace Unbiased.Playwright.Application.Jobs
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         /// <param name="newsService">The service responsible for news-related operations.</param>
         /// <param name="configuration">The application configuration.</param>
-        public ConsumeUnprocessedNewsJob(IMediator mediator, INewsService newsService, IConfiguration configuration)
+        public ConsumeUnprocessedNewsJob(IMediator mediator, INewsService newsService, IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _mediator = mediator;
             _newsService = newsService;
             _configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -46,22 +52,42 @@ namespace Unbiased.Playwright.Application.Jobs
                 if (checkNews.Any())
                 {
                     var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), context.CancellationToken);
-                    var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator);
+                    var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
                     await _newsService.GenerateNewsWithApiAsync(combinedNews, context.CancellationToken, externalServiceSend);
                 }
                 await Task.CompletedTask;
             }
-            catch (Exception ex) when (ex.Message.Contains("TooManyRequests"))
+            catch (Exception exception) when (exception.Message.Contains("TooManyRequests"))
             {
-                throw new TooManyRequestsException("API returned error: TooManyRequests", ex);
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
             catch (TooManyRequestsException exception)
             {
-                Console.WriteLine(exception.Message);
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 await Task.Delay(TimeSpan.FromMinutes(1));
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }

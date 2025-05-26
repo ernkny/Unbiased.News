@@ -4,6 +4,8 @@ using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
 {
@@ -13,14 +15,17 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
     public class ContentRepository : IContentRepository
     {
         private readonly UnbiasedSqlConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentRepository"/> class.
         /// </summary>
         /// <param name="connection">The connection to the database.</param>
-        public ContentRepository(UnbiasedSqlConnection connection)
+        public ContentRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -30,17 +35,32 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// <returns></returns>
         public async Task<bool> AddDailyHoroscopeAsync(HoroscopeDailyDetail horoscopeDetail)
         {
-            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
-            var turkeyTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, turkeyTimeZone);
-            using (var connection = _connection.CreateConnection())
+            try
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@Detail", horoscopeDetail.Detail, DbType.String, ParameterDirection.Input);
-                parameters.Add("@HoroscopeId", horoscopeDetail.HoroscopeId, DbType.String, ParameterDirection.Input);
-                parameters.Add("@CreatedDate", turkeyTime, DbType.DateTime);
-                var result = await connection.ExecuteAsync("UB_sp_InsertHoroscopeDetail", parameters, commandType: CommandType.StoredProcedure);
-                return result == 1;
+                var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+                var turkeyTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, turkeyTimeZone);
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Detail", horoscopeDetail.Detail, DbType.String, ParameterDirection.Input);
+                    parameters.Add("@HoroscopeId", horoscopeDetail.HoroscopeId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("@CreatedDate", turkeyTime, DbType.DateTime);
+                    var result = await connection.ExecuteAsync("UB_sp_InsertHoroscopeDetail", parameters, commandType: CommandType.StoredProcedure);
+                    return result == 1;
+                }
             }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -50,15 +70,30 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// <returns></returns>
         public async Task<bool> AddDailyContentInformationAsync(Contents content)
         {
-            using (var connection = _connection.CreateConnection())
+            try
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@ContentDetail", content.ContentDetail, DbType.String, ParameterDirection.Input);
-                parameters.Add("@ContentCategoryId", content.ContentCategoryId, DbType.String, ParameterDirection.Input);
-                parameters.Add("@CreatedDate", content.CreatedDate, DbType.DateTime);
-                var result = await connection.ExecuteAsync("UB_sp_InsertContentDetail", parameters, commandType: CommandType.StoredProcedure);
-                return result == 1;
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@ContentDetail", content.ContentDetail, DbType.String, ParameterDirection.Input);
+                    parameters.Add("@ContentCategoryId", content.ContentCategoryId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("@CreatedDate", content.CreatedDate, DbType.DateTime);
+                    var result = await connection.ExecuteAsync("UB_sp_InsertContentDetail", parameters, commandType: CommandType.StoredProcedure);
+                    return result == 1;
+                }
             }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -95,9 +130,16 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return false;
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
 
         }
@@ -120,9 +162,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                      );
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -150,8 +198,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     return result == 1;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -172,9 +227,15 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     );
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
@@ -186,16 +247,31 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// <returns></returns>
         private DataTable CreateQuestionsAndAnswersDataTable(List<ContentQuestionAndAnswer> list)
         {
-            var table = new DataTable();
-            table.Columns.Add("Question", typeof(string));
-            table.Columns.Add("Answer", typeof(string));
-
-            foreach (var item in list)
+            try
             {
-                table.Rows.Add(item.Question, item.Answer);
+                var table = new DataTable();
+                table.Columns.Add("Question", typeof(string));
+                table.Columns.Add("Answer", typeof(string));
+
+                foreach (var item in list)
+                {
+                    table.Rows.Add(item.Question, item.Answer);
+                }
+
+                return table;
+            }
+            catch (Exception exception)
+            {
+                 _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider).Wait();
+                throw;
             }
 
-            return table;
         }
 
         /// <summary>
@@ -205,17 +281,32 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
         /// <returns></returns>
         private DataTable CreateStepsDataTable(List<ContentStep> list)
         {
-            var table = new DataTable();
-            table.Columns.Add("StepNumber", typeof(int));
-            table.Columns.Add("StepTitle", typeof(string));
-            table.Columns.Add("StepDescription", typeof(string));
-
-            foreach (var item in list)
+            try
             {
-                table.Rows.Add(item.StepNumber, item.StepTitle, item.StepDescription);
+                var table = new DataTable();
+                table.Columns.Add("StepNumber", typeof(int));
+                table.Columns.Add("StepTitle", typeof(string));
+                table.Columns.Add("StepDescription", typeof(string));
+
+                foreach (var item in list)
+                {
+                    table.Rows.Add(item.StepNumber, item.StepTitle, item.StepDescription);
+                }
+
+                return table;
+            }
+            catch (Exception exception)
+            {
+                 _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider).Wait();
+                throw;
             }
 
-            return table;
         }
     }
 }

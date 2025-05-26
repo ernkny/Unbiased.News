@@ -1,9 +1,10 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Configuration;
 using Quartz;
 using Unbiased.Playwright.Application.Exceptions.Custom;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Jobs
 {
@@ -16,15 +17,16 @@ namespace Unbiased.Playwright.Application.Jobs
     {
         private readonly IMediator _mediator;
         private readonly INewsService _newsService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the ConsumeUnprocessedImagesJob class.
         /// </summary>
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         /// <param name="newsService">The service responsible for news-related operations.</param>
-        /// <param name="configuration">The application configuration.</param>
         /// <param name="serviceProvider">The service provider instance.</param>
-        public ConsumeUnprocessedImagesJob(IMediator mediator, INewsService newsService, IConfiguration configuration, IServiceProvider serviceProvider)
+        public ConsumeUnprocessedImagesJob(IMediator mediator, INewsService newsService,IServiceProvider serviceProvider)
         {
             _mediator = mediator;
             _newsService = newsService;
@@ -51,17 +53,37 @@ namespace Unbiased.Playwright.Application.Jobs
                 }
                 await Task.CompletedTask;
             }
-            catch (Exception ex) when (ex.Message.Contains("TooManyRequests"))
+            catch (Exception exception) when (exception.Message.Contains("TooManyRequests"))
             {
-                throw new TooManyRequestsException("API returned error: TooManyRequests", ex);
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
             }
             catch (TooManyRequestsException exception)
             {
-                Console.WriteLine(exception.Message);
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 await Task.Delay(TimeSpan.FromMinutes(1));
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
