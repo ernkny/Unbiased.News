@@ -1,28 +1,37 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unbiased.Dashboard.Domain.Entities;
 using Unbiased.Dashboard.Infrastructure.DataAccess.Connections;
 using Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
 {
+    /// <summary>
+    ///  Represents a repository for managing customer contact messages in the Unbiased Dashboard.
+    /// </summary>
     public class ContactRepository : IContactRepository
     {
         private readonly UnbiasedSqlConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContactRepository
         /// <param name="connection">The Unbiased SQL connection.</param>
-        public ContactRepository(UnbiasedSqlConnection connection)
+        public ContactRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
+            _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        ///  Retrieves all customer messages with pagination support.
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Contact>> GetAllCustomerMessagesAsync(int pageNumber, int pageSize)
         {
             try
@@ -35,13 +44,24 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryAsync<Contact>("UB_sp_GetAllCustomerMessages", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
 
+        /// <summary>
+        ///  Retrieves a customer message by its ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Contact> GetCustomerMessagesByIdAsync(int id)
         {
             try
@@ -53,14 +73,24 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryFirstAsync<Contact>("UB_sp_GetCustomerMessagesById", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
-
             }
         }
 
-
+        /// <summary>
+        ///  Deletes a customer message by its ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<bool> DeleteCustomerMessagesByIdAsync(int id)
         {
             try
@@ -72,10 +102,16 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     return await connection.QueryFirstAsync<bool>("UB_sp_DeleteCustomerMessagesById", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
-
             }
         }
     }

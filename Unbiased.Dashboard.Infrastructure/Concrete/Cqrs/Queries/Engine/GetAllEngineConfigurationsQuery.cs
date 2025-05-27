@@ -8,5 +8,8 @@ using Unbiased.Dashboard.Domain.Dto_s;
 
 namespace Unbiased.Dashboard.Infrastructure.Concrete.Cqrs.Queries.Engine
 {
+    /// <summary>
+    /// Query record for retrieving all engine configurations from the system.
+    /// </summary>
     public record GetAllEngineConfigurationsQuery:IRequest<IEnumerable<EngineConfigurationDto>>;
 }

@@ -8,5 +8,8 @@ using Unbiased.Dashboard.Domain.Entities;
 
 namespace Unbiased.Dashboard.Infrastructure.Concrete.Cqrs.Queries.Categories
 {
+    /// <summary>
+    /// Query record for retrieving all categories from the system.
+    /// </summary>
     public record GetAllCategoriesQuery:IRequest<IEnumerable<Category>>;
 }

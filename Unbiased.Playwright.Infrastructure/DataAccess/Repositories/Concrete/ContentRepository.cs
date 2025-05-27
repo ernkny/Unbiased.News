@@ -60,7 +60,6 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                 }, _serviceProvider);
                 throw;
             }
-
         }
 
         /// <summary>

@@ -2,25 +2,40 @@
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Text.Json;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Dashboard.Application.Helpers.GptContentGenerator
 {
+    /// <summary>
+    /// ContentGenerator class is responsible for generating content based on a provided URL by parsing the content and sending it to the GPT API for analysis and content creation.
+    /// </summary>
     public class ContentGenerator
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        public ContentGenerator(IConfiguration configuration)
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        public ContentGenerator(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
+            _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        ///  Generates content based on the provided URL by parsing the content and sending it to the GPT API for analysis and content creation.
+        /// </summary>
+        /// <param name="contentUrl"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="OperationCanceledException"></exception>
         public async Task<string> Generate(string contentUrl, CancellationToken cancellationToken)
         {
             try
             {
-                var detail= await contentParser(contentUrl);
-                var responseContent=string.Empty;
+                var detail = await contentParser(contentUrl);
+                var responseContent = string.Empty;
                 var prompt = $"I am sending you the content of a website. Please create new content in the same language as the original!!, and perform an analysis of it. Present this content and interpret it as if you have researched and written it yourself. Just send your response. A critical point is that your response must be in the same language as the content I provided!!!!.Only focus on main article of content:{detail}";
                 var url = _configuration.GetSection("Urls:GptApi").Value;
                 var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
@@ -62,13 +77,24 @@ namespace Unbiased.Dashboard.Application.Helpers.GptContentGenerator
                 responseContent = await response.Content.ReadAsStringAsync();
                 return responseContent;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
 
+        /// <summary>
+        ///  Parses the content of a webpage and extracts text from paragraph elements.
+        /// </summary>
+        /// <param name="contentUrl"></param>
+        /// <returns></returns>
         private async Task<string> contentParser(string contentUrl)
         {
             try
@@ -90,12 +116,18 @@ namespace Unbiased.Dashboard.Application.Helpers.GptContentGenerator
                 }
                 return stringBuilder.ToString();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
-           
+
         }
     }
 }

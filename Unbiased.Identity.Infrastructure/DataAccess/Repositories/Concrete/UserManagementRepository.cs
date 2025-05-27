@@ -7,19 +7,29 @@ using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract;
 
 namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
 {
+    /// <summary>
+    /// Repository implementation for user management operations providing comprehensive CRUD functionality for user management, authentication, and role assignment with database access and error handling.
+    /// </summary>
     public class UserManagementRepository:IUserManagementRepository
     {
         private readonly UnbiasedSqlConnection _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserManagementRepository"/> class.
+        /// Initializes a new instance of the UserManagementRepository class.
         /// </summary>
-        /// <param name="connection">The connection to the database.</param>
+        /// <param name="connection">The SQL connection provider for database operations.</param>
         public UserManagementRepository(UnbiasedSqlConnection connection)
         {
             _connection = connection;
         }
 
+        /// <summary>
+        /// Retrieves all users with pagination support using stored procedure with error handling.
+        /// </summary>
+        /// <param name="pageNumber">The page number for pagination.</param>
+        /// <param name="pageSize">The number of items per page for pagination.</param>
+        /// <returns>A task that represents the asynchronous operation containing a collection of user entities.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during users retrieval.</exception>
         public async Task<IEnumerable<User>> GetAllUsersAsync(int pageNumber, int pageSize)
         {
             try
@@ -39,6 +49,11 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Gets the total count of all users in the system using stored procedure with error handling.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation containing the total count of users.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during users count retrieval.</exception>
         public async Task<int> GetAllUsersCountAsync()
         {
             try
@@ -55,6 +70,12 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Creates a new user with assigned roles in the system using stored procedure with error handling.
+        /// </summary>
+        /// <param name="user">The insert user with roles data transfer object containing user and role information.</param>
+        /// <returns>A task that represents the asynchronous operation containing a boolean indicating success.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during user creation.</exception>
         public async Task<bool> InsertUserWithRolesAsync(InsertUserWithRolesDto user)
         {
             try
@@ -89,6 +110,12 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Updates an existing user with new information and role assignments using stored procedure with error handling.
+        /// </summary>
+        /// <param name="user">The update user with roles data transfer object containing updated information.</param>
+        /// <returns>A task that represents the asynchronous operation containing a boolean indicating success.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during user update.</exception>
         public async Task<bool> UpdateUserWithRolesAsync(UpdateUserWithRolesDto user)
         {
             try
@@ -121,6 +148,13 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Validates if the provided username and email are available and not already in use using stored procedure with error handling.
+        /// </summary>
+        /// <param name="username">The username to validate.</param>
+        /// <param name="email">The email address to validate.</param>
+        /// <returns>A task that represents the asynchronous operation containing a boolean indicating availability.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during validation.</exception>
         public async Task<bool> ValidateUsernameAndEmailWithRolesAsync(string username, string email)
         {
             try
@@ -141,6 +175,12 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Retrieves a specific user with their assigned roles and permissions by user identifier using stored procedure with error handling.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user to retrieve.</param>
+        /// <returns>A task that represents the asynchronous operation containing the user with roles DTO.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during user retrieval.</exception>
         public async Task<GetUserWithRolesDto> GetUserWithRolesAsync(int userId)
         {
             try
@@ -191,6 +231,12 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
 
         }
 
+        /// <summary>
+        /// Deletes a user and their associated roles by user identifier using stored procedure with error handling.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user to delete.</param>
+        /// <returns>A task that represents the asynchronous operation containing a boolean indicating success.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during user deletion.</exception>
         public async Task<bool> DeleteUserWithRolesAsync(int userId)
         {
             try
@@ -210,6 +256,12 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Checks if the provided email or username exists in the system and returns the user ID using stored procedure with error handling.
+        /// </summary>
+        /// <param name="EmailOrUsername">The email address or username to check.</param>
+        /// <returns>A task that represents the asynchronous operation containing the user ID if found, or 0 if not found.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during email or username check.</exception>
         public async Task<int> CheckEmailOrUsernameAsync(string EmailOrUsername)
         {
             try
@@ -229,6 +281,12 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Retrieves the hashed password for a specific user by their identifier using stored procedure with error handling.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user.</param>
+        /// <returns>A task that represents the asynchronous operation containing the hashed password.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during password retrieval.</exception>
         public async Task<string> GetHashedPasswordByIdAsync(int userId)
         {
             try
@@ -248,6 +306,14 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Updates the refresh token and its expiration date for a specific user using stored procedure with error handling.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user.</param>
+        /// <param name="refreshToken">The new refresh token to store.</param>
+        /// <param name="refreshTokenExpireDate">The expiration date for the refresh token.</param>
+        /// <returns>A task that represents the asynchronous operation containing a boolean indicating success.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during refresh token update.</exception>
         public async Task<bool> UpdateRefreshTokenByIdAsync(int userId,string refreshToken,DateTime? refreshTokenExpireDate)
         {
             try
@@ -273,6 +339,12 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Retrieves the refresh token for a specific user by their identifier using stored procedure with error handling.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user.</param>
+        /// <returns>A task that represents the asynchronous operation containing the refresh token.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during refresh token retrieval.</exception>
         public async Task<string> GetRefreshTokenByIdAsync(int userId)
         {
             try
@@ -292,6 +364,12 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
         }
 
+        /// <summary>
+        /// Retrieves user information by their refresh token using stored procedure with error handling.
+        /// </summary>
+        /// <param name="refreshToken">The refresh token to search for.</param>
+        /// <returns>A task that represents the asynchronous operation containing the user entity associated with the refresh token.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during user retrieval by refresh token.</exception>
         public async Task<User> GetRefreshTokenWithTokenAsync(string refreshToken)
         {
             try

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Unbiased.Identity.Domain\Unbiased.Identity.Domain.csproj" />
+    <ProjectReference Include="..\Unbiased.Shared.Extensions\Unbiased.Shared.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

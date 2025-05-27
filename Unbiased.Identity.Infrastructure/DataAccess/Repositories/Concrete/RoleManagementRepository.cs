@@ -4,22 +4,36 @@ using Unbiased.Identity.Domain.Dto_s;
 using Unbiased.Identity.Domain.Entities;
 using Unbiased.Identity.Infrastructure.DataAccess.Connections;
 using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
 {
+    /// <summary>
+    /// Repository implementation for role management operations providing comprehensive CRUD functionality for role and permission management with database access, error handling and logging.
+    /// </summary>
     public class RoleManagementRepository : IRoleManagementRepository
     {
         private readonly UnbiasedSqlConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CategoriesRepository"/> class.
+        /// Initializes a new instance of the RoleManagementRepository class.
         /// </summary>
-        /// <param name="connection">The connection to the database.</param>
-        public RoleManagementRepository(UnbiasedSqlConnection connection)
+        /// <param name="connection">The SQL connection provider for database operations.</param>
+        /// <param name="serviceProvider">The service provider for dependency injection.</param>
+        public RoleManagementRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
+            _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// Retrieves all pages with their associated permissions from the system using stored procedure with error handling and logging.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation containing a collection of pages with permissions DTOs.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during pages with permissions retrieval.</exception>
         public async Task<IEnumerable<PagesWithPermissionsDto>> GetAllPagesWithPermissionsAsync()
         {
             try
@@ -30,14 +44,27 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     return result;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
 
         }
 
+        /// <summary>
+        /// Retrieves all roles with pagination support using stored procedure with error handling and logging.
+        /// </summary>
+        /// <param name="pageNumber">The page number for pagination.</param>
+        /// <param name="pageSize">The number of items per page for pagination.</param>
+        /// <returns>A task that represents the asynchronous operation containing a collection of role entities.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during roles retrieval.</exception>
         public async Task<IEnumerable<Role>> GetAllRolesAsync(int pageNumber, int pageSize)
         {
             try
@@ -51,13 +78,24 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     return result;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
 
+        /// <summary>
+        /// Retrieves all roles without pagination using stored procedure with error handling and logging.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation containing a collection of all role entities.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during roles retrieval.</exception>
         public async Task<IEnumerable<Role>> GetAllRolessWithoutPaginationAsync()
         {
             try
@@ -68,13 +106,24 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     return result;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
 
+        /// <summary>
+        /// Gets the total count of all roles in the system using stored procedure with error handling and logging.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation containing the total count of roles.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during roles count retrieval.</exception>
         public async Task<int> GetAllRolesCountAsync()
         {
             try
@@ -85,13 +134,25 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     return result;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
 
+        /// <summary>
+        /// Deletes a role by its unique identifier using stored procedure with error handling and logging.
+        /// </summary>
+        /// <param name="id">The unique identifier of the role to delete.</param>
+        /// <returns>A task that represents the asynchronous operation containing the number of affected rows.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during role deletion.</exception>
         public async Task<int> DeleteRoleAsync(int id)
         {
             try
@@ -104,13 +165,25 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     return result;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
 
+        /// <summary>
+        /// Creates a new role with assigned permissions in the system using stored procedure with error handling and logging.
+        /// </summary>
+        /// <param name="role">The create role data transfer object containing role and permission information.</param>
+        /// <returns>A task that represents the asynchronous operation containing a boolean indicating success.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during role creation.</exception>
         public async Task<bool> InsertRoleAsync(CreateRoleDto role)
         {
             try
@@ -135,12 +208,25 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     return affectedRows > 0;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
 
+        /// <summary>
+        /// Updates an existing role with new information and permission assignments using stored procedure with error handling and logging.
+        /// </summary>
+        /// <param name="role">The update role data transfer object containing updated role and permission information.</param>
+        /// <returns>A task that represents the asynchronous operation containing a boolean indicating success.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during role update.</exception>
         public async Task<bool> UpdateRoleAsync(UpdateRoleDto role)
         {
             try
@@ -166,12 +252,25 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                     return affectedRows > 0;
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
         }
 
+        /// <summary>
+        /// Retrieves a specific role with its assigned permissions by role identifier using stored procedure with error handling and logging.
+        /// </summary>
+        /// <param name="roleId">The unique identifier of the role to retrieve.</param>
+        /// <returns>A task that represents the asynchronous operation containing the role DTO with detailed information and permissions.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during role retrieval.</exception>
         public async Task<RoleGetByIdDto> GetRoleById(int roleId)
         {
             try
@@ -205,9 +304,15 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
                 }
             }
 
-            catch (Exception)
+            catch (Exception exception)
             {
-
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
                 throw;
             }
 
