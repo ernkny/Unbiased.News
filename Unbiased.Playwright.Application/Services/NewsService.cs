@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Unbiased.Playwright.Application.Abstract;
 using Unbiased.Playwright.Application.Interfaces;
+using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageScrapping;
 using Unbiased.Playwright.Common.Concrete.Helper;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Entities;
@@ -11,7 +11,6 @@ using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Commands;
 using Unbiased.Playwright.Infrastructure.Concrete.Cqrs.Queries;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
-using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices.Factory;
 using Unbiased.Shared.Extensions.Concrete.Entities;
 using Unbiased.Shared.Extensions.Concrete.Loggging;
 
@@ -149,7 +148,7 @@ namespace Unbiased.Playwright.Application.Services
                 }, _serviceProvider);
                 throw;
             }
-          
+
         }
 
         /// <summary>
@@ -190,9 +189,14 @@ namespace Unbiased.Playwright.Application.Services
             {
                 foreach (var item in combinedNews)
                 {
-                    LanguageEnums language = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), item.Language);
+
+                    var language = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), item.Language);
+
+
                     var result = await externalServiceSend.SendCombinedNewsDetailToGpt(item.CombinedDetails, language, cancellationToken);
-                    if (result == null) throw new ArgumentException("Error");
+                    if (result == null)
+                        throw new ArgumentException("Error");
+
 
                     var generatedNews = new News
                     {
@@ -202,47 +206,67 @@ namespace Unbiased.Playwright.Application.Services
                         CategoryId = item.CategoryId,
                         Language = item.Language,
                         BiasScore = Convert.ToInt32(result.BiasScore),
-                        BiasScoreExplanation = result.BiasScoreExplanation,
+                        BiasScoreExplanation = result.BiasScoreExplanation
                     };
-                    if (!string.IsNullOrEmpty(result.Title) || !string.IsNullOrEmpty(result.Detail))
+
+                    if (string.IsNullOrEmpty(result.Title) && string.IsNullOrEmpty(result.Detail))
+                        continue;
+
+
+                    var saveGeneratedNews = await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken);
+                    var imageMatchValidate = await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
+
+                    if (!saveGeneratedNews || !imageMatchValidate)
+                        continue;
+
+                    string imageFile = null;
+
+
+                    if (!item.IsManuelImage)
                     {
-                        var saveGeneratedNews = await _mediator.Send(new AddGeneratedNewsCommand(generatedNews), cancellationToken);
-                        var imageMatchValidate = await _mediator.Send(new GetNewsImageWithMatchIdQuery(item.MatchId), cancellationToken);
-                        if (imageMatchValidate && saveGeneratedNews)
+                        imageFile = await GenerateImageAndSaveAsync(result.ImagePrompt, cancellationToken)
+                                     ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                    }
+                    else
+                    {
+                        var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(result.Title);
+                        if (scrapedImage == null)
                         {
-                            var imageFile=string.Empty;
-                            if (!item.IsManuelImage)
-                            {
-
-                                imageFile = await GenerateImageAndSaveAsync(result.ImagePrompt, cancellationToken);
-                                if (imageFile is null)
-                                {
-                                    imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
-                                }
-                            }
-                            else
-                            {
-                                imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
-                            }
-                            if (imageFile is not null)
-                            {
-                                await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
-                                {
-                                    MatchId = item.MatchId,
-                                    filePath = imageFile
-                                }), cancellationToken);
-                            }
-
-                            var QuestionsAndAnswersOfGeneratedNews = await externalServiceSend.SendNewsQuestionsAndAnswersPrompt(result.Detail,language, cancellationToken);
-                            foreach (var question in QuestionsAndAnswersOfGeneratedNews.questions)
-                            {
-                                if (question is not null)
-                                {
-                                     await _mediator.Send(new InsertQuestionAndAnswerCommand(new QuestionAnswerDto()
-                                     { Question=question.question,Answer=question.answer, MatchId = item.MatchId,CreatedDate=DateTime.UtcNow }));
-                                }
-                            }
+                            imageFile = await GenerateImageAndSaveAsync(result.ImagePrompt, cancellationToken)
+                                         ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
                         }
+                        else
+                        {
+                            imageFile = scrapedImage;
+
+                            await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
+                                _awsCredentials.BucketName,
+                                _configuration.GetSection("Paths:AwsFilePath").Value,
+                                imageFile,
+                                cancellationToken
+                            );
+                        }
+                    }
+
+                    if (imageFile != null)
+                    {
+                        await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+                        {
+                            MatchId = item.MatchId,
+                            filePath = imageFile
+                        }), cancellationToken);
+                    }
+
+                    var qaResult = await externalServiceSend.SendNewsQuestionsAndAnswersPrompt(result.Detail, language, cancellationToken);
+                    foreach (var question in qaResult.questions.Where(q => q != null))
+                    {
+                        await _mediator.Send(new InsertQuestionAndAnswerCommand(new QuestionAnswerDto
+                        {
+                            Question = question.question,
+                            Answer = question.answer,
+                            MatchId = item.MatchId,
+                            CreatedDate = DateTime.UtcNow
+                        }));
                     }
                 }
 
@@ -257,9 +281,9 @@ namespace Unbiased.Playwright.Application.Services
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
                 }, _serviceProvider);
+
                 throw;
             }
-
         }
 
         /// <summary>

@@ -25,28 +25,53 @@ public class GetNewsWithGuidMethod
     /// </summary>
     /// <param name="urlAndGuidPairs">List of URL and GUID pairs.</param>
     /// <returns>List of news articles.</returns>
-
     public async Task<List<News>> GetNewsWithGuid(List<SaveSearchUrlAndGuidDto> urlAndGuidPairs)
     {
         var newsArticles = new ConcurrentBag<News>();
-        if (_playwright == null)
+
+        _playwright ??= await Microsoft.Playwright.Playwright.CreateAsync();
+
+        var browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
-            _playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-        }
-        var browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+            Headless = true
+        });
+
         await Parallel.ForEachAsync(urlAndGuidPairs, async (urlPair, cancellationToken) =>
         {
+            IBrowserContext context = null;
+            IPage page = null;
+
             try
             {
-                var page = await browser.NewPageAsync();
+                context = await browser.NewContextAsync();
+                page = await context.NewPageAsync();
+
                 var contentBuilder = new StringBuilder();
-                await page.GotoAsync(urlPair.Url, new PageGotoOptions { Timeout = 60000, WaitUntil = WaitUntilState.DOMContentLoaded });
+
+                await page.GotoAsync(urlPair.Url, new PageGotoOptions
+                {
+                    Timeout = 60000,
+                    WaitUntil = WaitUntilState.DOMContentLoaded
+                });
+
+                await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
                 var paragraphs = await page.QuerySelectorAllAsync("p:not([class])");
+
                 foreach (var paragraph in paragraphs)
                 {
-                    contentBuilder.AppendLine(await paragraph.InnerTextAsync());
+                    try
+                    {
+                        var text = await paragraph.InnerTextAsync();
+                        contentBuilder.AppendLine(text);
+                    }
+                    catch
+                    {
+                        // Paragraf hatası varsa atla
+                    }
                 }
-                if (!string.IsNullOrEmpty(contentBuilder.ToString()))
+
+                if (!string.IsNullOrWhiteSpace(contentBuilder.ToString()))
                 {
                     newsArticles.Add(new News
                     {
@@ -61,8 +86,6 @@ public class GetNewsWithGuidMethod
                         Url = urlPair.Url,
                     });
                 }
-                
-                await page.CloseAsync();
             }
             catch (Exception exception)
             {
@@ -73,7 +96,11 @@ public class GetNewsWithGuidMethod
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
                 }, _serviceProvider);
-                throw;
+            }
+            finally
+            {
+                if (page != null) await page.CloseAsync();
+                if (context != null) await context.CloseAsync();
             }
         });
 

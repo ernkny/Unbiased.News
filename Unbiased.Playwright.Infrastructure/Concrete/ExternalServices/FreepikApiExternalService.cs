@@ -1,7 +1,5 @@
-﻿using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Configuration;
-using System.Buffers.Text;
 using System.Text;
 using System.Text.Json;
 using Unbiased.Playwright.Domain.DTOs;
