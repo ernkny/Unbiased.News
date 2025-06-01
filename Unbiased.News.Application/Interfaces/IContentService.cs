@@ -42,5 +42,12 @@ namespace Unbiased.News.Application.Interfaces
         /// <returns>The total number of subheadings in the category</returns>
         Task<int> ContentSubHeadingsCountAsync(int categoryId);
 
+        /// <summary>
+        ///  Retrieves all content subheadings with associated images for the home page.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        Task<IEnumerable<ContentSubHeadingWithImageDto>> GetAllContentWithImageForHomePageAsync(string language);
+
     }
 }

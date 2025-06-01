@@ -151,6 +151,36 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         }
 
         /// <summary>
+        ///  Retrieves all content subheadings with associated images for the home page.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ContentSubHeadingWithImageDto>> GetAllContentWithImageForHomePageAsync(string language)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@language", language, DbType.String);
+                    var result = await connection.QueryAsync<ContentSubHeadingWithImageDto>($"UB_sp_GetAllContentSubheadigsWithCategoriesForHomePage", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Retrieves generated content details by its unique URL.
         /// Uses a stored procedure to get the raw data and deserializes JSON fields into structured objects.
         /// </summary>

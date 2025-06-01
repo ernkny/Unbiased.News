@@ -113,16 +113,28 @@ namespace Unbiased.Playwright.Application.Services
                         var imageFile = string.Empty;
                         if (!item.IsManuelImage)
                         {
-                            imageFile = await SendNewsToApiForGenerateImageAndSaveItAwsAsync(item.ImagePrompt, ImageGenerationSource.Freepik, cancellationToken);
-                            if (imageFile is null)
-                            {
-                                imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
-                            }
+                            imageFile = await GenerateImageAndSaveAsync(item.ImagePrompt, cancellationToken)
+                                                                 ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
 
                         }
                         else
                         {
-                            imageFile = @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                            var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(item.Title);
+                            if (scrapedImage == null)
+                            {
+                                imageFile = await GenerateImageAndSaveAsync(item.ImagePrompt, cancellationToken)
+                                             ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                            }
+                            else
+                            {
+
+                                imageFile = await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
+                                    _awsCredentials.BucketName,
+                                    _configuration.GetSection("Paths:AwsFilePath").Value,
+                                    scrapedImage,
+                                    cancellationToken
+                                );
+                            }
                         }
                         if (imageFile is not null)
                         {
@@ -237,12 +249,11 @@ namespace Unbiased.Playwright.Application.Services
                         }
                         else
                         {
-                            imageFile = scrapedImage;
 
-                            await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
+                            imageFile= await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
                                 _awsCredentials.BucketName,
                                 _configuration.GetSection("Paths:AwsFilePath").Value,
-                                imageFile,
+                                scrapedImage,
                                 cancellationToken
                             );
                         }

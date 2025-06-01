@@ -150,6 +150,38 @@ namespace Unbiased.News.Api.Controllers
                 return StatusCode(500, errorResponse);
             }
         }
+        /// <summary>
+        /// Retrieves the latest daily content information.
+        /// Requires authentication to access this endpoint.
+        /// </summary>
+        /// <returns>The latest content information.</returns>
+        [HttpGet("/GetAllContentForHomePage")]
+        public async Task<IActionResult> GetAllContentForHomePage([FromQuery]string language)
+        {
+            try
+            {
+                var result = await _contentService.GetAllContentWithImageForHomePageAsync(language);
+                var response = new ResponseDto<IEnumerable<ContentSubHeadingWithImageDto>>
+                {
+                    IsSuccessful = result is not null,
+                    StatusCode = result is not null ? 200 : 204,
+                    Data = result is not null ? result : throw new ArgumentNullException(nameof(result))
+                };
+
+                return result is not null ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
 
         /// <summary>
         /// Retrieves subheadings for a specific category ID with pagination.

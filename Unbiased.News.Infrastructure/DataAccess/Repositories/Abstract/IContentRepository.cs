@@ -30,6 +30,13 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         Task<IEnumerable<ContentSubHeading>> ContentSubHeadingsAsync(int categoryId,int pageNumber);
 
         /// <summary>
+        ///  Retrieves all content subheadings with associated images for the home page.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        Task<IEnumerable<ContentSubHeadingWithImageDto>> GetAllContentWithImageForHomePageAsync(string language);
+
+        /// <summary>
         /// Retrieves generated content details by its unique URL.
         /// </summary>
         /// <param name="uniqUrl">The unique URL identifier for the content.</param>

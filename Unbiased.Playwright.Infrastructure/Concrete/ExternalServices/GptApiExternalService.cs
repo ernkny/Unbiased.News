@@ -484,7 +484,6 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                             }
                         }
                     },
-                    reasoning_effort = "medium",
                     store = true
                 };
 

@@ -90,6 +90,35 @@ namespace Unbiased.News.Application.Services
         }
 
         /// <summary>
+        ///  Retrieves all content subheadings with associated images for the home page.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ContentSubHeadingWithImageDto>> GetAllContentWithImageForHomePageAsync(string language)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetAllContentWithImageForHomePageQuery(language));
+                if (result.Any())
+                {
+                    return result;
+                }
+                return Enumerable.Empty<ContentSubHeadingWithImageDto>();
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                }, _serviceProvider);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Retrieves the most recent daily horoscope information for all zodiac signs.
         /// </summary>
         /// <returns>A collection of daily horoscope details</returns>
