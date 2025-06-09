@@ -218,7 +218,8 @@ namespace Unbiased.Playwright.Application.Services
                         CategoryId = item.CategoryId,
                         Language = item.Language,
                         BiasScore = Convert.ToInt32(result.BiasScore),
-                        BiasScoreExplanation = result.BiasScoreExplanation
+                        BiasScoreExplanation = result.BiasScoreExplanation,
+                        UniqUrlPath = result.UniqUrlPath
                     };
 
                     if (string.IsNullOrEmpty(result.Title) && string.IsNullOrEmpty(result.Detail))

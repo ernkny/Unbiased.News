@@ -107,7 +107,7 @@ namespace Unbiased.Playwright.Application.Configurations.Quartz
                 .ForJob(jobKeySubheadingsGenerate)
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(10)
+                    .WithIntervalInHours(24)
                     .RepeatForever())
                 .WithIdentity("SubheadingsGenerateJob"));
         }

@@ -32,5 +32,10 @@
         /// Gets or sets the promt of the news source to create Image
         /// </summary>
         public string ImagePrompt { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the unique URL path for the news article.
+        /// </summary>
+        public string UniqUrlPath { get; set; }
     }
 }

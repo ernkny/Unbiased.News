@@ -69,6 +69,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                             WaitUntil = WaitUntilState.DOMContentLoaded
                         });
 
+                        await Task.Delay(4000);
                         var shareButtons = await newPage.QuerySelectorAllAsync($"[aria-label='{Share}']");
                         var guid = Guid.NewGuid().ToString();
 

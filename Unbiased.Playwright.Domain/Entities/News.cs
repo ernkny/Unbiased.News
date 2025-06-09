@@ -131,6 +131,11 @@ namespace Unbiased.Playwright.Domain.Entities
         public string ImagePrompt { get; set; }
 
         /// <summary>
+        ///  Gets or sets the unique URL path for the news article.
+        /// </summary>
+        public string UniqUrlPath { get; set; }
+
+        /// <summary>
         /// Gets or sets the count of scores or ratings received for this news article.
         /// Used for tracking how many times the news has been evaluated or rated.
         /// </summary>

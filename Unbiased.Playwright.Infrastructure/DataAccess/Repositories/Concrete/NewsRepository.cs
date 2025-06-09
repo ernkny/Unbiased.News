@@ -274,6 +274,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("BiasScore", generatedNews.BiasScore, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("BiasScoreExplanation", generatedNews.BiasScoreExplanation, DbType.String, ParameterDirection.Input);
                     parameters.Add("ImagePrompt", generatedNews.ImagePrompt, DbType.String, ParameterDirection.Input);
+                    parameters.Add("UniqUrlPath", generatedNews.UniqUrlPath, DbType.String, ParameterDirection.Input);
 
                     return await connection.ExecuteAsync("UB_sp_InsertUBNewsGenerated", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }

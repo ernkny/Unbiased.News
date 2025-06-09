@@ -601,7 +601,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                         - You are given 1 category:
                           {ContentBaseTitle}
 
-                        - Each time you run this, generate 30 content titles for the given category.
+                        - Each time you run this, generate 10 content titles for the given category.
 
                         Rules:
                         - The generated titles must be different, original, and varied.
@@ -695,6 +695,14 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                         - Yazının sonunda, haberin genel taraflılık düzeyini değerlendir.
                         - BiasScore ver: 0 (tarafsız) ile 100 (aşırı taraflı) arasında bir değer.
                         - BiasScoreExplanation: Bu puanı neden verdiğini açıklayan 2-4 cümlelik kısa bir yorum yaz.
+                        
+                        SEO Dostu URL Gereksinimi:
+                        - Yazının başlığına dayanarak 'UniqUrlPathForSeo' alanını da oluştur.
+                        - Bu alan küçük harfli, URL uyumlu ve Türkçe karakterlerden arındırılmış olmalı.
+                        - Boşluklar yerine tire (-) kullanılmalı. Özel karakterler çıkarılmalı.
+                        - Örnek:
+                        Title: 'Ekonomide Yeni Dönem Başladı'
+                        UniqUrlPath: 'ekonomide-yeni-donem-basladi'
 
                         Yanıt Formatı:
                         - Sadece aşağıdaki JSON formatında yanıt ver.
@@ -707,7 +715,8 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                           ""Detail"": ""[HTML etiketleri kullanılarak yazılmış detaylı haber metni]"",
                           ""BiasScore"": ""[0-100 arasında tam sayı]"",
                           ""BiasScoreExplanation"": ""[Taraflılık puanı açıklaması]"",
-                          ""ImagePrompt"": ""[Fotoğraf oluşturmak için prompt]""
+                          ""ImagePrompt"": ""[Fotoğraf oluşturmak için prompt]"",
+                          ""UniqUrlPath"": ""[Başlığa göre SEO uyumlu URL]""
                         }}
                         ";
 
@@ -749,6 +758,14 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                         - After the article, evaluate the overall bias.
                         - Provide a BiasScore between 0 (unbiased) and 100 (extremely biased).
                         - Provide a short BiasScoreExplanation explaining the reason for the score in 2-4 sentences.
+                        
+                        SEO-Friendly Output Requirement:
+                        - Based on the article title, also generate a field called ""UniqUrlPathForSeo"".
+                        - This should be a lowercase, URL-safe version of the title.
+                        - Remove Turkish characters (ç,ğ,ı,ö,ş,ü), convert spaces to dashes, and strip any special characters.
+                        - Example:
+                            Title: ""Enflasyonla Mücadelede Yeni Adım""
+                             UniqUrlPath: ""enflasyonla-mucadelede-yeni-adim""
 
                         Response Format:
                         - Respond only in the following pure JSON structure.
@@ -762,6 +779,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                           ""BiasScore"": ""[Bias score 0-100]"",
                           ""BiasScoreExplanation"": ""[Brief explanation for the bias score]"",
                           ""ImagePrompt"": ""[Prompt to create photo]""
+                          ""UniqUrlPath"": ""[SEO-friendly URL path based on the title]""
                         }}
                         ";
 
