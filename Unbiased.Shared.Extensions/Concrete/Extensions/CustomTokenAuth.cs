@@ -5,9 +5,16 @@ using Unbiased.Shared.Extensions.Concrete.Helpers;
 
 namespace Unbiased.Shared.Extensions.Concrete.Extensions
 {
+    /// <summary>
+    /// Provides extension methods for adding custom token authentication to the service collection.
+    /// </summary>
     public static class CustomTokenAuth
     {
-
+        /// <summary>
+        /// Adds custom token authentication to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="tokenOptions"></param>
         public static void AddCustomTokenAuth(this IServiceCollection services, CustomTokenOption tokenOptions)
         {
             services.AddAuthorization(options =>
@@ -50,6 +57,11 @@ namespace Unbiased.Shared.Extensions.Concrete.Extensions
                 options.AddPolicy("Engine Management Update", policy => policy.RequireClaim("permissions", "Engine Management Update"));
                 options.AddPolicy("Engine Management Get", policy => policy.RequireClaim("permissions", "Engine Management Get"));
                 options.AddPolicy("Engine Management Generate Content", policy => policy.RequireClaim("permissions", "Engine Management Generate Content"));
+
+                options.AddPolicy("Content Management Add", policy => policy.RequireClaim("permissions", "Content Management Add"));
+                options.AddPolicy("Content Management Delete", policy => policy.RequireClaim("permissions", "Content Management Delete"));
+                options.AddPolicy("Content Management Update", policy => policy.RequireClaim("permissions", "Content Management Update"));
+                options.AddPolicy("Content Management Get", policy => policy.RequireClaim("permissions", "Content Management Get"));
             });
 
             services.AddAuthentication(options =>
