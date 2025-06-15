@@ -1,4 +1,5 @@
-﻿using Unbiased.Dashboard.Domain.Dto_s.Content;
+﻿using Microsoft.AspNetCore.Http;
+using Unbiased.Dashboard.Domain.Dto_s.Content;
 
 namespace Unbiased.Dashboard.Application.Interfaces
 {
@@ -39,5 +40,19 @@ namespace Unbiased.Dashboard.Application.Interfaces
         /// <param name="Id"></param>
         /// <returns></returns>
         Task<GeneratedContentDto> GetGeneratedContentByIdAsync(int Id);
+
+        /// <summary>
+        ///  Updates the generated content based on the provided request parameters.
+        /// </summary>
+        /// <param name="updateAllContentDataRequest"></param>
+        /// <returns></returns>
+        Task<bool> UpdateGenerateContentAsync(UpdateAllContentDataRequest updateAllContentDataRequest);
+
+        /// <summary>
+        ///   Updates the generated content image based on the provided file.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        Task<string> UpdateGenereatedContentImageAsync(IFormFile file);
     }
 }

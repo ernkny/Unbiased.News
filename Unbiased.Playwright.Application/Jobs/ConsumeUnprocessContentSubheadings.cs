@@ -19,16 +19,17 @@ namespace Unbiased.Playwright.Application.Jobs
     {
         private readonly IContentService _contentService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the ConsumeUnprocessContentSubheadings class.
         /// </summary>
         /// <param name="contentService">The content service for generating content.</param>
-        public ConsumeUnprocessContentSubheadings( IContentService contentService, IServiceProvider serviceProvider)
+        public ConsumeUnprocessContentSubheadings(IContentService contentService, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _contentService = contentService;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             catch (TooManyRequestsException exception)
@@ -62,7 +63,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 await Task.Delay(TimeSpan.FromMinutes(1));
             }
             catch (Exception exception)
@@ -73,7 +74,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

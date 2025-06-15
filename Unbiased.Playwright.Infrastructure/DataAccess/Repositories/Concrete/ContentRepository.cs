@@ -15,17 +15,16 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
     public class ContentRepository : IContentRepository
     {
         private readonly UnbiasedSqlConnection _connection;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentRepository"/> class.
         /// </summary>
         /// <param name="connection">The connection to the database.</param>
-        public ContentRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
+        public ContentRepository(UnbiasedSqlConnection connection, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
-            _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -89,7 +88,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -137,7 +136,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -169,7 +168,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -205,7 +204,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -234,7 +233,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -261,13 +260,13 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
             catch (Exception exception)
             {
-                 _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                _eventAndActivityLog.SendEventLogToQueue(new EventLog
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider).Wait();
+                }).Wait();
                 throw;
             }
 
@@ -296,13 +295,13 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
             }
             catch (Exception exception)
             {
-                 _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                _eventAndActivityLog.SendEventLogToQueue(new EventLog
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider).Wait();
+                }).Wait();
                 throw;
             }
 

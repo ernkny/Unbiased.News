@@ -12,6 +12,7 @@ using Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.Dtos.Concrete.Configurations;
 using Unbiased.Shared.Extensions.Concrete.Extensions;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
+builder.Services.AddScoped<IEventAndActivityLog, EventAndActivityLog>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -58,8 +60,10 @@ builder.Services.AddScoped<AwsCredentials>();
 builder.Services.AddCustomTokenAuth(builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>()!);
 builder.Services.Configure<AwsCredentials>(builder.Configuration.GetSection("S3Settings"));
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateGeneratedNewsWithImageDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<InsertNewsWithImageDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateGeneratedContentValidator>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

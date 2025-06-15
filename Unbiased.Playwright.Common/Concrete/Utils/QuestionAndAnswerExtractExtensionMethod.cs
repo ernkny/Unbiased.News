@@ -15,7 +15,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
         /// </summary>
         /// <param name="jsonResponse">The JSON response to extract question and answer data from.</param>
         /// <returns>A <see cref="QuestionsAndAnswersDto"/> containing the extracted question and answer data.</returns>
-        public static QuestionsAndAnswersDto ExtractQuestionAndAnswer(string jsonResponse, IServiceProvider _serviceProvider, EventAndActivityLog _eventAndActivityLog)
+        public static QuestionsAndAnswersDto ExtractQuestionAndAnswer(string jsonResponse, IEventAndActivityLog _eventAndActivityLog)
         {
             var questionsAndAnswersDto = new QuestionsAndAnswersDto();
             try
@@ -26,7 +26,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                 foreach (var choice in choices.EnumerateArray())
                 {
                     var message = choice.GetProperty("message");
-                    var content = message.GetProperty("content").GetString().Replace("```json",string.Empty).Replace("```",string.Empty);
+                    var content = message.GetProperty("content").GetString().Replace("```json", string.Empty).Replace("```", string.Empty);
 
 
                     return JsonSerializer.Deserialize<QuestionsAndAnswersDto>(content);
@@ -34,13 +34,13 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
             }
             catch (Exception exception)
             {
-                 _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                _eventAndActivityLog.SendEventLogToQueue(new EventLog
                 {
                     EventType = typeof(QuestionAndAnswerExtractExtensionMethod).FullName,
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider).Wait();
+                }).Wait();
                 throw;
             }
             return questionsAndAnswersDto;

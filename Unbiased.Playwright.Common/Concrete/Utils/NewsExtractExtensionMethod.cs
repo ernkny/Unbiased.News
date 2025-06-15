@@ -15,8 +15,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
         /// </summary>
         /// <param name="jsonResponse">The JSON response to extract news details from.</param>
         /// <returns>A <see cref="NewsExtractDto"/> containing the extracted news details.</returns>
-        public static NewsExtractDto ExtractNewsDetails(string jsonResponse, IServiceProvider _serviceProvider,
-        EventAndActivityLog _eventAndActivityLog)
+        public static NewsExtractDto ExtractNewsDetails(string jsonResponse, IEventAndActivityLog _eventAndActivityLog)
         {
             var detailsList = new NewsExtractDto();
             try
@@ -39,7 +38,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider).Wait();
+                }).Wait();
                 throw;
             }
             return detailsList;

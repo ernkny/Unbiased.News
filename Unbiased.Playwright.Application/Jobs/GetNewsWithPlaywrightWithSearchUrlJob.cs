@@ -18,17 +18,19 @@ namespace Unbiased.Playwright.Application.Jobs
         private readonly IPlaywrightScrappingService _playwrightScrappingService;
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
+
         /// <summary>
         /// Initializes a new instance of the GetNewsWithPlaywrightWithSearchUrlJob class.
         /// </summary>
         /// <param name="playwrightScrappingService">The service responsible for web scraping operations.</param>
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
-        public GetNewsWithPlaywrightWithSearchUrlJob(IPlaywrightScrappingService playwrightScrappingService, IMediator mediator, IServiceProvider serviceProvider)
+        public GetNewsWithPlaywrightWithSearchUrlJob(IPlaywrightScrappingService playwrightScrappingService, IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _playwrightScrappingService = playwrightScrappingService;
             _mediator = mediator;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 

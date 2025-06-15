@@ -15,25 +15,28 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
     {
         private readonly UnbiasedSqlConnection _connection;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NewsRepository"/> class.
+        /// Initializes a new instance of the <see cref="BlogRepository"/> class.
         /// </summary>
         /// <param name="connection">The Unbiased SQL connection.</param>
-        public BlogRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
+        /// <param name="serviceProvider">The service provider for dependency injection.</param>
+        /// <param name="eventAndActivityLog">The event and activity logging service.</param>
+        public BlogRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
-        ///  Retrieves all blog entries with pagination and filtering options for the dashboard.
+        /// Retrieves all blog entries with pagination and filtering options for the dashboard.
         /// </summary>
-        /// <param name="blogRequestDto"></param>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
+        /// <param name="blogRequestDto">The request DTO containing filtering criteria.</param>
+        /// <param name="pageNumber">The page number for pagination.</param>
+        /// <param name="pageSize">The number of items per page.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the collection of blog DTOs.</returns>
         public async Task<IEnumerable<BlogDto>> GetAllBlogsAsync(BlogRequestDto blogRequestDto, int pageNumber, int pageSize)
         {
             try
@@ -61,7 +64,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -69,8 +72,8 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Retrieves the total count of blog entries based on the provided filter criteria.
         /// </summary>
-        /// <param name="blogRequestDto"></param>
-        /// <returns></returns>
+        /// <param name="blogRequestDto">The request DTO containing filtering criteria.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the total count of blog entries.</returns>
         public async Task<int> GetAllBlogsCountAsync(BlogRequestDto blogRequestDto)
         {
             try
@@ -96,17 +99,17 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
         }
 
         /// <summary>
-        ///  Retrieves a blog entry by its ID, including its associated image.
+        /// Retrieves a blog entry by its ID, including its associated image.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the blog entry to retrieve.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the blog DTO.</returns>
         public async Task<BlogDto> GetBlogByIdWithImageAsync(string id)
         {
             try
@@ -127,16 +130,16 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
 
         /// <summary>
-        ///  Deletes a blog entry by its ID.
+        /// Deletes a blog entry by its ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the blog entry to delete.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the deletion was successful; otherwise, false.</returns>
         public async Task<bool> DeleteBlogByIdAsync(string id)
         {
             try
@@ -157,7 +160,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -165,9 +168,9 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Inserts a new blog entry into the database.
         /// </summary>
-        /// <param name="blogRequestDto"></param>
-        /// <param name="UserId"></param>
-        /// <returns></returns>
+        /// <param name="blogRequestDto">The DTO containing the blog data to insert.</param>
+        /// <param name="UserId">The ID of the user creating the blog entry.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the insertion was successful; otherwise, false.</returns>
         public async Task<bool> InsertBlogAsync(InsertBlogDtoRequest blogRequestDto, int UserId)
         {
             try
@@ -195,7 +198,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -204,8 +207,8 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Updates an existing blog entry in the database.
         /// </summary>
-        /// <param name="blogRequestDto"></param>
-        /// <returns></returns>
+        /// <param name="blogRequestDto">The DTO containing the updated blog data.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the update was successful; otherwise, false.</returns>
         public async Task<bool> UpdateBlogAsync(UpdateBlogDtoRequest blogRequestDto)
         {
             try
@@ -233,7 +236,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

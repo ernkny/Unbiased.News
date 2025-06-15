@@ -20,18 +20,19 @@ namespace Unbiased.Playwright.Application.Jobs
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the GetDailyHoroscopeDataJob class.
         /// </summary>
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         /// <param name="configuration">The application configuration.</param>
-        public GetDailyHoroscopeDataJob(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider)
+        public GetDailyHoroscopeDataJob(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -46,15 +47,15 @@ namespace Unbiased.Playwright.Application.Jobs
             {
                 foreach (HoroscopeEnums horoscope in Enum.GetValues(typeof(HoroscopeEnums)))
                 {
-                    
-                    var GptApi = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
+
+                    var GptApi = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider, _eventAndActivityLog);
                     var horoscopedetail = await GptApi.SendHoroscopeToGptAndGetResponse(horoscope.ToString(), context.CancellationToken);
                     if (horoscopedetail != null)
                     {
-                        var horoscopeData = new     HoroscopeDailyDetail()
+                        var horoscopeData = new HoroscopeDailyDetail()
                         {
                             CreatedDate = DateTime.UtcNow,
-                            HoroscopeId = (int)horoscope, 
+                            HoroscopeId = (int)horoscope,
                             Detail = horoscopedetail
                         };
 
@@ -72,7 +73,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

@@ -14,6 +14,7 @@ using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices;
 using Unbiased.Playwright.Infrastructure.DataAccess.Connections;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +69,7 @@ builder.Services.AddQuartzHostedService(q =>
 {
     q.WaitForJobsToComplete = true;
 });
+builder.Services.AddScoped<IEventAndActivityLog, EventAndActivityLog>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<INewsImageRepository, NewsImageRepository>();
 builder.Services.AddScoped<INewsService, NewsService>();

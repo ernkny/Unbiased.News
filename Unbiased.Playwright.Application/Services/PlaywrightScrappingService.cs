@@ -22,16 +22,17 @@ namespace Unbiased.Playwright.Application.Services
     {
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the PlaywrightScrappingService class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
-        public PlaywrightScrappingService(IMediator mediator, IServiceProvider serviceProvider)
+        public PlaywrightScrappingService(IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -74,9 +75,9 @@ namespace Unbiased.Playwright.Application.Services
             {
                 var listOfNews = Enumerable.Empty<News>().ToList();
                 var languageEnum = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), url.Language);
-                var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url, languageEnum, _serviceProvider);
+                var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url, languageEnum, _serviceProvider, _eventAndActivityLog);
                 var titles = await searchWithKeywordControl.Handle();
-                var newsContents = new GetNewsWithGuidControl(titles, _serviceProvider);
+                var newsContents = new GetNewsWithGuidControl(titles, _serviceProvider, _eventAndActivityLog);
                 var news = await newsContents.Handle();
                 news.ForEach(item => item.CategoryId = url.categoryId);
                 news.ForEach(item => item.Language = url.Language);
@@ -91,7 +92,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -118,7 +119,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -156,7 +157,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 

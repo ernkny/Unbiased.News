@@ -21,17 +21,18 @@ namespace Unbiased.Identity.Application.Services
     {
         private readonly CustomTokenOption _customTokenOption;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the TokenService class.
         /// </summary>
         /// <param name="customTokenOption">The custom token configuration options.</param>
         /// <param name="serviceProvider">The service provider for dependency injection.</param>
-        public TokenService(IOptions<CustomTokenOption> customTokenOption, IServiceProvider serviceProvider)
+        public TokenService(IOptions<CustomTokenOption> customTokenOption, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _customTokenOption = customTokenOption.Value;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider).Wait();
+                }).Wait();
                 throw;
             }
         }
@@ -96,7 +97,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider).Wait();
+                }).Wait();
                 throw;
             }
 
@@ -126,7 +127,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider).Wait();
+                }).Wait();
                 throw;
             }
 
@@ -165,7 +166,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -210,7 +211,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 

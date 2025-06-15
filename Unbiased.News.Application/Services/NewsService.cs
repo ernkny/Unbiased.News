@@ -15,16 +15,17 @@ namespace Unbiased.News.Application.Services
     {
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsService"/> class.
         /// </summary>
         /// <param name="mediator">The mediator instance for handling CQRS operations.</param>
-        public NewsService(IMediator mediator, IServiceProvider serviceProvider)
+        public NewsService(IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -77,7 +78,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -104,7 +105,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -131,7 +132,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -157,7 +158,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -182,7 +183,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -209,7 +210,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -235,7 +236,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -261,7 +262,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -288,7 +289,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

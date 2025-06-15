@@ -21,16 +21,17 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
         private readonly HttpClient _httpClient;
         private bool disposedValue;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveGeneratedImageToAws"/> class.
         /// </summary>
         /// <param name="awsCredentials">The AWS credentials for S3 access.</param>
-        public SaveGeneratedImageToAws(AwsCredentials awsCredentials)
+        public SaveGeneratedImageToAws(AwsCredentials awsCredentials, IEventAndActivityLog eventAndActivityLog)
         {
             client = new AmazonS3Client(awsCredentials.AccessKey, awsCredentials.SecretKey, Amazon.RegionEndpoint.EUNorth1);
             _httpClient = new HttpClient();
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             catch (Exception exception)
@@ -94,7 +95,7 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

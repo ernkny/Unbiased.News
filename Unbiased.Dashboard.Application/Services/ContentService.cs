@@ -1,9 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System;
 using Unbiased.Dashboard.Application.Interfaces;
+using Unbiased.Dashboard.Application.Validators;
+using Unbiased.Dashboard.Common.Concrete.Helpers;
 using Unbiased.Dashboard.Domain.Dto_s.Content;
 using Unbiased.Dashboard.Domain.Model.Aws;
+using Unbiased.Dashboard.Infrastructure.Concrete.Cqrs.Commands.Content;
 using Unbiased.Dashboard.Infrastructure.Concrete.Cqrs.Queries.Content;
 using Unbiased.Shared.Extensions.Concrete.Entities;
 using Unbiased.Shared.Extensions.Concrete.Loggging;
@@ -13,13 +18,13 @@ namespace Unbiased.Dashboard.Application.Services
     /// <summary>
     /// Provides methods for managing and retrieving content categories and contents.
     /// </summary>
-    public class ContentService : IContentService
+    public sealed class ContentService : IContentService
     {
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
         private readonly AwsCredentials _awsCredentials;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ContentService"/> class.
@@ -28,11 +33,12 @@ namespace Unbiased.Dashboard.Application.Services
         /// <param name="configuration"></param>
         /// <param name="awsOptions"></param>
         /// <param name="serviceProvider"></param>
-        public ContentService(IMediator mediator, IConfiguration configuration, IOptions<AwsCredentials> awsOptions, IServiceProvider serviceProvider)
+        public ContentService(IMediator mediator, IConfiguration configuration, IOptions<AwsCredentials> awsOptions, IEventAndActivityLog eventAndActivityLog, IServiceProvider serviceProvider)
         {
             _mediator = mediator;
             _configuration = configuration;
             _awsCredentials = awsOptions.Value;
+            _eventAndActivityLog = eventAndActivityLog;
             _serviceProvider = serviceProvider;
         }
 
@@ -54,7 +60,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -82,7 +88,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -108,7 +114,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -132,7 +138,69 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
+                throw;
+            }
+        }
+
+        /// <summary>
+        ///  Updates the generated content based on the provided request parameters.
+        /// </summary>
+        /// <param name="updateAllContentDataRequest"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateGenerateContentAsync(UpdateAllContentDataRequest updateAllContentDataRequest)
+        {
+            try
+            {
+                return await _mediator.Send(new UpdateContentCommand(updateAllContentDataRequest));
+
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                });
+                throw;
+            }
+        }
+
+        /// <summary>
+        ///  Updates the generated content image based on the provided file.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public async Task<string> UpdateGenereatedContentImageAsync(IFormFile file)
+        {
+            try
+            {
+                if (file != null && !new FormFileValidation().IsValidFile(file))
+                {
+                    throw new Exception("File is not valid");
+                }
+
+                var fileUpload = new SaveNewsImageToAws(_awsCredentials!);
+                var convertedFile = await new FileConvertToByteArray().ConvertToByteArray(file);
+                var resultOfPicture = await fileUpload.UploadFileToAws(_configuration.GetSection("Paths:AwsFilePath").Value, _awsCredentials.BucketName, convertedFile);
+
+                if (resultOfPicture == null)
+                {
+                    throw new Exception("Image not found");
+                }
+                return resultOfPicture;
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message}",
+                    EventDate = DateTime.UtcNow
+                });
                 throw;
             }
         }

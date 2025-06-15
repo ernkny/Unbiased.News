@@ -11,21 +11,22 @@ namespace Unbiased.Dashboard.Application.Services
     /// <summary>
     /// Service implementation for contact operations providing functionality for customer message management with error handling and logging.
     /// </summary>
-    public class ContactService : IContactService
+    public sealed class ContactService : IContactService
     {
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the ContactService class.
         /// </summary>
         /// <param name="mediator">The mediator for handling CQRS operations.</param>
         /// <param name="serviceProvider">The service provider for dependency injection.</param>
-        public ContactService(IMediator mediator, IServiceProvider serviceProvider)
+        public ContactService(IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -74,7 +75,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -99,7 +100,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

@@ -18,7 +18,7 @@ namespace Unbiased.Playwright.Application.Jobs
         private readonly IMediator _mediator;
         private readonly INewsService _newsService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the ConsumeUnprocessedImagesJob class.
@@ -26,10 +26,11 @@ namespace Unbiased.Playwright.Application.Jobs
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         /// <param name="newsService">The service responsible for news-related operations.</param>
         /// <param name="serviceProvider">The service provider instance.</param>
-        public ConsumeUnprocessedImagesJob(IMediator mediator, INewsService newsService,IServiceProvider serviceProvider)
+        public ConsumeUnprocessedImagesJob(IMediator mediator, INewsService newsService, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _newsService = newsService;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -45,7 +46,8 @@ namespace Unbiased.Playwright.Application.Jobs
                 var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery());
                 if (images.Any())
                 {
-                    foreach (var image in images) {
+                    foreach (var image in images)
+                    {
 
                         await _newsService.GenerateImagesWhenAllNewsHasGeneratedAsync(context.CancellationToken);
                     }
@@ -61,7 +63,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             catch (TooManyRequestsException exception)
@@ -72,7 +74,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 await Task.Delay(TimeSpan.FromMinutes(1));
             }
             catch (Exception exception)
@@ -83,7 +85,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

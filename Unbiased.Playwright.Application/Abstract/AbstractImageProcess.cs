@@ -4,6 +4,7 @@ using Unbiased.Playwright.Common.Concrete.Helper;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Playwright.Domain.Enums;
 using Unbiased.Playwright.Infrastructure.Concrete.ExternalServices.Factory;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Abstract
 {
@@ -18,6 +19,7 @@ namespace Unbiased.Playwright.Application.Abstract
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
         private readonly AwsCredentials _awsCredentials;
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the AbstractImageProcess class.
@@ -26,12 +28,13 @@ namespace Unbiased.Playwright.Application.Abstract
         /// <param name="mediator">The mediator instance for handling requests.</param>
         /// <param name="configuration">The application configuration.</param>
         /// <param name="serviceProvider">The service provider for dependency resolution.</param>
-        public AbstractImageProcess(AwsCredentials awsCredentials, IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider)
+        public AbstractImageProcess(AwsCredentials awsCredentials, IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _awsCredentials = awsCredentials;
             _mediator = mediator;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace Unbiased.Playwright.Application.Abstract
             if (string.IsNullOrEmpty(imageUrl))
                 return null;
 
-            return await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
+            return await new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog).GetFileFromGptAndUploadFileAsync(
                 _awsCredentials.BucketName,
                 _configuration.GetSection("Paths:AwsFilePath").Value,
                 imageUrl,

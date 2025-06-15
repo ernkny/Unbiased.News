@@ -15,17 +15,18 @@ namespace Unbiased.News.Application.Services
     {
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ContactService"/> class.
         /// </summary>
         /// <param name="mediator"></param>
         /// <param name="serviceProvider"></param>
-        public ContactService(IMediator mediator, IServiceProvider serviceProvider)
+        public ContactService(IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace Unbiased.News.Application.Services
             {
                 var validator = new ContactValidator();
                 var validatorResult = validator.Validate(contact);
-                if (validatorResult.IsValid) 
+                if (validatorResult.IsValid)
                 {
                     var result = await _mediator.Send(new InsertContactFormCommand(contact));
 
@@ -58,7 +59,7 @@ namespace Unbiased.News.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

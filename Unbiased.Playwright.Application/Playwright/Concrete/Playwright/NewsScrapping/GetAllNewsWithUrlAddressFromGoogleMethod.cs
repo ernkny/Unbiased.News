@@ -15,11 +15,12 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         private IBrowser _browser;
         private readonly IServiceProvider _serviceProvider;
 
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
-        public GetAllNewsWithUrlAddressFromGoogleMethod(IServiceProvider serviceProvider)
+        public GetAllNewsWithUrlAddressFromGoogleMethod(IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
 
@@ -29,12 +30,12 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         /// <param name="searchUrl">The URL to search for news articles.</param>
         /// <returns>A list of <see cref="SaveSearchUrlAndGuidDto"/> objects containing the news article URLs and GUIDs.</returns>
 
-        public async Task<List<SaveSearchUrlAndGuidDto>> GetAllNewsWithUrlAddressFromGoogle(string searchUrl,LanguageEnums languageEnum)
+        public async Task<List<SaveSearchUrlAndGuidDto>> GetAllNewsWithUrlAddressFromGoogle(string searchUrl, LanguageEnums languageEnum)
         {
 
-            var closeDialog= languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase)? "İletişim kutusunu kapat": "Close dialog";
-            var CopyLink = languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase)? "Bağlantıyı kopyala":"Copy link";
-            var Share = languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase)? "Paylaş" : "Share";
+            var closeDialog = languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase) ? "İletişim kutusunu kapat" : "Close dialog";
+            var CopyLink = languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase) ? "Bağlantıyı kopyala" : "Copy link";
+            var Share = languageEnum.ToString().Equals("TR", StringComparison.OrdinalIgnoreCase) ? "Paylaş" : "Share";
             var newsArticles = new List<SaveSearchUrlAndGuidDto>();
             try
             {
@@ -105,7 +106,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                             EventSeverity = "Error",
                             Message = $"{exception.Message}",
                             EventDate = DateTime.UtcNow
-                        }, _serviceProvider);
+                        });
                         throw;
                     }
                     finally
@@ -122,7 +123,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             finally

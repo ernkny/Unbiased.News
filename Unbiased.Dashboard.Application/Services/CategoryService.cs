@@ -10,19 +10,20 @@ namespace Unbiased.Dashboard.Application.Services
     /// <summary>
     /// Service implementation for category operations providing functionality for category management with logging support.
     /// </summary>
-    public sealed class CategoryService:ICategoryService
+    public sealed class CategoryService : ICategoryService
     {
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the CategoryService class.
         /// </summary>
         /// <param name="mediator">The mediator for handling CQRS operations.</param>
-        public CategoryService(IMediator mediator)
+        public CategoryService(IMediator mediator, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

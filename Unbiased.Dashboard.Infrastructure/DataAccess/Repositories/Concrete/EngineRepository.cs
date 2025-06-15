@@ -12,26 +12,29 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
     /// <summary>
     /// Represents a repository for managing engine configurations in the Unbiased Dashboard.
     /// </summary>
-    public class EngineRepository:IEngineRepository
+    public class EngineRepository : IEngineRepository
     {
         private readonly UnbiasedSqlConnection _connection;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineRepository"/> class.
         /// </summary>
         /// <param name="connection">The Unbiased SQL connection.</param>
-        public EngineRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
+        /// <param name="serviceProvider">The service provider for dependency injection.</param>
+        /// <param name="eventAndActivityLog">The event and activity logging service.</param>
+        public EngineRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
         /// Retrieves all engine configurations for the dashboard.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the collection of engine configuration DTOs.</returns>
         public async Task<IEnumerable<EngineConfigurationDto>> GetAllEngineConfigurationsAsync()
         {
             try
@@ -49,7 +52,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -57,8 +60,8 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Deactivates or activates a search engine based on the provided ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the search engine to activate or deactivate.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the operation was successful; otherwise, false.</returns>
         public async Task<bool> DeActivateOrActivateSearchAsync(string id)
         {
             try
@@ -78,7 +81,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -86,8 +89,8 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Activates an engine immediately based on the provided ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the engine to activate immediately.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the activation was successful; otherwise, false.</returns>
         public async Task<bool> ActivateEngineImmediatlyAsync(string id)
         {
             try
@@ -107,7 +110,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

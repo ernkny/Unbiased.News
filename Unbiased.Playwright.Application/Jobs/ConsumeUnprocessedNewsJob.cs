@@ -22,7 +22,7 @@ namespace Unbiased.Playwright.Application.Jobs
         private readonly INewsService _newsService;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the ConsumeUnprocessedNewsJob class.
@@ -30,12 +30,13 @@ namespace Unbiased.Playwright.Application.Jobs
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         /// <param name="newsService">The service responsible for news-related operations.</param>
         /// <param name="configuration">The application configuration.</param>
-        public ConsumeUnprocessedNewsJob(IMediator mediator, INewsService newsService, IConfiguration configuration, IServiceProvider serviceProvider)
+        public ConsumeUnprocessedNewsJob(IMediator mediator, INewsService newsService, IConfiguration configuration, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _newsService = newsService;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -52,8 +53,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 if (checkNews.Any())
                 {
                     var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), context.CancellationToken);
-                    var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
-                    await _newsService.GenerateNewsWithApiAsync(combinedNews, context.CancellationToken, externalServiceSend);
+                    var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider, _eventAndActivityLog);
                 }
                 await Task.CompletedTask;
             }
@@ -65,7 +65,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             catch (TooManyRequestsException exception)
@@ -76,7 +76,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 await Task.Delay(TimeSpan.FromMinutes(1));
             }
             catch (Exception exception)
@@ -87,7 +87,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

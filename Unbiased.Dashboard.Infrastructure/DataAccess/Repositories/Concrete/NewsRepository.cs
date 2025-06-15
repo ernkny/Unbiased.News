@@ -12,34 +12,36 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
     /// <summary>
     ///  Represents a repository for managing news articles with images.
     /// </summary>
-    public class NewsRepository:INewsRepository
+    public class NewsRepository : INewsRepository
     {
         private readonly UnbiasedSqlConnection _connection;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
-
+        private readonly IEventAndActivityLog _eventAndActivityLog;
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsRepository"/> class.
         /// </summary>
         /// <param name="connection">The Unbiased SQL connection.</param>
-        public NewsRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
+        /// <param name="serviceProvider">The service provider for dependency injection.</param>
+        /// <param name="eventAndActivityLog">The event and activity logging service.</param>
+        public NewsRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
         /// Retrieves all generated news articles with images for the dashboard.
         /// </summary>
-        /// <param name="requestDto"></param>
-        /// <returns></returns>
+        /// <param name="requestDto">The request DTO containing filtering and pagination parameters.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the collection of generated news with image DTOs.</returns>
         public async Task<IEnumerable<GenerateNewsWithImageDto>> GetAllGeneratedNewsWithImageAsync(GetGeneratedNewsWithImagePathRequestDto requestDto)
         {
             try
             {
                 using (var connection = _connection.CreateConnection())
                 {
-                    var parameters = new DynamicParameters(); 
+                    var parameters = new DynamicParameters();
                     parameters.Add("@pageNumber", requestDto.PageNumber);
                     parameters.Add("@pageSize", requestDto.PageSize);
                     parameters.Add("@Language", requestDto.Language);
@@ -59,16 +61,16 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
 
         /// <summary>
-        ///  Retrieves the count of all generated news articles with images for the dashboard.
+        /// Retrieves the count of all generated news articles with images for the dashboard.
         /// </summary>
-        /// <param name="requestDto"></param>
-        /// <returns></returns>
+        /// <param name="requestDto">The request DTO containing filtering parameters.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the total count of generated news articles.</returns>
         public async Task<int> GetAllGeneratedNewsWithImageCountAsync(GetGeneratedNewsWithImagePathRequestDto requestDto)
         {
             try
@@ -93,7 +95,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -101,8 +103,8 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Retrieves a specific generated news article with an image by its ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the news article to retrieve.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the generated news with image DTO.</returns>
         public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByIdWithImageAsync(string id)
         {
             try
@@ -122,7 +124,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -130,8 +132,8 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Deletes a news article by its ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the news article to delete.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the deletion was successful; otherwise, false.</returns>
         public async Task<bool> DeleteNewsByIdAsync(string id)
         {
             try
@@ -141,7 +143,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
 
                 using (var connection = _connection.CreateConnection())
                 {
-                    return await connection.QueryFirstAsync<int>("UB_sp_DeleteNews", paramaters, commandType: CommandType.StoredProcedure)==1;
+                    return await connection.QueryFirstAsync<int>("UB_sp_DeleteNews", paramaters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
             catch (Exception exception)
@@ -152,7 +154,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -160,24 +162,24 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Updates a generated news article with an image.
         /// </summary>
-        /// <param name="generatedNewsDto"></param>
-        /// <returns></returns>
+        /// <param name="generatedNewsDto">The DTO containing the updated news article data.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the update was successful; otherwise, false.</returns>
         public async Task<bool> UpdateGeneratedNewsWithImageAsync(UpdateGeneratedNewsDto generatedNewsDto)
         {
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@Id", generatedNewsDto.Id,DbType.String);
-                parameters.Add("@Title", generatedNewsDto.Title,DbType.String);
-                parameters.Add("@Detail", generatedNewsDto.Detail,DbType.String);
-                parameters.Add("@CategoryId", generatedNewsDto.CategoryId,DbType.Int32);
-                parameters.Add("@CreatedTime", generatedNewsDto.CreatedTime,DbType.DateTime);
-                parameters.Add("@IsApproved", generatedNewsDto.IsApproved,DbType.Boolean);
-                parameters.Add("@IsActive", generatedNewsDto.IsActive,DbType.Boolean);
-                parameters.Add("@ImagePath", generatedNewsDto.ImagePath,DbType.String);
+                parameters.Add("@Id", generatedNewsDto.Id, DbType.String);
+                parameters.Add("@Title", generatedNewsDto.Title, DbType.String);
+                parameters.Add("@Detail", generatedNewsDto.Detail, DbType.String);
+                parameters.Add("@CategoryId", generatedNewsDto.CategoryId, DbType.Int32);
+                parameters.Add("@CreatedTime", generatedNewsDto.CreatedTime, DbType.DateTime);
+                parameters.Add("@IsApproved", generatedNewsDto.IsApproved, DbType.Boolean);
+                parameters.Add("@IsActive", generatedNewsDto.IsActive, DbType.Boolean);
+                parameters.Add("@ImagePath", generatedNewsDto.ImagePath, DbType.String);
                 using (var connection = _connection.CreateConnection())
                 {
-                    return await connection.QueryFirstAsync<int>("UB_sp_UpdateGeneratedNews", parameters, commandType: CommandType.StoredProcedure)==1;
+                    return await connection.QueryFirstAsync<int>("UB_sp_UpdateGeneratedNews", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
             catch (Exception exception)
@@ -188,7 +190,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -196,8 +198,8 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
         /// <summary>
         /// Inserts a new generated news article with an image into the database.
         /// </summary>
-        /// <param name="insertNewsWithImageDto"></param>
-        /// <returns></returns>
+        /// <param name="insertNewsWithImageDto">The DTO containing the news article data to insert.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the insertion was successful; otherwise, false.</returns>
         public async Task<bool> InsertGeneratedNewsWithImageAsync(InsertNewsWithImageDto insertNewsWithImageDto)
         {
             try
@@ -224,7 +226,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

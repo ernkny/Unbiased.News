@@ -39,5 +39,12 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Abstract
         /// <param name="Id"></param>
         /// <returns></returns>
         Task<GeneratedContentDto> GetGeneratedContentByIdAsync(int Id);
+
+        /// <summary>
+        ///  Updates the generated content based on the provided request parameters.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<bool> UpdateGeneratedContentAsync(UpdateAllContentDataRequest request);
     }
 }

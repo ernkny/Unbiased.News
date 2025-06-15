@@ -21,19 +21,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
         /// <summary>
         /// Initializes a new instance of the GptApiExternalService class.
         /// </summary>
         /// <param name="httpClient">The HTTP client instance for making API requests.</param>
         /// <param name="configuration">The configuration instance for API URLs and keys.</param>
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
-        public GptApiExternalService(HttpClient httpClient, IConfiguration configuration, IMediator mediator, IServiceProvider serviceProvider)
+        public GptApiExternalService(HttpClient httpClient, IConfiguration configuration, IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _mediator = mediator;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 if (response.IsSuccessStatusCode)
                 {
                     await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
-                    result = NewsExtractExtensionMethod.ExtractNewsDetails(await response.Content.ReadAsStringAsync(), _serviceProvider,_eventAndActivityLog);
+                    result = NewsExtractExtensionMethod.ExtractNewsDetails(await response.Content.ReadAsStringAsync(), _eventAndActivityLog);
 
                 }
 
@@ -169,7 +170,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             catch (OperationCanceledException exception)
@@ -180,7 +181,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             catch (Exception exception)
@@ -191,7 +192,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -322,7 +323,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 if (response.IsSuccessStatusCode)
                 {
                     await _mediator.Send(new AddOpenApiResponseCommand(await response.Content.ReadAsStringAsync()));
-                    result = QuestionAndAnswerExtractExtensionMethod.ExtractQuestionAndAnswer(await response.Content.ReadAsStringAsync(), _serviceProvider,_eventAndActivityLog);
+                    result = QuestionAndAnswerExtractExtensionMethod.ExtractQuestionAndAnswer(await response.Content.ReadAsStringAsync(), _eventAndActivityLog);
 
                 }
 

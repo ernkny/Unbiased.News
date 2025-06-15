@@ -15,17 +15,18 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
     {
         private readonly UnbiasedSqlConnection _connection;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the IdentityRepository class.
         /// </summary>
         /// <param name="connection">The SQL connection provider for database operations.</param>
         /// <param name="serviceProvider">The service provider for dependency injection.</param>
-        public IdentityRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
+        public IdentityRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -62,13 +63,13 @@ namespace Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete
             }
             catch (Exception exception)
             {
-                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+            await _eventAndActivityLog.SendEventLogToQueue(new EventLog
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 

@@ -15,23 +15,27 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
     {
         private readonly UnbiasedSqlConnection _connection;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContactRepository
+        /// Initializes a new instance of the <see cref="ContactRepository"/> class.
+        /// </summary>
         /// <param name="connection">The Unbiased SQL connection.</param>
-        public ContactRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
+        /// <param name="serviceProvider">The service provider for dependency injection.</param>
+        /// <param name="eventAndActivityLog">The event and activity logging service.</param>
+        public ContactRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
-        ///  Retrieves all customer messages with pagination support.
+        /// Retrieves all customer messages with pagination support.
         /// </summary>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
+        /// <param name="pageNumber">The page number for pagination.</param>
+        /// <param name="pageSize">The number of items per page.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the collection of customer contact messages.</returns>
         public async Task<IEnumerable<Contact>> GetAllCustomerMessagesAsync(int pageNumber, int pageSize)
         {
             try
@@ -52,16 +56,16 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
 
         /// <summary>
-        ///  Retrieves a customer message by its ID.
+        /// Retrieves a customer message by its ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the customer message.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the customer contact message.</returns>
         public async Task<Contact> GetCustomerMessagesByIdAsync(int id)
         {
             try
@@ -81,16 +85,16 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
 
         /// <summary>
-        ///  Deletes a customer message by its ID.
+        /// Deletes a customer message by its ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The unique identifier of the customer message to delete.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the deletion was successful; otherwise, false.</returns>
         public async Task<bool> DeleteCustomerMessagesByIdAsync(int id)
         {
             try
@@ -110,7 +114,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

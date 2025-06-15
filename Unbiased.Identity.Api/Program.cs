@@ -9,6 +9,7 @@ using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Identity.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.Dtos.Concrete.Configurations;
 using Unbiased.Shared.Extensions.Concrete.Extensions;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,7 +48,7 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IRoleManagementService, RoleManagementService>();
 builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
-
+builder.Services.AddScoped<IEventAndActivityLog, EventAndActivityLog>();
 builder.Services.AddScoped<IRoleManagementRepository, RoleManagementRepository>();
 builder.Services.AddScoped<IIdentityRepository, IdentityRepository>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));

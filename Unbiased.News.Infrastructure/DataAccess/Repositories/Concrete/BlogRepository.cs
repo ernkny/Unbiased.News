@@ -15,15 +15,16 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
     {
         private readonly UnbiasedSqlConnection _connection;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsRepository"/> class.
         /// </summary>
         /// <param name="connection">The Unbiased SQL connection.</param>
-        public BlogRepository(UnbiasedSqlConnection connection)
+        public BlogRepository(UnbiasedSqlConnection connection, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -51,11 +52,17 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
 
+        /// <summary>
+        /// Retrieves the count of all blogs with images for the main page asynchronously.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="searchData"></param>
+        /// <returns></returns>
         public async Task<int> GetAllBlogsWithImageCountAsync(string language, string? searchData)
         {
             try
@@ -76,7 +83,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -104,7 +111,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

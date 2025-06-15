@@ -16,16 +16,17 @@ namespace Unbiased.Playwright.Application.Jobs
 
         private readonly IContentService _contentService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the GetContentSubheadingsJob class.
         /// </summary>
         /// <param name="contentService"></param>
-        public GetContentSubheadingsJob(IContentService contentService, IServiceProvider serviceProvider)
+        public GetContentSubheadingsJob(IContentService contentService, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _contentService = contentService;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

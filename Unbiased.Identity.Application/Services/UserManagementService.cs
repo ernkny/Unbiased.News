@@ -22,7 +22,7 @@ namespace Unbiased.Identity.Application.Services
         private readonly IMediator _mediator;
         private readonly IAuthenticationService _authenticationService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the UserManagementService class.
@@ -58,7 +58,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -85,7 +85,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -111,7 +111,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -139,7 +139,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -176,7 +176,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -200,7 +200,7 @@ namespace Unbiased.Identity.Application.Services
                 if (!PasswordHashingExtension.Verify(loginDto.Password, hashedPassword))
                     throw new ValidationException("Incorrect password or email or username");
 
-                var userWihtRoles= await _mediator.Send(new GetUserWithRolesQuery(userId));
+                var userWihtRoles = await _mediator.Send(new GetUserWithRolesQuery(userId));
                 return await _authenticationService.CreateTokenAsync(userWihtRoles);
             }
             catch (Exception exception)
@@ -211,7 +211,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -243,7 +243,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

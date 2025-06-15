@@ -19,18 +19,19 @@ namespace Unbiased.Playwright.Application.Jobs
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the GetDailyContentDataJob class.
         /// </summary>
         /// <param name="mediator">The mediator instance for handling commands and queries.</param>
         /// <param name="configuration">The application configuration.</param>
-        public GetDailyContentDataJob(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider)
+        public GetDailyContentDataJob(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace Unbiased.Playwright.Application.Jobs
             {
                 if (context != null)
                 {
-                    var dailyContentDataFromGpt = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
+                    var dailyContentDataFromGpt = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider, _eventAndActivityLog);
                     var content = await dailyContentDataFromGpt.SendDailyInformationToGptAndGetResponse(context.CancellationToken);
                     var contentDetail = new Contents()
                     {
@@ -65,7 +66,7 @@ namespace Unbiased.Playwright.Application.Jobs
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

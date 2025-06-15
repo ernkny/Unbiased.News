@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text.Json;
 using Unbiased.Dashboard.Application.Interfaces;
+using Unbiased.Dashboard.Domain.Dto_s;
 using Unbiased.Dashboard.Domain.Dto_s.Content;
 using Unbiased.Shared.Dtos.Concrete;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Unbiased.Dashboard.Api.Controllers
 {
@@ -11,14 +16,16 @@ namespace Unbiased.Dashboard.Api.Controllers
     public class ContentDashboardController : ControllerBase
     {
         private readonly IContentService _contentService;
+        private readonly IValidator<UpdateAllContentDataRequest> _validator;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ContentDashboardController"/> class.
         /// </summary>
         /// <param name="contentService"></param>
-        public ContentDashboardController(IContentService contentService)
+        public ContentDashboardController(IContentService contentService, IValidator<UpdateAllContentDataRequest> validator)
         {
             _contentService = contentService;
+            _validator = validator;
         }
 
         /// <summary>
@@ -149,6 +156,65 @@ namespace Unbiased.Dashboard.Api.Controllers
                 };
 
                 return result is not null ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = ex.InnerException.Message is not null ? ex.InnerException.Message : "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        /// <summary>
+        /// Updates the content with the provided data and image. 
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Policy = "Content Management Update")]
+        [HttpPost("/UpdateContent")]
+        public async Task<IActionResult> UpdateContent()
+        {
+            try
+            {
+                var formCollection = await Request.ReadFormAsync();
+                var image = formCollection.Files.FirstOrDefault();
+                var contentDto = JsonConvert.DeserializeObject<UpdateAllContentDataRequest>(formCollection["UpdateAllContentDataRequest"].FirstOrDefault());
+                if (contentDto is null)
+                {
+                    return BadRequest(contentDto);
+                }
+
+                var validationResult = await _validator.ValidateAsync(contentDto);
+                if (!validationResult.IsValid)
+                {
+                    var response = new
+                    {
+                        IsSuccessful = false,
+                        StatusCode = 400,
+                        Errors = validationResult.Errors.Select(x => new
+                        {
+                            Field = x.PropertyName,
+                            Message = x.ErrorMessage
+                        }).ToList()
+                    };
+                    return BadRequest(response);
+                }
+
+                if (image is not null)
+                {
+                    contentDto.ImagePath= await _contentService.UpdateGenereatedContentImageAsync(image);
+                }
+
+                var result= _contentService.UpdateGenerateContentAsync(contentDto);
+                return Ok(new ResponseDto<bool>
+                {
+                    IsSuccessful = true,
+                    StatusCode = 200,
+                    Data = true
+                });
             }
             catch (Exception ex)
             {

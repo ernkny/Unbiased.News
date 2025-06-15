@@ -15,28 +15,28 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
     public class ContentRepository : IContentRepository
     {
         private readonly UnbiasedSqlConnection _connection;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NewsRepository"/> class.
+        /// Initializes a new instance of the <see cref="ContentRepository"/> class.
         /// </summary>
         /// <param name="connection">The Unbiased SQL connection.</param>
-        public ContentRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
+        /// <param name="eventAndActivityLog">The event and activity logging service.</param>
+        public ContentRepository(UnbiasedSqlConnection connection, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
-            _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
         /// Retrieves all content subheadings for the dashboard with pagination and filtering options.
         /// </summary>
-        /// <param name="PageNumber"></param>
-        /// <param name="PageSize"></param>
-        /// <param name="Language"></param>
-        /// <param name="CategoryId"></param>
-        /// <param name="IsProcess"></param>
-        /// <returns></returns>
+        /// <param name="PageNumber">The page number for pagination.</param>
+        /// <param name="PageSize">The number of items per page.</param>
+        /// <param name="Language">The language filter for content.</param>
+        /// <param name="CategoryId">The optional category identifier to filter by.</param>
+        /// <param name="IsProcess">The optional processing status filter.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the collection of content subheading DTOs.</returns>
         public async Task<IEnumerable<ContentSubheadingDto>> GetAllContentsAsync(int PageNumber, int PageSize, string Language, int? CategoryId, bool? IsProcess)
         {
             try
@@ -61,18 +61,18 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
 
         /// <summary>
-        ///  Retrieves the count of all content subheadings based on the specified parameters such as language, category ID, and processing status.
+        /// Retrieves the count of all content subheadings based on the specified parameters such as language, category ID, and processing status.
         /// </summary>
-        /// <param name="Language"></param>
-        /// <param name="CategoryId"></param>
-        /// <param name="IsProcess"></param>
-        /// <returns></returns>
+        /// <param name="Language">The language filter for content.</param>
+        /// <param name="CategoryId">The optional category identifier to filter by.</param>
+        /// <param name="IsProcess">The optional processing status filter.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the total count of content subheadings.</returns>
         public async Task<int> GetAllContentsCountAsync(string Language, int? CategoryId, bool? IsProcess)
         {
             try
@@ -95,15 +95,15 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
 
         /// <summary>
-        ///   Retrieves all content categories from the database.
+        /// Retrieves all content categories from the database.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the collection of content categories.</returns>
         public async Task<IEnumerable<ContentCategories>> GetAllContentCategoriesAsync()
         {
             try
@@ -122,16 +122,16 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
 
         /// <summary>
-        ///  Retrieves the generated content by its unique identifier.
+        /// Retrieves the generated content by its unique identifier.
         /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
+        /// <param name="Id">The unique identifier of the content to retrieve.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the generated content DTO or null if not found.</returns>
         public async Task<GeneratedContentDto> GetGeneratedContentByIdAsync(int Id)
         {
             try
@@ -173,9 +173,93 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Updates generated content in the database.
+        /// </summary>
+        /// <param name="request">The request containing all the updated content data.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains true if the update was successful; otherwise, false.</returns>
+        public async Task<bool> UpdateGeneratedContentAsync(UpdateAllContentDataRequest request)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@ContentSubHeadingId", request.ContentSubHeadingId);
+                    parameters.Add("@ContentCategoryId", request.ContentCategoryId);
+                    parameters.Add("@Title", request.Title);
+                    parameters.Add("@IsActive", request.IsActive);
+                    parameters.Add("@UniqUrlPath", request.UniqUrlPath);
+                    parameters.Add("@CreatedTime", request.CreatedTime);
+                    parameters.Add("@SubTitle", request.SubTitle);
+                    parameters.Add("@ImagePrompt", request.ImagePrompt);
+                    parameters.Add("@Hashtags", request.Hashtags);
+                    parameters.Add("@ImagePath", request.ImagePath);
+                    parameters.Add("@DetailIsActive", request.DetailIsActive ?? true);
+                    parameters.Add("@DetailIsDeleted", request.DetailIsDeleted ?? false);
+                    parameters.Add("@QuestionsAndAnswers", CreateQuestionsAndAnswersDataTable(request.Questions).AsTableValuedParameter("ContentQuestionsAndAnswersType"));
+                    parameters.Add("@Steps", CreateStepsDataTable(request.Steps).AsTableValuedParameter("ContentStepsType"));
+
+                    await connection.ExecuteAsync(
+                        "UB_sp_UpdateAllContentData",
+                        parameters,
+                        commandType: CommandType.StoredProcedure
+                    );
+                }
+                return true;
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"Content Update Error: {exception.Message}",
+                    EventDate = DateTime.UtcNow
+                });
+                throw;
+            }
+        }
+
+        private DataTable CreateQuestionsAndAnswersDataTable(List<QuestionDto> questions)
+        {
+            var table = new DataTable();
+            table.Columns.Add("Question", typeof(string));
+            table.Columns.Add("Answer", typeof(string));
+
+            if (questions != null)
+            {
+                foreach (var q in questions)
+                {
+                    table.Rows.Add(q.Question, q.Answer);
+                }
+            }
+
+            return table;
+        }
+
+        private DataTable CreateStepsDataTable(List<StepDto> steps)
+        {
+            var table = new DataTable();
+
+            table.Columns.Add("StepNumber", typeof(int));
+            table.Columns.Add("StepTitle", typeof(string));
+            table.Columns.Add("StepDescription", typeof(string));
+
+            if (steps != null)
+            {
+                foreach (var step in steps)
+                {
+                    table.Rows.Add(step.StepNumber, step.StepTitle, step.StepDescription);
+                }
+            }
+
+            return table;
         }
     }
 }

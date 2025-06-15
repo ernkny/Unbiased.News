@@ -27,19 +27,20 @@ namespace Unbiased.Playwright.Application.Services
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
         private readonly AwsCredentials _awsCredentials;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the NewsService class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
         /// <param name="configuration">The configuration instance.</param>
-        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions) : base(awsOptions.Value, mediator, configuration, serviceProvider)
+        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions, IEventAndActivityLog eventAndActivityLog) : base(awsOptions.Value, mediator, configuration, serviceProvider, eventAndActivityLog)
         {
             _mediator = mediator;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
             _awsCredentials = awsOptions.Value;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -77,7 +78,7 @@ namespace Unbiased.Playwright.Application.Services
             try
             {
                 var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), cancellationToken);
-                var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider);
+                var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider, _eventAndActivityLog);
                 var result = await GenerateNewsWithApiAsync(combinedNews, cancellationToken, externalServiceSend);
                 return result;
             }
@@ -89,7 +90,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -128,7 +129,7 @@ namespace Unbiased.Playwright.Application.Services
                             else
                             {
 
-                                imageFile = await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
+                                imageFile = await new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog).GetFileFromGptAndUploadFileAsync(
                                     _awsCredentials.BucketName,
                                     _configuration.GetSection("Paths:AwsFilePath").Value,
                                     scrapedImage,
@@ -157,7 +158,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -183,7 +184,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -251,7 +252,7 @@ namespace Unbiased.Playwright.Application.Services
                         else
                         {
 
-                            imageFile= await new SaveGeneratedImageToAws(_awsCredentials!).GetFileFromGptAndUploadFileAsync(
+                            imageFile = await new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog).GetFileFromGptAndUploadFileAsync(
                                 _awsCredentials.BucketName,
                                 _configuration.GetSection("Paths:AwsFilePath").Value,
                                 scrapedImage,
@@ -292,7 +293,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
 
                 throw;
             }
@@ -318,7 +319,7 @@ namespace Unbiased.Playwright.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

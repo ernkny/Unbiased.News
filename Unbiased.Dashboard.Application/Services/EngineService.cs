@@ -13,12 +13,12 @@ namespace Unbiased.Dashboard.Application.Services
     /// <summary>
     /// Service implementation for engine operations providing functionality for engine configuration, content generation, and search management with error handling and logging.
     /// </summary>
-    public class EngineService : IEngineService
+    public sealed class EngineService : IEngineService
     {
-        private readonly  IMediator _mediator;
+        private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the EngineService class.
@@ -26,11 +26,12 @@ namespace Unbiased.Dashboard.Application.Services
         /// <param name="mediator">The mediator for handling CQRS operations.</param>
         /// <param name="configuration">The configuration provider for application settings.</param>
         /// <param name="serviceProvider">The service provider for dependency injection.</param>
-        public EngineService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider)
+        public EngineService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Unbiased.Dashboard.Application.Services
             try
             {
 
-                var result=  await _mediator.Send(new DeActivateOrActivateSearchCommand(id));
+                var result = await _mediator.Send(new DeActivateOrActivateSearchCommand(id));
                 return result;
             }
             catch (Exception exception)
@@ -55,7 +56,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -82,7 +83,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -97,14 +98,14 @@ namespace Unbiased.Dashboard.Application.Services
         {
             try
             {
-                
-                var urlCanBeReached= await new HttpClient().GetAsync(url);
+
+                var urlCanBeReached = await new HttpClient().GetAsync(url);
                 if (!urlCanBeReached.IsSuccessStatusCode)
                 {
                     throw new Exception("Url cannot be reached");
                 }
-                var cancelationToken= new CancellationTokenSource().Token;
-                var generatedContent = await new ContentGenerator(_configuration, _serviceProvider).Generate(url, cancelationToken);
+                var cancelationToken = new CancellationTokenSource().Token;
+                var generatedContent = await new ContentGenerator(_configuration, _serviceProvider, _eventAndActivityLog).Generate(url, cancelationToken);
                 return generatedContent;
             }
             catch (Exception exception)
@@ -115,7 +116,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -129,7 +130,7 @@ namespace Unbiased.Dashboard.Application.Services
         {
             try
             {
-               return await _mediator.Send(new GetAllEngineConfigurationsQuery());
+                return await _mediator.Send(new GetAllEngineConfigurationsQuery());
             }
             catch (Exception exception)
             {
@@ -139,7 +140,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

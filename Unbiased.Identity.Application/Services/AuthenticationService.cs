@@ -25,7 +25,7 @@ namespace Unbiased.Identity.Application.Services
         private readonly ITokenService _tokenService;
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the AuthenticationService class.
@@ -34,12 +34,13 @@ namespace Unbiased.Identity.Application.Services
         /// <param name="optionsClient">The configuration options containing client information.</param>
         /// <param name="mediator">The mediator for CQRS pattern implementation.</param>
         /// <param name="serviceProvider">The service provider for dependency injection.</param>
-        public AuthenticationService(ITokenService tokenService, IOptions<List<Client>> optionsClient, IMediator mediator, IServiceProvider serviceProvider)
+        public AuthenticationService(ITokenService tokenService, IOptions<List<Client>> optionsClient, IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _tokenService = tokenService;
             _clients = optionsClient.Value;
             _mediator = mediator;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Unbiased.Identity.Application.Services
             try
             {
                 if (getUserWithRolesDto == null) throw new ArgumentNullException(nameof(getUserWithRolesDto));
-                var token=  await _tokenService.CreateToken(getUserWithRolesDto);
+                var token = await _tokenService.CreateToken(getUserWithRolesDto);
                 await _mediator.Send(new UpdateRefreshTokenByIdCommand(getUserWithRolesDto.UserId, token.RefreshToken, token.RefreshTokenExpiration));
                 return token;
             }
@@ -66,7 +67,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -102,7 +103,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -121,14 +122,15 @@ namespace Unbiased.Identity.Application.Services
 
                 if (existRefreshToken == null)
                 {
-                   throw new Exception("Refresh token not found");
+                    throw new Exception("Refresh token not found");
                 }
 
-                var user =  await _mediator.Send(new GetUserWithRolesQuery(existRefreshToken.UserId));
+                var user = await _mediator.Send(new GetUserWithRolesQuery(existRefreshToken.UserId));
 
                 if (user == null)
                 {
-                    throw new Exception("User Id not found");            }
+                    throw new Exception("User Id not found");
+                }
 
                 var tokenDto = await _tokenService.CreateToken(user);
 
@@ -143,7 +145,7 @@ namespace Unbiased.Identity.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

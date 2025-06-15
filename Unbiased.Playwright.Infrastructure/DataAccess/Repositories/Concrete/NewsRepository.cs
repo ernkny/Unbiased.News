@@ -17,19 +17,20 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
     /// </summary>
     public class NewsRepository : INewsRepository
     {
-        private readonly UnbiasedSqlConnection _connection; 
+        private readonly UnbiasedSqlConnection _connection;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewsRepository"/> class.
         /// </summary>
         /// <param name="connection">The connection to the database.</param>
-        public NewsRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider)
+        public NewsRepository(UnbiasedSqlConnection connection, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -94,7 +95,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                         EventSeverity = "Error",
                         Message = $"{exception.Message}",
                         EventDate = DateTime.UtcNow
-                    }, _serviceProvider);
+                    });
                     throw;
                 }
             }
@@ -160,7 +161,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -189,7 +190,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -216,7 +217,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -245,7 +246,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -287,7 +288,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -316,7 +317,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -345,7 +346,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -380,7 +381,7 @@ namespace Unbiased.Playwright.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

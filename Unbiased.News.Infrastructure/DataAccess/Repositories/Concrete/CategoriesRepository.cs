@@ -17,15 +17,16 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
     {
         private readonly UnbiasedSqlConnection _connection;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoriesRepository"/> class.
         /// </summary>
         /// <param name="connection">The connection to the database.</param>
-        public CategoriesRepository(UnbiasedSqlConnection connection)
+        public CategoriesRepository(UnbiasedSqlConnection connection, IEventAndActivityLog eventAndActivityLog)
         {
             _connection = connection;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -81,7 +82,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -112,7 +113,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 
@@ -143,7 +144,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

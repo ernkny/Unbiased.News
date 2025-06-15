@@ -11,6 +11,7 @@ using Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete;
 using Unbiased.Shared.Dtos.Concrete.Configurations;
 using Unbiased.Shared.Extensions.Concrete.Extensions;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +45,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
+builder.Services.AddScoped<IEventAndActivityLog, EventAndActivityLog>();
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<ICategoriesService,CategoriesService>();
 builder.Services.AddScoped<IContentRepository, ContentRepository>();

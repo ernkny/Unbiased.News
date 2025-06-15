@@ -23,7 +23,7 @@ namespace Unbiased.Dashboard.Application.Services
         private readonly IConfiguration _configuration;
         private readonly AwsCredentials _awsCredentials;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+        private readonly IEventAndActivityLog _eventAndActivityLog;
 
         /// <summary>
         /// Initializes a new instance of the NewsService class.
@@ -32,12 +32,13 @@ namespace Unbiased.Dashboard.Application.Services
         /// <param name="configuration">The configuration provider for application settings.</param>
         /// <param name="awsOptions">The AWS credentials options for cloud storage operations.</param>
         /// <param name="serviceProvider">The service provider for dependency injection.</param>
-        public NewsService(IMediator mediator, IConfiguration configuration, IOptions<AwsCredentials> awsOptions, IServiceProvider serviceProvider)
+        public NewsService(IMediator mediator, IConfiguration configuration, IOptions<AwsCredentials> awsOptions, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _mediator = mediator;
             _configuration = configuration;
             _awsCredentials = awsOptions.Value;
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -85,7 +86,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -110,7 +111,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -135,7 +136,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -181,7 +182,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -222,7 +223,7 @@ namespace Unbiased.Dashboard.Application.Services
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }

@@ -15,12 +15,13 @@ namespace Unbiased.Dashboard.Application.Helpers.GptContentGenerator
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
-        public ContentGenerator(IConfiguration configuration, IServiceProvider serviceProvider)
+        private readonly IEventAndActivityLog _eventAndActivityLog;
+        public ContentGenerator(IConfiguration configuration, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
         {
             _configuration = configuration;
             _httpClient = new HttpClient();
             _serviceProvider = serviceProvider;
+            _eventAndActivityLog = eventAndActivityLog;
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace Unbiased.Dashboard.Application.Helpers.GptContentGenerator
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
         }
@@ -124,7 +125,7 @@ namespace Unbiased.Dashboard.Application.Helpers.GptContentGenerator
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
 

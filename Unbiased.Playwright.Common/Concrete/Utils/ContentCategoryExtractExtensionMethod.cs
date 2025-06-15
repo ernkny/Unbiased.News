@@ -17,7 +17,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
         /// <param name="jsonResponse"></param>
         /// <returns></returns>
         public static async Task<ContentCategoryTitleResponse> ContentCategoryExtract(string jsonResponse, IServiceProvider _serviceProvider,
-        EventAndActivityLog _eventAndActivityLog)
+        IEventAndActivityLog _eventAndActivityLog)
         {
             var contentCategoryTitleResponse = new ContentCategoryTitleResponse();
             try
@@ -40,7 +40,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             return contentCategoryTitleResponse;

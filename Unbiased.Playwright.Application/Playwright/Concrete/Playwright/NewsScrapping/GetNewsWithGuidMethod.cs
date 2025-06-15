@@ -13,11 +13,17 @@ public class GetNewsWithGuidMethod
 {
     private IPlaywright _playwright;
     private readonly IServiceProvider _serviceProvider;
-    private readonly EventAndActivityLog _eventAndActivityLog = new EventAndActivityLog();
+    private readonly IEventAndActivityLog _eventAndActivityLog;
 
-    public GetNewsWithGuidMethod(IServiceProvider serviceProvider)
+    /// <summary>
+    /// Initializes a new instance of the GetNewsWithGuidMethod class.
+    /// </summary>
+    /// <param name="serviceProvider"></param>
+    /// <param name="eventAndActivityLog"></param>
+    public GetNewsWithGuidMethod(IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
     {
         _serviceProvider = serviceProvider;
+        _eventAndActivityLog = eventAndActivityLog;
     }
 
     /// <summary>
@@ -95,7 +101,7 @@ public class GetNewsWithGuidMethod
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
             }
             finally
             {

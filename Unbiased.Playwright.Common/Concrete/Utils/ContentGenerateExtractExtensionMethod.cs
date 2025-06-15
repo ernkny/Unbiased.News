@@ -18,7 +18,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
         /// <param name="jsonResponse">The JSON response from the content generation API.</param>
         /// <returns>A deserialized InsertAllContentDataRequest object containing the content data.</returns>
         public static async Task<InsertAllContentDataRequest> ContentGenerateExtract(string jsonResponse, IServiceProvider _serviceProvider,
-        EventAndActivityLog _eventAndActivityLog)
+        IEventAndActivityLog _eventAndActivityLog)
         {
             var insertAllContentDataRequest = new InsertAllContentDataRequest();
             try
@@ -41,7 +41,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                     EventSeverity = "Error",
                     Message = $"{exception.Message}",
                     EventDate = DateTime.UtcNow
-                }, _serviceProvider);
+                });
                 throw;
             }
             return insertAllContentDataRequest;

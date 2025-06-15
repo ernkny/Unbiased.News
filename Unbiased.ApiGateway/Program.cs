@@ -5,6 +5,7 @@ using Unbiased.ApiGateway.Application.Services;
 using Unbiased.ApiGateway.Infrastructure.DataAccess.Connections;
 using Unbiased.ApiGateway.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.ApiGateway.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlCon
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
 builder.Services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
 builder.Services.AddScoped<IApiKeyService, ApiKeyService>();
+builder.Services.AddScoped<IEventAndActivityLog, EventAndActivityLog>();
 builder.Services.AddHostedService<ApiKeyRefresherService>();
 var corsUrl = builder.Configuration.GetSection("ConnectionStrings:CorsApi").Value;
 var corsOrigins = Environment.GetEnvironmentVariable("CORS_ORIGINS") ?? corsUrl;

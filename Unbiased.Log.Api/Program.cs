@@ -7,6 +7,7 @@ using Unbiased.Log.Infrastructure;
 using Unbiased.Log.Infrastructure.DataAccess.Connections;
 using Unbiased.Log.Infrastructure.DataAccess.Repositories.Abstract;
 using Unbiased.Log.Infrastructure.DataAccess.Repositories.Concrete;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 using Unbiased.Shared.Extensions.Concrete.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,7 @@ builder.Services.AddCors(options =>
 var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlConnection");
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!)); builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
+builder.Services.AddScoped<IEventAndActivityLog, EventAndActivityLog>();
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<EventLogConsumer>();
