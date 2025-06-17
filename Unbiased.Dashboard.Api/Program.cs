@@ -5,6 +5,7 @@ using Unbiased.Dashboard.Application;
 using Unbiased.Dashboard.Application.Interfaces;
 using Unbiased.Dashboard.Application.Services;
 using Unbiased.Dashboard.Application.Validators;
+using Unbiased.Dashboard.Common.Abstract.Helpers;
 using Unbiased.Dashboard.Domain.Model.Aws;
 using Unbiased.Dashboard.Infrastructure;
 using Unbiased.Dashboard.Infrastructure.DataAccess.Connections;
@@ -40,7 +41,13 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-
+builder.Services.AddHttpClient<ISocialMediaImageGenerator, SocialMediaImageGenerator>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    AllowAutoRedirect = true
+});
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));
 builder.Services.AddScoped<IEventAndActivityLog, EventAndActivityLog>();

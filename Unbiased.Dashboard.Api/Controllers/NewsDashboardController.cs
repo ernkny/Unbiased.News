@@ -2,26 +2,42 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Unbiased.Dashboard.Application.Interfaces;
+using Unbiased.Dashboard.Common.Abstract.Helpers;
 using Unbiased.Dashboard.Domain.Dto_s;
 using Unbiased.Dashboard.Domain.Entities;
 using Unbiased.Shared.Dtos.Concrete;
 
 namespace Unbiased.Dashboard.Api.Controllers
 {
+    /// <summary>
+    /// Controller for managing news-related operations in the dashboard.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class NewsDashboardController : ControllerBase
     {
         private readonly INewsService _newsService;
         private readonly ICategoryService _categoryService;
+        private readonly IWebHostEnvironment _env;
+        private readonly ISocialMediaImageGenerator _socialMediaImageGenerator;
 
-        public NewsDashboardController(INewsService newsService, ICategoryService categoryService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewsDashboardController"/> class.
+        /// </summary>
+        /// <param name="newsService"></param>
+        /// <param name="categoryService"></param>
+        public NewsDashboardController(INewsService newsService, ICategoryService categoryService, IWebHostEnvironment env, ISocialMediaImageGenerator socialMediaImageGenerator)
         {
             _newsService = newsService;
             _categoryService = categoryService;
+            _env = env;
+            _socialMediaImageGenerator = socialMediaImageGenerator;
         }
 
-
+        /// <summary>
+        ///  Retrieves all categories from the system.
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "News Get")]
         [HttpGet("/GetAllCategories")]
         public async Task<IActionResult> GetAllCategories()
@@ -49,6 +65,12 @@ namespace Unbiased.Dashboard.Api.Controllers
                 return StatusCode(500, errorResponse);
             }
         }
+
+        /// <summary>
+        ///   Retrieves all generated news items with an image based on the provided request parameters.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Authorize(Policy ="News Get")]
         [HttpPost("/GetAllGeneratedNews")]
         public async Task<IActionResult> GetAllGeneratedNews(GetGeneratedNewsWithImagePathRequestDto request)
@@ -77,6 +99,11 @@ namespace Unbiased.Dashboard.Api.Controllers
             }
         }
 
+        /// <summary>
+        ///  Retrieves the count of all generated news items with an image based on the provided request parameters.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Authorize(Policy = "News Get")]
         [HttpPost("/GetAllGeneratedNewsCount")]
         public async Task<IActionResult> GetAllGeneratedNewsCount(GetGeneratedNewsWithImagePathRequestDto request)
@@ -105,6 +132,11 @@ namespace Unbiased.Dashboard.Api.Controllers
             }
         }
 
+        /// <summary>
+        ///   Retrieves a specific generated news item with an image based on the provided ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "News Update")]
         [HttpGet("/GetAllGeneratedNewsForUpdate")]
         public async Task<IActionResult> GetAllGeneratedNewsForUpdate([FromQuery]string id)
@@ -133,6 +165,10 @@ namespace Unbiased.Dashboard.Api.Controllers
             }
         }
 
+        /// <summary>
+        ///  Updates an existing news item with an image based on the provided data.
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "News Update")]
         [HttpPost("/UpdateGeneratedNews")]
         public async Task<IActionResult> UpdateGeneratedNews()
@@ -165,6 +201,10 @@ namespace Unbiased.Dashboard.Api.Controllers
             }
         }
 
+        /// <summary>
+        ///  Inserts a new news item with an image based on the provided data.
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "News Add")]
         [HttpPost("/InsertGeneratedNews")]
         public async Task<IActionResult> InsertGeneratedNews()
@@ -196,6 +236,11 @@ namespace Unbiased.Dashboard.Api.Controllers
             }
         }
 
+        /// <summary>
+        ///  Deletes a news item based on the provided ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Policy = "News Delete")]
         [HttpDelete("/DeleteNews")]
         public async Task<IActionResult> DeleteNews([FromQuery] string id)
@@ -221,6 +266,19 @@ namespace Unbiased.Dashboard.Api.Controllers
                 };
                 return StatusCode(500, errorResponse);
             }
+        }
+
+        [HttpPost("/generate-from-url")]
+        public async Task<IActionResult> GenerateFromUrl([FromQuery] string imageUrl, [FromQuery] string title)
+        {
+            var imageBytes = await _socialMediaImageGenerator.GenerateFromUrlAsync(imageUrl, title, GetLogoPath());
+            var base64 = Convert.ToBase64String(imageBytes);
+            return Ok(new { ImageBase64 = base64 });
+        }
+        private string GetLogoPath()
+        {
+            var image= Path.Combine(_env.WebRootPath, "Images", "logo.png");
+            return image;
         }
     }
 }

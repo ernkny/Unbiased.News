@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Unbiased.Shared.Extensions\Unbiased.Shared.Extensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Images\logo.png" />
+  </ItemGroup>
+
 </Project>
