@@ -42,7 +42,7 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                //await _contentService.GenerateContentAsync(context.CancellationToken);
+                await _contentService.GenerateContentAsync(context.CancellationToken);
             }
             catch (Exception exception) when (exception.Message.Contains("TooManyRequests"))
             {

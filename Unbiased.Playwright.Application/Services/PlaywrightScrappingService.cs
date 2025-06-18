@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Playwright;
 using Unbiased.Playwright.Application.Cqrs.Commands;
 using Unbiased.Playwright.Application.Cqrs.Queries;
 using Unbiased.Playwright.Application.Interfaces.Playwright;
@@ -23,16 +24,18 @@ namespace Unbiased.Playwright.Application.Services
         private readonly IMediator _mediator;
         private readonly IServiceProvider _serviceProvider;
         private readonly IEventAndActivityLog _eventAndActivityLog;
+        private readonly IPlaywright _playwright;
 
         /// <summary>
         /// Initializes a new instance of the PlaywrightScrappingService class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
-        public PlaywrightScrappingService(IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog)
+        public PlaywrightScrappingService(IMediator mediator, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog, IPlaywright playwright)
         {
             _mediator = mediator;
             _serviceProvider = serviceProvider;
             _eventAndActivityLog = eventAndActivityLog;
+            _playwright = playwright;
         }
 
         /// <summary>
@@ -77,7 +80,7 @@ namespace Unbiased.Playwright.Application.Services
                 var languageEnum = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), url.Language);
                 var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url, languageEnum, _serviceProvider, _eventAndActivityLog);
                 var titles = await searchWithKeywordControl.Handle();
-                var newsContents = new GetNewsWithGuidControl(titles, _serviceProvider, _eventAndActivityLog);
+                var newsContents = new GetNewsWithGuidControl(titles, _serviceProvider, _eventAndActivityLog, _playwright);
                 var news = await newsContents.Handle();
                 news.ForEach(item => item.CategoryId = url.categoryId);
                 news.ForEach(item => item.Language = url.Language);

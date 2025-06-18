@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.Playwright;
 using Unbiased.Playwright.Application.Abstract;
 using Unbiased.Playwright.Application.Interfaces;
 using Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageScrapping;
@@ -28,19 +29,21 @@ namespace Unbiased.Playwright.Application.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly AwsCredentials _awsCredentials;
         private readonly IEventAndActivityLog _eventAndActivityLog;
+        private readonly IPlaywright _playwright;
 
         /// <summary>
         /// Initializes a new instance of the NewsService class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
         /// <param name="configuration">The configuration instance.</param>
-        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions, IEventAndActivityLog eventAndActivityLog) : base(awsOptions.Value, mediator, configuration, serviceProvider, eventAndActivityLog)
+        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions, IEventAndActivityLog eventAndActivityLog, IPlaywright playwright) : base(awsOptions.Value, mediator, configuration, serviceProvider, eventAndActivityLog)
         {
             _mediator = mediator;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
             _awsCredentials = awsOptions.Value;
             _eventAndActivityLog = eventAndActivityLog;
+            _playwright = playwright;
         }
 
         /// <summary>
@@ -120,8 +123,8 @@ namespace Unbiased.Playwright.Application.Services
                         }
                         else
                         {
-                            var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(item.Title);
-                            if (scrapedImage == null)
+                            var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(item.Title, _playwright, _eventAndActivityLog);
+                            if (string.IsNullOrEmpty(scrapedImage))
                             {
                                 imageFile = await GenerateImageAndSaveAsync(item.ImagePrompt, cancellationToken)
                                              ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
@@ -243,8 +246,8 @@ namespace Unbiased.Playwright.Application.Services
                     }
                     else
                     {
-                        var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(result.Title);
-                        if (scrapedImage == null)
+                        var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(result.Title, _playwright, _eventAndActivityLog);
+                        if (string.IsNullOrEmpty(scrapedImage))
                         {
                             imageFile = await GenerateImageAndSaveAsync(result.ImagePrompt, cancellationToken)
                                          ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Playwright;
+using Unbiased.Shared.Extensions.Concrete.Entities;
+using Unbiased.Shared.Extensions.Concrete.Loggging;
 
 namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageScrapping
 {
@@ -12,12 +14,11 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageSc
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
-        public static async Task<string> GetImageWithTitle(string title)
+        public static async Task<string> GetImageWithTitle(string title,IPlaywright playwright, IEventAndActivityLog _eventAndActivityLog)
         {
             try
             {
-                using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
-                var chromium = playwright.Chromium;
+                var chromium = playwright.Firefox;
                 var browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
                 {
                     Headless = true,
@@ -48,10 +49,16 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageSc
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                return string.Empty;
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = typeof(GetImageWithTitleScrapping).FullName,
+                    EventSeverity = "Error",
+                    Message = $"{ex.Message} - {ex.StackTrace}",
+                    EventDate = DateTime.UtcNow
+                });
+               return string.Empty;
             }
         }
     }

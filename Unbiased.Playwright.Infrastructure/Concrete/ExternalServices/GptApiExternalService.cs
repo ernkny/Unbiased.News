@@ -50,8 +50,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
 
             try
             {
-                var url = _configuration.GetSection("Urls:GptApi").Value;
-                var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
+				var url = _configuration["Urls:GptApi"];
+				if (string.IsNullOrWhiteSpace(url) || !Uri.IsWellFormedUriString(url, UriKind.Absolute))
+				{
+					await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+					{
+						EventType = this.GetType().FullName,
+						EventSeverity = "Critical",
+						Message = $"Invalid or missing GptApi URL: {url ?? "null"}",
+						EventDate = DateTime.UtcNow
+					});
+
+					throw new InvalidOperationException("GptApi URL is invalid or missing.");
+				}
+				var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
 
                 var prompt = language == LanguageEnums.TR
                     ? await TurkishPromptMessage(DetailIOfNews)
@@ -349,8 +361,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         {
             try
             {
-                var url = _configuration.GetSection("Urls:GptApi").Value;
-                var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
+				var url = _configuration["Urls:GptApi"];
+				if (string.IsNullOrWhiteSpace(url) || !Uri.IsWellFormedUriString(url, UriKind.Absolute))
+				{
+					await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+					{
+						EventType = this.GetType().FullName,
+						EventSeverity = "Critical",
+						Message = $"Invalid or missing GptApi URL: {url ?? "null"}",
+						EventDate = DateTime.UtcNow
+					});
+
+					throw new InvalidOperationException("GptApi URL is invalid or missing.");
+				}
+				var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
 
                 var requestData = new
                 {
@@ -425,8 +449,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         {
             try
             {
-                var url = _configuration.GetSection("Urls:GptApi").Value;
-                var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
+				var url = _configuration["Urls:GptApi"];
+				if (string.IsNullOrWhiteSpace(url) || !Uri.IsWellFormedUriString(url, UriKind.Absolute))
+				{
+					await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+					{
+						EventType = this.GetType().FullName,
+						EventSeverity = "Critical",
+						Message = $"Invalid or missing GptApi URL: {url ?? "null"}",
+						EventDate = DateTime.UtcNow
+					});
+
+					throw new InvalidOperationException("GptApi URL is invalid or missing.");
+				}
+				var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
 
                 var requestData = new
                 {
@@ -630,8 +666,20 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         {
             try
             {
-                var url = _configuration.GetSection("Urls:GptApi").Value;
-                var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
+				var url = _configuration["Urls:GptApi"];
+				if (string.IsNullOrWhiteSpace(url) || !Uri.IsWellFormedUriString(url, UriKind.Absolute))
+				{
+					await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+					{
+						EventType = this.GetType().FullName,
+						EventSeverity = "Critical",
+						Message = $"Invalid or missing GptApi URL: {url ?? "null"}",
+						EventDate = DateTime.UtcNow
+					});
+
+					throw new InvalidOperationException("GptApi URL is invalid or missing.");
+				}
+				var apiKey = _configuration.GetSection("Keys:GptApiKey").Value;
                 var requestData = new
                 {
                     model = "gpt-4o-mini",

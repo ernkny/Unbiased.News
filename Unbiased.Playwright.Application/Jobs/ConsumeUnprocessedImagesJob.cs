@@ -43,16 +43,16 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                //var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery());
-                //if (images.Any())
-                //{
-                //    foreach (var image in images)
-                //    {
+                var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery());
+                if (images.Any())
+                {
+                    foreach (var image in images)
+                    {
 
-                //        await _newsService.GenerateImagesWhenAllNewsHasGeneratedAsync(context.CancellationToken);
-                //    }
+                        await _newsService.GenerateImagesWhenAllNewsHasGeneratedAsync(context.CancellationToken);
+                    }
 
-                //}
+                }
                 await Task.CompletedTask;
             }
             catch (Exception exception) when (exception.Message.Contains("TooManyRequests"))

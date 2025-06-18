@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Microsoft.Playwright;
 using Polly;
 using Polly.Retry;
 using Quartz;
@@ -38,6 +39,7 @@ builder.Services.AddCors(options =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("UnbiasedSqlConnection");
+builder.Services.AddSingleton<IPlaywright>(await Playwright.CreateAsync());
 builder.Services.AddTransient<UnbiasedSqlConnection>(provider => new UnbiasedSqlConnection(connectionString!));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplication).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IInfrastructure).Assembly));

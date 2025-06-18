@@ -38,7 +38,7 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                //await _contentService.GenerateSubheadingsAndSaveAsync(context.CancellationToken);
+                await _contentService.GenerateSubheadingsAndSaveAsync(context.CancellationToken);
             }
             catch (Exception exception)
             {
