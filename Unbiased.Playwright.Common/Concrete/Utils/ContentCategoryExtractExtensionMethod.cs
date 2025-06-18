@@ -38,7 +38,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                 {
                     EventType = typeof(ContentCategoryExtractExtensionMethod).FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;

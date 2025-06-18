@@ -43,16 +43,16 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery());
-                if (images.Any())
-                {
-                    foreach (var image in images)
-                    {
+                //var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery());
+                //if (images.Any())
+                //{
+                //    foreach (var image in images)
+                //    {
 
-                        await _newsService.GenerateImagesWhenAllNewsHasGeneratedAsync(context.CancellationToken);
-                    }
+                //        await _newsService.GenerateImagesWhenAllNewsHasGeneratedAsync(context.CancellationToken);
+                //    }
 
-                }
+                //}
                 await Task.CompletedTask;
             }
             catch (Exception exception) when (exception.Message.Contains("TooManyRequests"))
@@ -61,7 +61,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;
@@ -72,7 +72,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 await Task.Delay(TimeSpan.FromMinutes(1));
@@ -83,7 +83,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;

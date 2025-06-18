@@ -51,7 +51,7 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
 				{
 					EventType = this.GetType().FullName,
 					EventSeverity = "Error",
-					Message = $"{exception.Message}",
+					Message = $"{exception.Message} - {exception.StackTrace}",
 					EventDate = DateTime.UtcNow
 				});
 				throw;

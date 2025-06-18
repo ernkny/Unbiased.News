@@ -104,7 +104,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                         {
                             EventType = this.GetType().FullName,
                             EventSeverity = "Error",
-                            Message = $"{exception.Message}",
+                            Message = $"{exception.Message} - {exception.StackTrace}",
                             EventDate = DateTime.UtcNow
                         });
                         throw;
@@ -121,7 +121,7 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;

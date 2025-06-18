@@ -42,7 +42,7 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                await _contentService.GenerateContentAsync(context.CancellationToken);
+                //await _contentService.GenerateContentAsync(context.CancellationToken);
             }
             catch (Exception exception) when (exception.Message.Contains("TooManyRequests"))
             {
@@ -50,7 +50,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;
@@ -61,7 +61,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 await Task.Delay(TimeSpan.FromMinutes(1));
@@ -72,7 +72,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;

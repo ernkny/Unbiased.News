@@ -38,7 +38,7 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                await _contentService.GenerateSubheadingsAndSaveAsync(context.CancellationToken);
+                //await _contentService.GenerateSubheadingsAndSaveAsync(context.CancellationToken);
             }
             catch (Exception exception)
             {
@@ -46,7 +46,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;

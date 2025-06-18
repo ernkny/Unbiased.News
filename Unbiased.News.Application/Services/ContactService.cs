@@ -57,7 +57,7 @@ namespace Unbiased.News.Application.Services
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;

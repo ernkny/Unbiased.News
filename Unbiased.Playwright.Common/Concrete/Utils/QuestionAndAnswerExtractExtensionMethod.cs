@@ -38,7 +38,7 @@ namespace Unbiased.Playwright.Common.Concrete.Utils
                 {
                     EventType = typeof(QuestionAndAnswerExtractExtensionMethod).FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 }).Wait();
                 throw;

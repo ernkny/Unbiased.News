@@ -49,12 +49,12 @@ namespace Unbiased.Playwright.Application.Jobs
         {
             try
             {
-                var checkNews = await _mediator.Send(new GetAllNewsByNotIncludedProcessQuery());
-                if (checkNews.Any())
-                {
-                    var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), context.CancellationToken);
-                    var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider, _eventAndActivityLog);
-                }
+                //var checkNews = await _mediator.Send(new GetAllNewsByNotIncludedProcessQuery());
+                //if (checkNews.Any())
+                //{
+                //    var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), context.CancellationToken);
+                //    var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider, _eventAndActivityLog);
+                //}
                 await Task.CompletedTask;
             }
             catch (Exception exception) when (exception.Message.Contains("TooManyRequests"))
@@ -63,7 +63,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;
@@ -74,7 +74,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 await Task.Delay(TimeSpan.FromMinutes(1));
@@ -85,7 +85,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     EventType = this.GetType().FullName,
                     EventSeverity = "Error",
-                    Message = $"{exception.Message}",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
                 throw;
