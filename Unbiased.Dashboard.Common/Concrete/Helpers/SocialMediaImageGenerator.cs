@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System.Net.Http;
+using System.Linq;
 using Unbiased.Dashboard.Common.Abstract.Helpers;
 
 /// <summary>
@@ -21,7 +22,43 @@ public class SocialMediaImageGenerator : ISocialMediaImageGenerator
     public SocialMediaImageGenerator(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        var fontFamily = SystemFonts.Get("Arial");
+        
+        // Try to get Arial font, if not available use fallback fonts
+        FontFamily fontFamily;
+        try
+        {
+            fontFamily = SystemFonts.Get("Arial");
+        }
+        catch
+        {
+            // Fallback fonts for Linux containers
+            try
+            {
+                fontFamily = SystemFonts.Get("Liberation Sans");
+            }
+            catch
+            {
+                try
+                {
+                    fontFamily = SystemFonts.Get("DejaVu Sans");
+                }
+                catch
+                {
+                    // Last resort - use any available font
+                    var availableFont = SystemFonts.Families.FirstOrDefault();
+                    if (availableFont != null)
+                    {
+                        fontFamily = availableFont;
+                    }
+                    else
+                    {
+                        // Ultimate fallback
+                        fontFamily = SystemFonts.Get("sans-serif");
+                    }
+                }
+            }
+        }
+        
         _font = new Font(fontFamily, 48, FontStyle.Bold);
     }
 
