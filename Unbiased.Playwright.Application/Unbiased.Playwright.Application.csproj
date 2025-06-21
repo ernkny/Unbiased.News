@@ -17,10 +17,7 @@
     <PackageReference Include="Microsoft.Playwright" Version="1.48.0" />
     <PackageReference Include="Quartz" Version="3.13.1" />
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.13.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Unbiased.Playwright.Common\Unbiased.Playwright.Common.csproj" />
     <ProjectReference Include="..\Unbiased.Playwright.Domain\Unbiased.Playwright.Domain.csproj" />

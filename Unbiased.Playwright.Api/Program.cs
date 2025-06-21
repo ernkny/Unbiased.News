@@ -82,7 +82,11 @@ builder.Services.AddScoped<IPlaywrightScrappingService, PlaywrightScrappingServi
 builder.Services.AddScoped<GptDalleApiExternalService>();
 builder.Services.AddScoped<FreepikApiExternalService>();
 builder.Services.AddHttpClient();
-
+var webRootPath = builder.Environment.WebRootPath;
+builder.Services.AddSingleton(new WebRootPathOptions
+{
+    WebRootPath = webRootPath
+});
 builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>

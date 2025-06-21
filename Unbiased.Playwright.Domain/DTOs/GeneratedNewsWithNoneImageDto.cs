@@ -29,5 +29,10 @@
         /// Indicates whether the image is a manual image.
         /// </summary>
         public bool IsManuelImage { get; set; }
+
+        /// <summary>
+        ///  Language of the generated news item.
+        /// </summary>
+        public string CategoryName { get; set; }
     }
 }

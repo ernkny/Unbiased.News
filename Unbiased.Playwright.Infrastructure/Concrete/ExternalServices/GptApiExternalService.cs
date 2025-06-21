@@ -617,7 +617,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                             - Sana 1 kategori veriyorum:
                               {ContentBaseTitle}
 
-                            - Her çalıştırıldığında bu kategoriden 30 adet içerik başlığı üret.
+                            - Her çalıştırıldığında bu kategoriden 5 adet içerik başlığı üret.
 
                             Kurallar:
                             - Üretilen başlıklar farklı, özgün ve çeşitlendirilmiş olsun.
@@ -638,7 +638,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                         - You are given 1 category:
                           {ContentBaseTitle}
 
-                        - Each time you run this, generate 10 content titles for the given category.
+                        - Each time you run this, generate 5 content titles for the given category.
 
                         Rules:
                         - The generated titles must be different, original, and varied.

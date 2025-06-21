@@ -3,8 +3,6 @@ using Amazon.S3.Model;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
-using System;
-using System.IO;
 using Unbiased.Playwright.Domain.DTOs;
 using Unbiased.Shared.Extensions.Concrete.Entities;
 using Unbiased.Shared.Extensions.Concrete.Loggging;
@@ -86,6 +84,38 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
                     EventDate = DateTime.UtcNow
                 });
                 throw;
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
+                    EventDate = DateTime.UtcNow
+                });
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Saves a generated banner image to AWS S3 and returns the file path.
+        /// </summary>
+        /// <param name="imageBytes"></param>
+        /// <param name="bucketName"></param>
+        /// <param name="picturesPath"></param>
+        /// <returns></returns>
+        public async Task<string> SaveGeneratedBannerImageToAws(byte[] imageBytes, string bucketName, string picturesPath)
+        {
+            try
+            {
+                var guid = Guid.NewGuid();
+                var jpegFilePath = Path.Combine(picturesPath, $"{guid}.jpg");
+                using (var originalStream = new MemoryStream(imageBytes))
+                {
+                    await UploadToS3(originalStream, $"Pictures/{guid}.jpg", "image/jpeg", bucketName);
+                }
+                return jpegFilePath;
             }
             catch (Exception exception)
             {

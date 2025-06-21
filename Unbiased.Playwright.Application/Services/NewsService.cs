@@ -30,13 +30,14 @@ namespace Unbiased.Playwright.Application.Services
         private readonly AwsCredentials _awsCredentials;
         private readonly IEventAndActivityLog _eventAndActivityLog;
         private readonly IPlaywright _playwright;
+        private readonly WebRootPathOptions _webRootOptions;
 
         /// <summary>
         /// Initializes a new instance of the NewsService class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
         /// <param name="configuration">The configuration instance.</param>
-        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions, IEventAndActivityLog eventAndActivityLog, IPlaywright playwright) : base(awsOptions.Value, mediator, configuration, serviceProvider, eventAndActivityLog)
+        public NewsService(IMediator mediator, IConfiguration configuration, IServiceProvider serviceProvider, IOptions<AwsCredentials> awsOptions, IEventAndActivityLog eventAndActivityLog, IPlaywright playwright, WebRootPathOptions webRootOptions) : base(awsOptions.Value, mediator, configuration, serviceProvider, eventAndActivityLog)
         {
             _mediator = mediator;
             _configuration = configuration;
@@ -44,6 +45,7 @@ namespace Unbiased.Playwright.Application.Services
             _awsCredentials = awsOptions.Value;
             _eventAndActivityLog = eventAndActivityLog;
             _playwright = playwright;
+            _webRootOptions = webRootOptions;
         }
 
         /// <summary>
@@ -123,16 +125,24 @@ namespace Unbiased.Playwright.Application.Services
                         }
                         else
                         {
+                            var saveImageToAWs = new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog);
                             var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(item.Title, _playwright, _eventAndActivityLog);
                             if (string.IsNullOrEmpty(scrapedImage))
                             {
-                                imageFile = await GenerateImageAndSaveAsync(item.ImagePrompt, cancellationToken)
-                                             ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                                var garetHeavyFont = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:FontsPath"]}Garet-Heavy.ttf");
+                                var garetBookFont = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:FontsPath"]}Garet-Book.ttf");
+                                var ImagePath = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:ImagePath"]}KırmızıBanner.png");
+                                using (var stream = File.OpenRead(ImagePath))
+                                {
+                                    var title = item.Title.Count() > 90 ? item.Title.Substring(0, 90) + "..." : item.Title;
+                                    var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, item.CategoryName.ToUpper(), title, garetHeavyFont, garetBookFont);
+                                    imageFile = await saveImageToAWs.SaveGeneratedBannerImageToAws(resultGeneratedImage, _awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value);
+                                }
                             }
                             else
                             {
 
-                                imageFile = await new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog).GetFileFromGptAndUploadFileAsync(
+                                imageFile = await saveImageToAWs.GetFileFromGptAndUploadFileAsync(
                                     _awsCredentials.BucketName,
                                     _configuration.GetSection("Paths:AwsFilePath").Value,
                                     scrapedImage,
@@ -238,7 +248,7 @@ namespace Unbiased.Playwright.Application.Services
 
                     string imageFile = null;
 
-
+                    var saveImageToAWs = new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog);
                     if (!item.IsManuelImage)
                     {
                         imageFile = await GenerateImageAndSaveAsync(result.ImagePrompt, cancellationToken)
@@ -249,13 +259,20 @@ namespace Unbiased.Playwright.Application.Services
                         var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(result.Title, _playwright, _eventAndActivityLog);
                         if (string.IsNullOrEmpty(scrapedImage))
                         {
-                            imageFile = await GenerateImageAndSaveAsync(result.ImagePrompt, cancellationToken)
-                                         ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                            var garetHeavyFont = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:FontsPath"]}Garet-Heavy.ttf");
+                            var garetBookFont = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:FontsPath"]}Garet-Book.ttf");
+                            var ImagePath = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:ImagePath"]}KırmızıBanner.png");
+                            using (var stream = File.OpenRead(ImagePath))
+                            {
+                                var title = generatedNews.Title.Count() > 60 ? generatedNews.Title.Substring(0, 60) + "..." : generatedNews.Title;
+                                var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, item.CategoryName.ToUpper(), title, garetHeavyFont, garetBookFont);
+                                imageFile = await saveImageToAWs.SaveGeneratedBannerImageToAws(resultGeneratedImage, _awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value);
+                            }
                         }
                         else
                         {
 
-                            imageFile = await new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog).GetFileFromGptAndUploadFileAsync(
+                            imageFile = await saveImageToAWs.GetFileFromGptAndUploadFileAsync(
                                 _awsCredentials.BucketName,
                                 _configuration.GetSection("Paths:AwsFilePath").Value,
                                 scrapedImage,

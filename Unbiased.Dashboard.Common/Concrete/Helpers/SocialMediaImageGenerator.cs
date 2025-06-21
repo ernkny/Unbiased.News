@@ -3,8 +3,6 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using System.Net.Http;
-using System.Linq;
 using Unbiased.Dashboard.Common.Abstract.Helpers;
 
 /// <summary>
@@ -22,8 +20,7 @@ public class SocialMediaImageGenerator : ISocialMediaImageGenerator
     public SocialMediaImageGenerator(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        
-        // Try to get Arial font, if not available use fallback fonts
+
         FontFamily fontFamily;
         try
         {
@@ -31,7 +28,6 @@ public class SocialMediaImageGenerator : ISocialMediaImageGenerator
         }
         catch
         {
-            // Fallback fonts for Linux containers
             try
             {
                 fontFamily = SystemFonts.Get("Liberation Sans");
@@ -44,7 +40,6 @@ public class SocialMediaImageGenerator : ISocialMediaImageGenerator
                 }
                 catch
                 {
-                    // Last resort - use any available font
                     var availableFont = SystemFonts.Families.FirstOrDefault();
                     if (availableFont != null)
                     {
@@ -52,13 +47,12 @@ public class SocialMediaImageGenerator : ISocialMediaImageGenerator
                     }
                     else
                     {
-                        // Ultimate fallback
                         fontFamily = SystemFonts.Get("sans-serif");
                     }
                 }
             }
         }
-        
+
         _font = new Font(fontFamily, 48, FontStyle.Bold);
     }
 
@@ -69,7 +63,7 @@ public class SocialMediaImageGenerator : ISocialMediaImageGenerator
     /// <param name="title"></param>
     /// <param name="logoPath"></param>
     /// <returns></returns>
-    public async Task<byte[]> GenerateFromUrlAsync(string imageUrl, string title,string logoPath)
+    public async Task<byte[]> GenerateFromUrlAsync(string imageUrl, string title, string logoPath)
     {
         var imageBytes = await _httpClient.GetByteArrayAsync(imageUrl);
         using var imageStream = new MemoryStream(imageBytes);
