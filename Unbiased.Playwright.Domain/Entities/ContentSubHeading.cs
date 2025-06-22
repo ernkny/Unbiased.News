@@ -34,5 +34,10 @@
         /// Gets or sets the unique URL for the content subheading.
         /// </summary>
         public string Language { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the content category this subheading belongs to.
+        /// </summary>
+        public string CategoryName { get; set; }
     }
 }

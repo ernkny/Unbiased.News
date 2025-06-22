@@ -179,7 +179,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
         /// <returns>The URL of the generated image, or null if generation was unsuccessful.</returns>
         public async Task<string> GenerateImageUrlAsync(string prompt, CancellationToken cancellationToken)
         {
-            var creationResponse = await SendMessageToFreePikForGenerateImage(prompt);
+            var creationResponse = await SendMessageToFreePikForGenerateImage(prompt,cancellationToken);
             if (creationResponse?.Data?.task_id == null)
                 return null;
 

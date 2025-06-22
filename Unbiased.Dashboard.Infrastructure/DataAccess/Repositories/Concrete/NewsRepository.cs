@@ -84,7 +84,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                     parameters.Add("@SearchData", requestDto.SearchData);
                     parameters.Add("@StartDate", requestDto.StartDate);
                     parameters.Add("@EndDate", requestDto.EndDate);
-                    return await connection.QueryFirstAsync<int>("UB_sp_GetAllGeneratedNewsWithImagePathForDashboardCount", parameters, commandType: CommandType.StoredProcedure);
+                    return await connection.QueryFirstOrDefaultAsync<int>("UB_sp_GetAllGeneratedNewsWithImagePathForDashboardCount", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception exception)
@@ -113,7 +113,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 parameters.Add("@id", id);
                 using (var connection = _connection.CreateConnection())
                 {
-                    return await connection.QueryFirstAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsById", parameters, commandType: CommandType.StoredProcedure);
+                    return await connection.QueryFirstOrDefaultAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsById", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
             catch (Exception exception)
@@ -179,7 +179,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
                 parameters.Add("@ImagePath", generatedNewsDto.ImagePath, DbType.String);
                 using (var connection = _connection.CreateConnection())
                 {
-                    return await connection.QueryFirstAsync<int>("UB_sp_UpdateGeneratedNews", parameters, commandType: CommandType.StoredProcedure) == 1;
+                    return await connection.QueryFirstOrDefaultAsync<int>("UB_sp_UpdateGeneratedNews", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
             catch (Exception exception)
@@ -215,7 +215,7 @@ namespace Unbiased.Dashboard.Infrastructure.DataAccess.Repositories.Concrete
 
                 using (var connection = _connection.CreateConnection())
                 {
-                    return await connection.QueryFirstAsync<int>("UB_sp_InsertIndividualNewsWithImage", parameters, commandType: CommandType.StoredProcedure) == 1;
+                    return await connection.QueryFirstOrDefaultAsync<int>("UB_sp_InsertIndividualNewsWithImage", parameters, commandType: CommandType.StoredProcedure) == 1;
                 }
             }
             catch (Exception exception)

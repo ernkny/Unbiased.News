@@ -31,12 +31,16 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
                 var garetFontFamily = fontCollection.Add(garetFontPath);
                 var sansFontFamily = fontCollection.Add(sansFontPath);
 
-                var categoryFont = garetFontFamily.CreateFont(116, FontStyle.Bold);
+                var categoryFont = garetFontFamily.CreateFont(64, FontStyle.Bold);
                 var titleFont = sansFontFamily.CreateFont(56, FontStyle.Regular);
 
                 var whiteBrush = Brushes.Solid(Color.White);
+                var semiTransparentBlack = new Color(new Rgba32(0, 0, 0, 180)); 
+                var blackBrush = Brushes.Solid(semiTransparentBlack);
 
-                float categoryY = image.Height * 0.25f;
+                float paddingTop = 120; 
+                float categoryY = paddingTop;
+                float titleY = image.Height / 2f;
                 float maxTitleWidth = image.Width * 0.9f;
 
                 var categoryOptions = new TextOptions(categoryFont)
@@ -50,14 +54,27 @@ namespace Unbiased.Playwright.Common.Concrete.Helper
                 {
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Top,
-                    Origin = new PointF(image.Width / 2f, categoryY + 130),
+                    Origin = new PointF(image.Width / 2f, titleY),
                     WrappingLength = maxTitleWidth,
                     LineSpacing = 1.1f
                 };
 
+                var titleOptionsForMeasure = new TextOptions(titleFont)
+                {
+                    WrappingLength = maxTitleWidth,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
+
+                var textMeasurer = TextMeasurer.Measure(title, titleOptionsForMeasure);
+                var maskHeight = textMeasurer.Height + 60; 
+                var maskY = titleY - 30;
+
                 image.Mutate(ctx =>
                 {
+                    ctx.Fill(blackBrush, new RectangleF(0, maskY, image.Width, maskHeight));
+
                     ctx.DrawText(categoryOptions, categoryName, whiteBrush);
+
                     ctx.DrawText(titleOptions, title, whiteBrush);
                 });
 
