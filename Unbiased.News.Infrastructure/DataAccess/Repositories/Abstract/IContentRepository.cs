@@ -49,5 +49,12 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         /// <param name="categoryId">The ID of the category to count subheadings for.</param>
         /// <returns>The total number of subheadings in the category.</returns>
         Task<int> ContentSubHeadingsCountAsync(int categoryId);
+
+        /// <summary>
+        ///  Retrieves all content entries for the sitemap in a specific language.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        Task<IEnumerable<SitemapContentModel>> GetAllContentsForSiteMap(string language);
     }
 }

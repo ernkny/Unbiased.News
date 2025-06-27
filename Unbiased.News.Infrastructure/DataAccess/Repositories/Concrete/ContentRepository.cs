@@ -232,5 +232,35 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                 throw;
             }
         }
+
+        /// <summary>
+        ///  Retrieves all contents for the site map in a specific language.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<SitemapContentModel>> GetAllContentsForSiteMap(string language)
+        {
+            try
+            {
+                using (var connection = _connection.CreateConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@language", language, DbType.String);
+                    var result = await connection.QueryAsync<SitemapContentModel>($"UB_sp_GetAllContentsForSiteMap", parameters, commandType: CommandType.StoredProcedure);
+                    return result;
+                }
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
+                    EventDate = DateTime.UtcNow
+                });
+                throw;
+            }
+        }
     }
 }

@@ -277,5 +277,37 @@ namespace Unbiased.News.Api.Controllers
                 return StatusCode(500, errorResponse);
             }
         }
+
+        /// <summary>
+        ///  Retrieves all content entries for the sitemap in a specific language.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        [HttpGet("/GetAllContentsForSiteMap")]
+        public async Task<IActionResult> GetAllContentsForSiteMap([FromQuery] string language)
+        {
+            try
+            {
+                var result = await _contentService.GetAllContentsForSiteMapAsync(language);
+                var response = new ResponseDto<IEnumerable<SitemapContentModel>>
+                {
+                    IsSuccessful = true,
+                    StatusCode = result is not null ? 200 : 204,
+                    Data = result
+                };
+                return result is not null ? Ok(response) : NoContent();
+            }
+            catch (Exception)
+            {
+
+                var errorResponse = new ResponseDto<string>
+                {
+                    IsSuccessful = false,
+                    StatusCode = 500,
+                    Data = "An error occurred while processing your request."
+                };
+                return StatusCode(500, errorResponse);
+            }
+        }
     }
 }

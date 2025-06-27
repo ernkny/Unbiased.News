@@ -91,6 +91,36 @@ namespace Unbiased.News.Application.Services
         }
 
         /// <summary>
+        ///  Retrieves all content entries for the sitemap in a specific language.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<SitemapContentModel>> GetAllContentsForSiteMapAsync(string language)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetAllContentsForSiteMapQuery(language));
+                if (result.Count() > 0)
+                {
+
+                    return result;
+                }
+                return Enumerable.Empty<SitemapContentModel>();
+            }
+            catch (Exception exception)
+            {
+                await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                {
+                    EventType = this.GetType().FullName,
+                    EventSeverity = "Error",
+                    Message = $"{exception.Message} - {exception.StackTrace}",
+                    EventDate = DateTime.UtcNow
+                });
+                throw;
+            }
+        }
+
+        /// <summary>
         ///  Retrieves all content subheadings with associated images for the home page.
         /// </summary>
         /// <param name="language"></param>

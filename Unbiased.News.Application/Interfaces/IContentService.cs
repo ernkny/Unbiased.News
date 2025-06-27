@@ -49,5 +49,12 @@ namespace Unbiased.News.Application.Interfaces
         /// <returns></returns>
         Task<IEnumerable<ContentSubHeadingWithImageDto>> GetAllContentWithImageForHomePageAsync(string language);
 
+        /// <summary>
+        /// Retrieves all content entries for the sitemap in a specific language.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        Task<IEnumerable<SitemapContentModel>> GetAllContentsForSiteMapAsync(string language);
+
     }
 }
