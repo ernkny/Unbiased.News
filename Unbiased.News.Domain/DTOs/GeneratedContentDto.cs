@@ -42,6 +42,11 @@
         public string UniqUrlPath { get; set; }
 
         /// <summary>
+        ///  Gets or sets the language in which the content is written.
+        /// </summary>
+        public string Language { get; set; }
+
+        /// <summary>
         /// Gets or sets the detailed content information.
         /// </summary>
         public ContentDetailDto ContentDetail { get; set; }

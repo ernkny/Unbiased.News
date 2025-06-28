@@ -214,6 +214,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                         IsProccessed = resultJson.IsProccessed,
                         CreatedTime = resultJson.CreatedTime,
                         UniqUrlPath = resultJson.UniqUrlPath,
+                        Language = resultJson.Language.Trim(),
                         ContentDetail = JsonSerializer.Deserialize<ContentDetailDto>(resultJson.ContentDetail.ToString()),
                         QuestionsAndAnswers = JsonSerializer.Deserialize<List<QuestionDto>>(resultJson.QuestionsAndAnswers.ToString()),
                         Steps = JsonSerializer.Deserialize<List<StepDto>>(resultJson.Steps.ToString())

@@ -52,7 +52,7 @@ namespace Unbiased.News.Domain.DTOs
         /// <summary>
         /// Language of the news content.
         /// </summary>
-        public string Langauge { get; set; }
+        public string Language { get; set; }
 
         /// <summary>
         /// File path to the image associated with the news.
