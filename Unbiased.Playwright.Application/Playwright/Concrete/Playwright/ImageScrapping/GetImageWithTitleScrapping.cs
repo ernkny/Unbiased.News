@@ -14,22 +14,30 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageSc
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
-        public static async Task<string> GetImageWithTitle(string title,IPlaywright playwright, IEventAndActivityLog _eventAndActivityLog)
+        public static async Task<string> GetImageWithTitle(
+            string title,
+            IPlaywright playwright,
+            IEventAndActivityLog _eventAndActivityLog)
         {
+            IBrowser browser = null;
+            IPage page = null;
+
             try
             {
                 var chromium = playwright.Firefox;
-                var browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
+                browser = await chromium.LaunchAsync(new BrowserTypeLaunchOptions
                 {
                     Headless = true,
-
                 });
-                var page = await browser.NewPageAsync();
+
+                page = await browser.NewPageAsync();
+
                 await page.GotoAsync("https://images.google.com", new PageGotoOptions
                 {
                     Timeout = 60000,
                     WaitUntil = WaitUntilState.DOMContentLoaded
                 });
+
                 await page.FillAsync("textarea", title);
                 await page.PressAsync("textarea[name='q']", "Enter");
 
@@ -38,16 +46,16 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageSc
                     State = WaitForSelectorState.Visible,
                     Timeout = 4000
                 });
+
                 await page.ClickAsync(".H8Rx8c img.YQ4gaf");
 
                 var detailedImg = await page.WaitForSelectorAsync("img.sFlh5c.FyHeAf.iPVvYb", new PageWaitForSelectorOptions
                 {
                     Timeout = 4000
                 });
+
                 var imageUrl = await detailedImg.GetAttributeAsync("src");
-                return imageUrl is not null ? imageUrl : string.Empty;
-
-
+                return imageUrl ?? string.Empty;
             }
             catch (Exception ex)
             {
@@ -58,8 +66,20 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageSc
                     Message = $"{ex.Message} - {ex.StackTrace}",
                     EventDate = DateTime.UtcNow
                 });
-               return string.Empty;
+                return string.Empty;
+            }
+            finally
+            {
+                if (page != null)
+                {
+                    try { await page.CloseAsync(); } catch { /* ignore */ }
+                }
+                if (browser != null)
+                {
+                    try { await browser.CloseAsync(); } catch { /* ignore */ }
+                }
             }
         }
+
     }
 }

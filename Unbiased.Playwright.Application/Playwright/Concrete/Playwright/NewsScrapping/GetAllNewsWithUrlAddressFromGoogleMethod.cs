@@ -50,10 +50,10 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
                 var page = await _browser.NewPageAsync();
                 await page.GotoAsync(searchUrl, new PageGotoOptions
                 {
-                    Timeout = 60000,
+                    Timeout = 20000,
                     WaitUntil = WaitUntilState.DOMContentLoaded
                 });
-                await Task.Delay(5000);
+                await Task.Delay(4000);
 
                 var newsUrls = await page.QuerySelectorAllAsync(".jKHa4e");
                 await page.WaitForSelectorAsync(".jKHa4e", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });

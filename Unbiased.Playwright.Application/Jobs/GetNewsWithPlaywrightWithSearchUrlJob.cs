@@ -44,7 +44,7 @@ namespace Unbiased.Playwright.Application.Jobs
             try
             {
                 var getUrl = await _mediator.Send(new GetAllActiveUrlsForSearchQuery());
-                var getSearchUrlsActiveNextRunTime = getUrl.Where(x => x.NextRunTime < DateTime.Now).Take(1).ToList();
+                var getSearchUrlsActiveNextRunTime = getUrl.Where(x => x.NextRunTime < DateTime.Now).Take(2).ToList();
                 foreach (var url in getSearchUrlsActiveNextRunTime)
                 {
                     var result = await _playwrightScrappingService.PlaywrightScrappingNewsAsync(url);

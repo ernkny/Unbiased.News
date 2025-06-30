@@ -173,7 +173,7 @@ namespace Unbiased.Playwright.Application.Services
                 var convertedData = await ContentGenerateExtractExtensionMethod.ContentGenerateExtract(await response.Content.ReadAsStringAsync(), _serviceProvider, _eventAndActivityLog);
                 convertedData.ContentCategoryId = contentCategoryId;
                 convertedData.ContentSubHeadingId = contentSubheadingId;
-                var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(convertedData.Title, _playwright, _eventAndActivityLog);
+                var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(itemTitle, _playwright, _eventAndActivityLog);
                 var saveImageToAWs = new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog);
                 if (string.IsNullOrEmpty(scrapedImage))
                 {
@@ -183,7 +183,7 @@ namespace Unbiased.Playwright.Application.Services
                     using (var stream = File.OpenRead(ImagePath))
                     {
                         var title = itemTitle.Length > 60 ? itemTitle.Substring(0, 60) + "..." :itemTitle;
-                        var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, categoryName.ToUpper(), title, garetHeavyFont, garetBookFont);
+                        var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, categoryName.ToUpper(), itemTitle, garetHeavyFont, garetBookFont);
                         imageFile = await saveImageToAWs.SaveGeneratedBannerImageToAws(resultGeneratedImage, _awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value);
                     }
                 }

@@ -252,6 +252,10 @@ namespace Unbiased.News.Application.Services
             {
 
                 var result = await _mediator.Send(new GetGeneratedNewsByUniqUrlWithImageQuery(UniqUrl));
+                if (result == null)
+                {
+                    throw new KeyNotFoundException($"News with unique URL '{UniqUrl}' not found.");
+                }
                 return result;
             }
             catch (Exception exception)

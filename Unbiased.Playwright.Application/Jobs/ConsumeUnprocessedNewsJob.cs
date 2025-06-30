@@ -54,7 +54,7 @@ namespace Unbiased.Playwright.Application.Jobs
                 {
                     var combinedNews = await _mediator.Send(new GetAllNewsCombinedDetailsQuery(), context.CancellationToken);
                     var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider, _eventAndActivityLog);
-					await _newsService.GenerateNewsWithApiAsync(combinedNews, context.CancellationToken, externalServiceSend);
+					await _newsService.GenerateNewsWithApiAsync(combinedNews.Take(10), context.CancellationToken, externalServiceSend);
 				}
                 await Task.CompletedTask;
             }
