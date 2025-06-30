@@ -17,17 +17,19 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         private readonly IServiceProvider _serviceProvider;
         private readonly IEventAndActivityLog _eventAndActivityLog;
         private readonly IPlaywright _playwright;
+        private readonly HttpClient _httpClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetNewsWithGuidControl"/> class.
         /// </summary>
         /// <param name="saveSearchUrlAndGuids">The list of SaveSearchUrlAndGuidDto objects to retrieve news articles for.</param>
-        public GetNewsWithGuidControl(List<SaveSearchUrlAndGuidDto> saveSearchUrlAndGuids, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog, IPlaywright playwright)
+        public GetNewsWithGuidControl(List<SaveSearchUrlAndGuidDto> saveSearchUrlAndGuids, IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog, IPlaywright playwright, HttpClient httpClient)
         {
             _saveSearchUrlAndGuids = saveSearchUrlAndGuids;
             _serviceProvider = serviceProvider;
             _eventAndActivityLog = eventAndActivityLog;
             _playwright = playwright;
+            _httpClient = httpClient;
         }
 
         /// <summary>
@@ -37,8 +39,8 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.NewsScr
         /// The Task result contains a list of News objects representing the retrieved news articles.</returns>
         public async override Task<List<News>> Handle()
         {
-            var getNewsContent = new GetNewsWithGuidMethod(_serviceProvider, _eventAndActivityLog, _playwright);
-            var result = await getNewsContent.GetNewsWithGuid(_saveSearchUrlAndGuids);
+            var getNewsContent = new GetNewsWithGuidMethod(_serviceProvider, _eventAndActivityLog, _playwright,_httpClient);
+            var result = await getNewsContent.GetNewsWithGuidHybrid(_saveSearchUrlAndGuids);
             return result;
         }
 

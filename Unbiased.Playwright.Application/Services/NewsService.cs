@@ -109,57 +109,57 @@ namespace Unbiased.Playwright.Application.Services
         {
             try
             {
-                var isDone = false;
-                while (!isDone)
+                var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
+                await Parallel.ForEachAsync(images, new ParallelOptions
                 {
-                    var images = await _mediator.Send(new GetImagesWithNoneHasGeneratedQuery(), cancellationToken);
-                    _ = images.Count() == 0 ? isDone = true : isDone = false;
-                    foreach (var item in images)
+                    MaxDegreeOfParallelism = 4,
+                    CancellationToken = cancellationToken
+                },
+                async (item, ct) =>
+                {
+                    string? imageFile = null;
+                    if (!item.IsManuelImage)
                     {
-                        var imageFile = string.Empty;
-                        if (!item.IsManuelImage)
+                        imageFile = await GenerateImageAndSaveAsync(item.ImagePrompt, ct)
+                            ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
+                    }
+                    else
+                    {
+                        var saveImageToAWs = new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog);
+                        var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(item.Title, _playwright, _eventAndActivityLog);
+                        if (string.IsNullOrEmpty(scrapedImage))
                         {
-                            imageFile = await GenerateImageAndSaveAsync(item.ImagePrompt, cancellationToken)
-                                                                 ?? @"https://unbiasedbucket.s3.eu-north-1.amazonaws.com/Pictures/noimage.png";
-
+                            var garetHeavyFont = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:FontsPath"]}Garet-Heavy.ttf");
+                            var garetBookFont = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:FontsPath"]}Garet-Book.ttf");
+                            var ImagePath = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:ImagePath"]}KırmızıBanner.png");
+                            using (var stream = File.OpenRead(ImagePath))
+                            {
+                                var title = item.Title.Length > 90 ? item.Title.Substring(0, 90) + "..." : item.Title;
+                                var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, item.CategoryName.ToUpper(), title, garetHeavyFont, garetBookFont);
+                                imageFile = await saveImageToAWs.SaveGeneratedBannerImageToAws(resultGeneratedImage, _awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value);
+                            }
                         }
                         else
                         {
-                            var saveImageToAWs = new SaveGeneratedImageToAws(_awsCredentials!, _eventAndActivityLog);
-                            var scrapedImage = await GetImageWithTitleScrapping.GetImageWithTitle(item.Title, _playwright, _eventAndActivityLog);
-                            if (string.IsNullOrEmpty(scrapedImage))
-                            {
-                                var garetHeavyFont = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:FontsPath"]}Garet-Heavy.ttf");
-                                var garetBookFont = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:FontsPath"]}Garet-Book.ttf");
-                                var ImagePath = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:ImagePath"]}KırmızıBanner.png");
-                                using (var stream = File.OpenRead(ImagePath))
-                                {
-                                    var title = item.Title.Count() > 90 ? item.Title.Substring(0, 90) + "..." : item.Title;
-                                    var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, item.CategoryName.ToUpper(), title, garetHeavyFont, garetBookFont);
-                                    imageFile = await saveImageToAWs.SaveGeneratedBannerImageToAws(resultGeneratedImage, _awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value);
-                                }
-                            }
-                            else
-                            {
 
-                                imageFile = await saveImageToAWs.GetFileFromGptAndUploadFileAsync(
-                                    _awsCredentials.BucketName,
-                                    _configuration.GetSection("Paths:AwsFilePath").Value,
-                                    scrapedImage,
-                                    cancellationToken
-                                );
-                            }
-                        }
-                        if (imageFile is not null)
-                        {
-                            await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
-                            {
-                                MatchId = item.Id,
-                                filePath = imageFile
-                            }), cancellationToken);
+                            imageFile = await saveImageToAWs.GetFileFromGptAndUploadFileAsync(
+                                _awsCredentials.BucketName,
+                                _configuration.GetSection("Paths:AwsFilePath").Value,
+                                scrapedImage,
+                                cancellationToken
+                            );
                         }
                     }
-                }
+
+                    if (!string.IsNullOrEmpty(imageFile))
+                    {
+                        await _mediator.Send(new InsertGeneratedImageCommand(new InsertNewsImageDto
+                        {
+                            MatchId = item.Id,
+                            filePath = imageFile
+                        }), ct);
+                    }
+                });
 
                 return true;
             }

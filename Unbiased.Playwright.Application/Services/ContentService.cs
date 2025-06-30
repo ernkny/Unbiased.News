@@ -91,7 +91,7 @@ namespace Unbiased.Playwright.Application.Services
                     var result = await externalServiceSend.SendGeneratedContentPromptAndGetResponse(item.Title, languageEnum, cancellationToken);
                     if (result.IsSuccessStatusCode == true)
                     {
-                        await GetGeneratedContentAndSave(result, item.Id, item.ContentCategoryId, item.CategoryName, cancellationToken);
+                        await GetGeneratedContentAndSave(result, item.Title, item.Id, item.ContentCategoryId, item.CategoryName, cancellationToken);
                     }
                 }
                 return true;
@@ -165,7 +165,7 @@ namespace Unbiased.Playwright.Application.Services
         /// <param name="contentCategoryId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<bool> GetGeneratedContentAndSave(HttpResponseMessage response, int contentSubheadingId, int contentCategoryId, string categoryName, CancellationToken cancellationToken)
+        private async Task<bool> GetGeneratedContentAndSave(HttpResponseMessage response, string itemTitle,int contentSubheadingId, int contentCategoryId, string categoryName, CancellationToken cancellationToken)
         {
             try
             {
@@ -182,7 +182,7 @@ namespace Unbiased.Playwright.Application.Services
                     var ImagePath = Path.Combine(_webRootOptions.WebRootPath, $"{_configuration["StaticFiles:ImagePath"]}KırmızıBanner.png");
                     using (var stream = File.OpenRead(ImagePath))
                     {
-                        var title = convertedData.Title.Count() > 60 ? convertedData.Title.Substring(0, 60) + "..." : convertedData.Title;
+                        var title = itemTitle.Length > 60 ? itemTitle.Substring(0, 60) + "..." :itemTitle;
                         var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, categoryName.ToUpper(), title, garetHeavyFont, garetBookFont);
                         imageFile = await saveImageToAWs.SaveGeneratedBannerImageToAws(resultGeneratedImage, _awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value);
                     }

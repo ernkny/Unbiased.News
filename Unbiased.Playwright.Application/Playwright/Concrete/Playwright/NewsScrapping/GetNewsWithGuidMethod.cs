@@ -1,5 +1,7 @@
-﻿using Microsoft.Playwright;
+﻿using HtmlAgilityPack;
+using Microsoft.Playwright;
 using System.Collections.Concurrent;
+using System.Net.Http;
 using System.Text;
 using Unbiased.Playwright.Application.Dto.PlaywrightDto;
 using Unbiased.Playwright.Domain.Entities;
@@ -14,18 +16,21 @@ public class GetNewsWithGuidMethod
 	private IPlaywright _playwright;
 	private readonly IServiceProvider _serviceProvider;
 	private readonly IEventAndActivityLog _eventAndActivityLog;
+    private readonly HttpClient _httpClient;
 
-	/// <summary>
-	/// Initializes a new instance of the GetNewsWithGuidMethod class.
-	/// </summary>
-	/// <param name="serviceProvider"></param>
-	/// <param name="eventAndActivityLog"></param>
-	public GetNewsWithGuidMethod(IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog, IPlaywright playwright)
+    /// <summary>
+    /// Initializes a new instance of the GetNewsWithGuidMethod class.
+    /// </summary>
+    /// <param name="serviceProvider"></param>
+    /// <param name="eventAndActivityLog"></param>
+    public GetNewsWithGuidMethod(IServiceProvider serviceProvider, IEventAndActivityLog eventAndActivityLog, IPlaywright playwright,HttpClient httpClient)
 	{
 		_serviceProvider = serviceProvider;
 		_eventAndActivityLog = eventAndActivityLog;
 		_playwright = playwright;
-	}
+        _httpClient= httpClient ?? throw new ArgumentNullException(nameof(httpClient), "HttpClient cannot be null. Please provide a valid HttpClient instance.");
+
+    }
 
 	/// <summary>
 	/// Retrieves news articles with GUIDs from the provided URL and GUID pairs.
@@ -134,8 +139,155 @@ public class GetNewsWithGuidMethod
 			}
 		});
 
-		await browser.CloseAsync();
-
 		return newsArticles.ToList();
 	}
+
+    /// <summary>
+    ///  Retrieves news articles with GUIDs from the provided URL and GUID pairs using a hybrid approach of HTML scraping and Playwright.
+    /// </summary>
+    /// <param name="urlAndGuidPairs"></param>
+    /// <returns></returns>
+    /// <exception cref="TimeoutException"></exception>
+    public async Task<List<News>> GetNewsWithGuidHybrid(List<SaveSearchUrlAndGuidDto> urlAndGuidPairs)
+    {
+        var newsArticles = new ConcurrentBag<News>();
+
+        await Parallel.ForEachAsync(urlAndGuidPairs, new ParallelOptions
+        {
+            MaxDegreeOfParallelism = 3 // CPU dostu limit
+        },
+        async (urlPair, cancellationToken) =>
+        {
+            string contentFromHtml = null;
+
+            try
+            {
+                var html = await _httpClient.GetStringAsync(urlPair.Url, cancellationToken);
+
+                if (!string.IsNullOrEmpty(html))
+                {
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(html);
+
+                    var paragraphs = doc.DocumentNode
+                        .SelectNodes("//p")
+                        ?.Select(p => p.InnerText?.Trim())
+                        .Where(t => !string.IsNullOrEmpty(t))
+                        .ToList();
+
+                    if (paragraphs != null && paragraphs.Count > 0)
+                    {
+                        contentFromHtml = string.Join(Environment.NewLine, paragraphs);
+                    }
+                }
+            }
+            catch
+            {
+                
+            }
+
+            if (string.IsNullOrWhiteSpace(contentFromHtml))
+            {
+
+                IBrowserContext context = null;
+                IPage page = null;
+
+                try
+                {
+                    await using var browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+                    {
+                        Headless = true
+                    });
+                    context = await browser.NewContextAsync();
+                    page = await context.NewPageAsync();
+
+                    int retries = 0;
+                    bool navigated = false;
+
+                    while (!navigated && retries < 3)
+                    {
+                        try
+                        {
+                            await page.GotoAsync(urlPair.Url, new PageGotoOptions
+                            {
+                                Timeout = 60000,
+                                WaitUntil = WaitUntilState.DOMContentLoaded
+                            });
+
+                            await page.WaitForLoadStateAsync(LoadState.Load, new PageWaitForLoadStateOptions
+                            {
+                                Timeout = 30000
+                            });
+
+                            navigated = true;
+                        }
+                        catch
+                        {
+                            retries++;
+                            await Task.Delay(2000);
+                        }
+                    }
+
+                    if (!navigated)
+                        throw new TimeoutException("Failed to navigate after 3 attempts.");
+
+                    var paragraphs = await page.QuerySelectorAllAsync("p");
+
+                    var sb = new StringBuilder();
+                    foreach (var p in paragraphs)
+                    {
+                        try
+                        {
+                            var text = await p.InnerTextAsync();
+                            if (!string.IsNullOrEmpty(text))
+                                sb.AppendLine(text);
+                        }
+                        catch
+                        {
+                            // ignore
+                        }
+                    }
+
+                    contentFromHtml = sb.ToString();
+                    await browser.CloseAsync();
+                }
+                catch (Exception ex)
+                {
+                    await _eventAndActivityLog.SendEventLogToQueue(new EventLog
+                    {
+                        EventType = this.GetType().FullName,
+                        EventSeverity = "Error",
+                        Message = $"URL: {urlPair.Url} - {ex.Message} - {ex.StackTrace}",
+                        EventDate = DateTime.UtcNow
+                    });
+                }
+                finally
+                {
+                    if (page != null) await page.CloseAsync();
+                    if (context != null) await context.CloseAsync();
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(contentFromHtml))
+            {
+                newsArticles.Add(new News
+                {
+                    CreatedTime = DateTime.UtcNow,
+                    CreatedUser = "system",
+                    Detail = contentFromHtml,
+                    IsActive = true,
+                    IsProcessed = false,
+                    MatchId = urlPair.MatchId,
+                    IsDeleted = false,
+                    Title = urlPair.Title,
+                    Url = urlPair.Url,
+                });
+            }
+        });
+
+        
+
+        return newsArticles.ToList();
+    }
+
 }

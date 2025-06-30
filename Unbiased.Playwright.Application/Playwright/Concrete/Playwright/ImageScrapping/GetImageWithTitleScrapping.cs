@@ -36,13 +36,13 @@ namespace Unbiased.Playwright.Application.Playwright.Concrete.Playwright.ImageSc
                 await page.WaitForSelectorAsync("img.YQ4gaf", new PageWaitForSelectorOptions
                 {
                     State = WaitForSelectorState.Visible,
-                    Timeout = 10000
+                    Timeout = 4000
                 });
                 await page.ClickAsync(".H8Rx8c img.YQ4gaf");
 
                 var detailedImg = await page.WaitForSelectorAsync("img.sFlh5c.FyHeAf.iPVvYb", new PageWaitForSelectorOptions
                 {
-                    Timeout = 10000
+                    Timeout = 4000
                 });
                 var imageUrl = await detailedImg.GetAttributeAsync("src");
                 return imageUrl is not null ? imageUrl : string.Empty;

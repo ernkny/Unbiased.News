@@ -25,6 +25,7 @@ namespace Unbiased.Playwright.Application.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly IEventAndActivityLog _eventAndActivityLog;
         private readonly IPlaywright _playwright;
+        private readonly HttpClient _httpClient;
 
         /// <summary>
         /// Initializes a new instance of the PlaywrightScrappingService class.
@@ -36,6 +37,7 @@ namespace Unbiased.Playwright.Application.Services
             _serviceProvider = serviceProvider;
             _eventAndActivityLog = eventAndActivityLog;
             _playwright = playwright;
+            _httpClient = new HttpClient();
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace Unbiased.Playwright.Application.Services
                 var languageEnum = (LanguageEnums)Enum.Parse(typeof(LanguageEnums), url.Language);
                 var searchWithKeywordControl = new GetAllNewsWithUrlAddressFromGoogleControl(url.url, languageEnum, _serviceProvider, _eventAndActivityLog);
                 var titles = await searchWithKeywordControl.Handle();
-                var newsContents = new GetNewsWithGuidControl(titles, _serviceProvider, _eventAndActivityLog, _playwright);
+                var newsContents = new GetNewsWithGuidControl(titles, _serviceProvider, _eventAndActivityLog, _playwright, _httpClient);
                 var news = await newsContents.Handle();
                 news.ForEach(item => item.CategoryId = url.categoryId);
                 news.ForEach(item => item.Language = url.Language);
