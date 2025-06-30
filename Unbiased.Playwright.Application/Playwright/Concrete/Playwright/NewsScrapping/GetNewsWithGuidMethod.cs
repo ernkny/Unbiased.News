@@ -151,10 +151,11 @@ public class GetNewsWithGuidMethod
     public async Task<List<News>> GetNewsWithGuidHybrid(List<SaveSearchUrlAndGuidDto> urlAndGuidPairs)
     {
         var newsArticles = new ConcurrentBag<News>();
+        await using var browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
 
         await Parallel.ForEachAsync(urlAndGuidPairs, new ParallelOptions
         {
-            MaxDegreeOfParallelism = 3 // CPU dostu limit
+            MaxDegreeOfParallelism = 4 // CPU dostu limit
         },
         async (urlPair, cancellationToken) =>
         {
@@ -194,10 +195,6 @@ public class GetNewsWithGuidMethod
 
                 try
                 {
-                    await using var browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
-                    {
-                        Headless = true
-                    });
                     context = await browser.NewContextAsync();
                     page = await context.NewPageAsync();
 
@@ -249,7 +246,6 @@ public class GetNewsWithGuidMethod
                     }
 
                     contentFromHtml = sb.ToString();
-                    await browser.CloseAsync();
                 }
                 catch (Exception ex)
                 {
@@ -285,7 +281,6 @@ public class GetNewsWithGuidMethod
             }
         });
 
-        
 
         return newsArticles.ToList();
     }
