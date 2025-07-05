@@ -187,7 +187,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
         /// </summary>
         /// <param name="uniqUrl">The unique URL identifier for the content.</param>
         /// <returns>The content details associated with the URL, or null if not found.</returns>
-        public async Task<GeneratedContentDto> GetGeneratedContentByUrlAsync(string uniqUrl)
+        public async Task<GeneratedContentDto> GetGeneratedContentByUrlAsync(string uniqUrl,string language)
         {
             try
             {
@@ -195,6 +195,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("@UniqUrl", uniqUrl, DbType.String);
+                    parameters.Add("@language", language, DbType.String);
 
                     var resultJson = await connection.QueryFirstOrDefaultAsync<GeneratedContentRawDto>(
                         "UB_sp_GetGeneratedContentWithUniqPath",

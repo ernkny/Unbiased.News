@@ -218,15 +218,16 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
 		/// </summary>
 		/// <param name="uniqUrlPath">The unique URL path of the news item to retrieve.</param>
 		/// <returns>The requested news item with its associated image.</returns>
-		public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlWithImageAsync(string uniqUrlPath)
+		public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlWithImageAsync(string uniqUrlPath, string language)
 		{
 			try
 			{
 				var parameters = new DynamicParameters();
 				parameters.Add("@uniqurlpath", uniqUrlPath);
+				parameters.Add("@language", language);
 				using (var connection = _connection.CreateConnection())
 				{
-					return await connection.QueryFirstAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsByUniqUrlPath", parameters, commandType: CommandType.StoredProcedure);
+					return await connection.QueryFirstOrDefaultAsync<GenerateNewsWithImageDto>("UB_sp_GetGeneratedNewsByUniqUrlPath", parameters, commandType: CommandType.StoredProcedure);
 				}
 			}
 			catch (Exception exception)

@@ -246,12 +246,12 @@ namespace Unbiased.News.Application.Services
         /// </summary>
         /// <param name="UniqUrl">The unique URL of the news item.</param>
         /// <returns>The requested news item with its associated image.</returns>
-        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlAsync(string UniqUrl)
+        public async Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlAsync(string UniqUrl, string language)
         {
             try
             {
 
-                var result = await _mediator.Send(new GetGeneratedNewsByUniqUrlWithImageQuery(UniqUrl));
+                var result = await _mediator.Send(new GetGeneratedNewsByUniqUrlWithImageQuery(UniqUrl, language));
                 if (result == null)
                 {
                     throw new KeyNotFoundException($"News with unique URL '{UniqUrl}' not found.");

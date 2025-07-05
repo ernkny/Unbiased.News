@@ -41,7 +41,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         /// </summary>
         /// <param name="uniqUrl">The unique URL identifier for the content.</param>
         /// <returns>The content details associated with the URL.</returns>
-        Task<GeneratedContentDto> GetGeneratedContentByUrlAsync(string uniqUrl);
+        Task<GeneratedContentDto> GetGeneratedContentByUrlAsync(string uniqUrl,string language);
 
         /// <summary>
         /// Gets the total count of subheadings available for a specific category.

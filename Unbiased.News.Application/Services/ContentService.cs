@@ -184,11 +184,11 @@ namespace Unbiased.News.Application.Services
         /// </summary>
         /// <param name="uniqUrl">The unique URL identifier for the content</param>
         /// <returns>The content details associated with the URL</returns>
-        public async Task<GeneratedContentDto> GetGeneratedContentByUrlAsync(string uniqUrl)
+        public async Task<GeneratedContentDto> GetGeneratedContentByUrlAsync(string uniqUrl, string language)
         {
             try
             {
-                var result = await _mediator.Send(new GetContentDetailQuery(uniqUrl));
+                var result = await _mediator.Send(new GetContentDetailQuery(uniqUrl, language));
                 if (result is not null)
                 {
                     return result;

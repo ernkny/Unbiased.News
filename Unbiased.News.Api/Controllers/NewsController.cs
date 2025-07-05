@@ -201,11 +201,11 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="UniqUrl">The unique URL of the news item to retrieve.</param>
         /// <returns>Detailed information about the requested news item.</returns>
         [HttpGet("/GetGeneratedNewByUniqUrl")]
-        public async Task<IActionResult> GetGeneratedNewsByUniqUrl(string UniqUrl)
+        public async Task<IActionResult> GetGeneratedNewsByUniqUrl([FromQuery]string UniqUrl, string language)
         {
             try
             {
-                var result = await _newsService.GetGeneratedNewsByUniqUrlAsync(UniqUrl);
+                var result = await _newsService.GetGeneratedNewsByUniqUrlAsync(UniqUrl, language);
                 if (result == null)
                 {
 

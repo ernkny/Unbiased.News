@@ -47,7 +47,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Abstract
         /// </summary>
         /// <param name="uniqUrlPath">The unique URL path of the news item to retrieve.</param>
         /// <returns>The requested news item with its associated image.</returns>
-        Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlWithImageAsync(string uniqUrlPath);
+        Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlWithImageAsync(string uniqUrlPath, string language);
         
         /// <summary>
         /// Retrieves a specific news item by its ID with associated image.

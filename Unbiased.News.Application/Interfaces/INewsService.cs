@@ -45,7 +45,7 @@ namespace Unbiased.News.Application.Interfaces
         /// </summary>
         /// <param name="UniqUrl">The unique URL of the news item.</param>
         /// <returns>A task containing the requested news item with its associated image.</returns>
-        Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlAsync(string UniqUrl);
+        Task<GenerateNewsWithImageDto> GetGeneratedNewsByUniqUrlAsync(string UniqUrl, string language);
 
         /// <summary>
         /// Retrieves banner news items for a specific category and language.

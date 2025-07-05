@@ -252,11 +252,11 @@ namespace Unbiased.News.Api.Controllers
         /// <param name="uniqUrl">The unique URL of the content</param>
         /// <returns>The details of the requested content</returns>
         [HttpGet("/GetContentDetail")]
-        public async Task<IActionResult> GetContentDetail([FromQuery] string uniqUrl)
+        public async Task<IActionResult> GetContentDetail([FromQuery] string uniqUrl, string language)
         {
             try
             {
-                var result = await _contentService.GetGeneratedContentByUrlAsync(uniqUrl);
+                var result = await _contentService.GetGeneratedContentByUrlAsync(uniqUrl, language);
                 var response = new ResponseDto<GeneratedContentDto>
                 {
                     IsSuccessful = true,

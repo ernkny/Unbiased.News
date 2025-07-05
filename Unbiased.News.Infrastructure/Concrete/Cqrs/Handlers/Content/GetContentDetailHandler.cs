@@ -31,7 +31,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.Content
         /// <returns>The generated content details for the specified URL.</returns>
         public async Task<GeneratedContentDto> Handle(GetContentDetailQuery request, CancellationToken cancellationToken)
         {
-            return await _contentRepository.GetGeneratedContentByUrlAsync(request.UniqUrl);
+            return await _contentRepository.GetGeneratedContentByUrlAsync(request.UniqUrl,request.language);
         }
     }
 }

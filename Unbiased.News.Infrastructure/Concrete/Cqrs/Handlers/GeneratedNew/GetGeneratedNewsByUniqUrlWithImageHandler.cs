@@ -29,7 +29,7 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Handlers.GeneratedNew
         /// <returns>The requested news item with its associated image.</returns>
         public async Task<GenerateNewsWithImageDto> Handle(GetGeneratedNewsByUniqUrlWithImageQuery request, CancellationToken cancellationToken)
         {
-            return await _newsRepository.GetGeneratedNewsByUniqUrlWithImageAsync(request.UniqUrl);
+            return await _newsRepository.GetGeneratedNewsByUniqUrlWithImageAsync(request.UniqUrl,request.language);
         }
     }
 }

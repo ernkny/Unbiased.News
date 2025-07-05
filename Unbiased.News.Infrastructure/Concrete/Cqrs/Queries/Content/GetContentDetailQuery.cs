@@ -7,6 +7,6 @@ namespace Unbiased.News.Infrastructure.Concrete.Cqrs.Queries.Content
     /// CQRS query that requests detailed content information based on a unique URL.
     /// </summary>
     /// <param name="UniqUrl">The unique URL identifier for the content.</param>
-    public record GetContentDetailQuery(string UniqUrl): IRequest<GeneratedContentDto>;
+    public record GetContentDetailQuery(string UniqUrl,string language) : IRequest<GeneratedContentDto>;
 }
 
