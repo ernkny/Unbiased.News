@@ -20,7 +20,19 @@
         /// </summary>
         public int OrderLevel { get; set; }
 
+        /// <summary>
+        ///  Description of the category.
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        ///  Count of news items associated with this category.
+        /// </summary>
         public int NewsCount { get; set; }
+
+        /// <summary>
+        ///  Language of the category content.
+        /// </summary>
+        public string Language { get; set; }
     }
 }
