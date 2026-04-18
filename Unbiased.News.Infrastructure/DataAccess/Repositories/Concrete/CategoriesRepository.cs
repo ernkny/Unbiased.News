@@ -102,7 +102,7 @@ namespace Unbiased.News.Infrastructure.DataAccess.Repositories.Concrete
                     var parameters = new DynamicParameters();
                     parameters.Add("@language", language);
                     var result = await connection.QueryAsync<HomePageCategoriesRandomLastGeneratedNewsDto>($"UB_sp_GetRandomLastGeneratedNews", parameters, commandType: CommandType.StoredProcedure);
-                    return result;
+                     return result;
                 }
             }
             catch (Exception exception)

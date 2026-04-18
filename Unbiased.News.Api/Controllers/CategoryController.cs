@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Unbiased.News.Application.Interfaces;
 using Unbiased.News.Domain.DTOs;
 using Unbiased.News.Domain.Entities;
@@ -102,6 +103,7 @@ namespace Unbiased.News.Api.Controllers
         {
             try
             {
+                var sw = Stopwatch.StartNew();
                 var result = await _categoriesService.GetHomePageCategoriesRandomGeneratedNewsAsync(language);
                 var response = new ResponseDto<List<HomePageCategoriesRandomLastGeneratedNewsDto>>
                 {
@@ -109,6 +111,8 @@ namespace Unbiased.News.Api.Controllers
                     StatusCode = result.Any() ? 200 : 404,
                     Data = result
                 };
+                sw.Stop();
+                Console.WriteLine($"Sorgu süresi: {sw.ElapsedMilliseconds} ms");
                 return result.Any() ? Ok(response) : NotFound(response);
             }
             catch (Exception ex)

@@ -68,36 +68,35 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                 var prompt = language == LanguageEnums.TR
                     ? await TurkishPromptMessage(DetailIOfNews)
                     : await EnglishPromptMessage(DetailIOfNews);
-
                 var requestData = new
                 {
                     model = "gpt-4o-mini",
                     messages = new object[]
                     {
+        new
+        {
+            role = "developer",
+            content = new object[]
+            {
                 new
                 {
-                    role = "developer",
-                    content = new object[]
-                    {
-                        new
-                        {
-                            type = "text",
-                            text = prompt
-                        }
-                    }
-                },
-                new
-                {
-                    role = "user",
-                    content = new object[]
-                    {
-                        new
-                        {
-                            type = "text",
-                            text = DetailIOfNews
-                        }
-                    }
+                    type = "text",
+                    text = prompt
                 }
+            }
+        },
+        new
+        {
+            role = "user",
+            content = new object[]
+            {
+                new
+                {
+                    type = "text",
+                    text = DetailIOfNews
+                }
+            }
+        }
                     },
                     response_format = new
                     {
@@ -105,7 +104,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                         json_schema = new
                         {
                             name = "generate_news_article",
-                            strict = false,
+                            strict = true, 
                             schema = new
                             {
                                 type = "object",
@@ -123,7 +122,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                                     },
                                     BiasScore = new
                                     {
-                                        type = "string",
+                                        type = "integer", 
                                         description = "Bias evaluation score between 0 (unbiased) and 100 (very biased).",
                                         minimum = 0,
                                         maximum = 100
@@ -145,6 +144,7 @@ namespace Unbiased.Playwright.Infrastructure.Concrete.ExternalServices
                     presence_penalty = 0,
                     store = true
                 };
+
                 var request = new HttpRequestMessage(HttpMethod.Post, url)
                 {
                     Content = new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/json")

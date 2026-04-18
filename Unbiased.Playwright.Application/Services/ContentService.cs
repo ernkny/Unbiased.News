@@ -85,7 +85,7 @@ namespace Unbiased.Playwright.Application.Services
             {
                 var subHeadings = await _mediator.Send(new GetAllNoneGeneratedSubHeadingsQuery(), cancellationToken);
                 var externalServiceSend = new GptApiExternalService(new HttpClient(), _configuration, _mediator, _serviceProvider, _eventAndActivityLog);
-                foreach (var item in subHeadings.Take(50))
+                foreach (var item in subHeadings.Take(20))
                 {
                     var languageEnum = Enum.Parse<LanguageEnums>(item.Language);
                     var result = await externalServiceSend.SendGeneratedContentPromptAndGetResponse(item.Title, languageEnum, cancellationToken);

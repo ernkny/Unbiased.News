@@ -39,14 +39,13 @@
       "publishAllPorts": true,
       "useSSL": true
     }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:53622/",
+      "sslPort": 44322
+    }
   }
-  //"$schema": "http://json.schemastore.org/launchsettings.json",
-  //"iisSettings": {
-  //  "windowsAuthentication": false,
-  //  "anonymousAuthentication": true,
-  //  "iisExpress": {
-  //    "applicationUrl": "http://localhost:54518",
-  //    "sslPort": 44324
-  //  }
-  //}
 }

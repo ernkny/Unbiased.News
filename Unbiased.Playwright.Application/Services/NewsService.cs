@@ -265,7 +265,7 @@ namespace Unbiased.Playwright.Application.Services
                             using (var stream = File.OpenRead(ImagePath))
                             {
                                 var title = generatedNews.Title.Count() > 60 ? generatedNews.Title.Substring(0, 60) + "..." : generatedNews.Title;
-                                var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, item.CategoryName.ToUpper(), title, garetHeavyFont, garetBookFont);
+                                var resultGeneratedImage = await GenerateImageBannerWithTitle.ApplyTextOnImageAsync(stream, (item.CategoryName ?? string.Empty).ToUpper(), title, garetHeavyFont, garetBookFont);
                                 imageFile = await saveImageToAWs.SaveGeneratedBannerImageToAws(resultGeneratedImage, _awsCredentials.BucketName, _configuration.GetSection("Paths:AwsFilePath").Value);
                             }
                         }

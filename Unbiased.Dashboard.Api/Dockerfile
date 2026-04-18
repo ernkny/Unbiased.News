@@ -2,6 +2,22 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+
+# Install necessary packages and fonts for Linux containers
+USER root
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    fontconfig \
+    fonts-liberation \
+    fonts-dejavu-core \
+    fonts-liberation2 \
+    fonts-noto && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    fc-cache -fv
+
+# Switch back to non-root user
+USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
