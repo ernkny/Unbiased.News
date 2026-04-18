@@ -4,6 +4,7 @@ Unbiased is a **.NET 8 based microservice news and content platform** that autom
 
 The system is built on top of web scraping (Playwright), OpenAI / Freepik AI integrations, AWS S3 image storage, RabbitMQ-based messaging, Quartz.NET scheduled workflows, and a YARP-based API Gateway.
 
+DB script : https://github.com/ernkny/Unbiased.News/blob/main/UnbiasedNews.DbScript.sql
 ---
 
 ## Table of Contents

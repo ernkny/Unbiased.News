@@ -6,6 +6,7 @@ Unbiased, haber kaynaklarını otomatik olarak tarayan, yapay zekâ ile yeniden 
 
 Sistem; web scraping (Playwright), OpenAI/Freepik AI entegrasyonları, AWS S3 görsel depolama, RabbitMQ tabanlı mesajlaşma, Quartz.NET ile zamanlanmış iş akışları ve YARP tabanlı bir API Gateway üzerine inşa edilmiştir.
 
+DB script : https://github.com/ernkny/Unbiased.News/blob/main/UnbiasedNews.DbScript.sql
 ---
 
 ## İçindekiler
