@@ -83,7 +83,9 @@ Unbiased consists of several independent microservices written following **Clean
 | Documentation | Swagger / OpenAPI |
 
 ---
-
+## Project UI Screens
+![Ana ekran](https://github.com/ernkny/Unbiased.News/blob/main/tarafsizhaberler-1.jpg)
+![Ana ekran](https://github.com/ernkny/Unbiased.News/blob/main/tarafsizhaberler-2.jpg)
 ## Project Layout
 
 Each microservice is modelled as a group of five projects following the **Api → Application → Domain → Infrastructure → Common** layering. The solution can be grouped as follows:
