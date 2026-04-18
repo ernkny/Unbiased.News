@@ -89,7 +89,9 @@ Unbiased, **Clean Architecture** prensiplerine uygun olarak yazılmış birden f
 ## Proje Yapısı
 
 Her mikroservis; **Api → Application → Domain → Infrastructure → Common** katmanlarını barındıran 5'li bir grup hâlinde modellenmiştir. Çözüm içindeki tüm projeler şu şekilde gruplanabilir:
-
+## Ekran Görüntüleri
+![Ana ekran](https://github.com/ernkny/Unbiased.News/blob/main/tarafsizhaberler-1.jpg)
+![Ana ekran](https://github.com/ernkny/Unbiased.News/blob/main/tarafsizhaberler-2.jpg)
 ### 1) Mikroservis Grupları
 
 - **Unbiased.ApiGateway / .Application / .Common / .Domain / .Infrastructure**
