@@ -1,4 +1,6 @@
-# Unbiased - Tarafsız Haber ve İçerik Platformu
+# English Read Me File : https://github.com/ernkny/Unbiased.News/blob/main/README.en.md
+
+# Unbiased - Tarafsız Haber ve İçerik Platformu - Turkish
 
 Unbiased, haber kaynaklarını otomatik olarak tarayan, yapay zekâ ile yeniden üreten ve birden fazla kanal üzerinden tüketicilere sunan **.NET 8 tabanlı, mikroservis mimarisinde** bir haber ve içerik platformudur.
 
