@@ -345,10 +345,6 @@ dotnet run --project Unbiased.Identity.Api --launch-profile http
 dotnet run --project Unbiased.Dashboard.Api --launch-profile http
 ```
 
-### Docker
-
-Each API project ships with its own `Dockerfile` and is suitable for containerized deployment.
-
 ---
 
 ## Configuration

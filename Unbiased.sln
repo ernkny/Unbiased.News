@@ -75,11 +75,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unbiased.Identity.Api", "Un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unbiased.Shared.Extensions", "Unbiased.Shared.Extensions\Unbiased.Shared.Extensions.csproj", "{9355191D-FF2F-4589-A1C1-C13F3B06D47D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EDE8A3E-58FB-42BF-AA9D-92ABFDB4F95C}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unbiased.Dashboard.Domain", "Unbiased.Dashboard.Domain\Unbiased.Dashboard.Domain.csproj", "{A17EBC87-A9AD-45B1-8FE8-05A6CBECD74E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unbiased.Dashboard.Application", "Unbiased.Dashboard.Application\Unbiased.Dashboard.Application.csproj", "{F17F0569-4505-446A-A15B-FD11AA3C1FD5}"
